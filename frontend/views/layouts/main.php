@@ -1,6 +1,5 @@
 <?php
 
-// use Yii;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\helpers\ArrayHelper;
@@ -51,6 +50,8 @@ AppAsset::register($this);
     //     ],
     // ]);
     $menuItems = [
+        ['label' => Yii::t('frontend', 'Главная'), 'url' => ['/']],
+        ['label' => Yii::t('frontend', 'Компании'), 'url' => ['/company/index']],
         ['label' => Yii::t('frontend', 'Articles'), 'url' => ['/article/index']],
         [
             'label' => Yii::t('frontend', 'Users'),
@@ -96,9 +97,16 @@ AppAsset::register($this);
     ?>					
         <ul class="menu">
             <li>
-            <?= Html::a(Yii::t('frontend', 'Articles'), '/article/index');?>
+                <?= Html::a(Yii::t('frontend', 'Главная'), '/');?>
             </li>
-            <li class="dropdown">
+            <li>
+                <?= Html::a(Yii::t('frontend', 'Компании'), '/company');?>
+            </li>
+            <li>
+                <?= Html::a(Yii::t('frontend', 'Articles'), '/article/index');?>
+            </li>
+
+            <!-- <li class="dropdown">
                 <a href="JavaScript:Void(0);" class="active">Home</a>
                 <ul class="dropdown-menu">
                     <li class="dropdown">
@@ -129,7 +137,7 @@ AppAsset::register($this);
                         </ul>                                 
                     </li>
                 </ul>
-            </li>
+            </li> -->
             
             <li class="dropdown">
                 <a href="JavaScript:Void(0);">Explore</a>
@@ -312,8 +320,14 @@ AppAsset::register($this);
         <?= Breadcrumbs::widget([
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
         ]) ?>
-        <?= Wrapper::widget() ?>
-    </div>
+        <?= Wrapper::widget(); ?>
+        <?php if( Yii::$app->session->hasFlash('success') ): ?>
+            <div class="alert alert-success alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <?php echo Yii::$app->session->getFlash('success'); ?>
+            </div>
+        <?php endif;?>
+        </div>
     <?= $content ?>
 
 </div>
@@ -379,6 +393,7 @@ AppAsset::register($this);
                             <li><a href="about-us.html">Support</a></li>
                             <li><a href="contact.html">Contact Us</a></li>
                             <li><a href="checkout.html">Privacy & Terms</a></li>
+                            <li class="log-icon lg-ic"><a href="#" data-toggle="modal" data-target="#signup" class="rt-log">Регистрация</a></li>
                         </ul>
                     </div>
                 </div>

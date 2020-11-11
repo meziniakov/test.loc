@@ -4,114 +4,21 @@ namespace frontend\controllers;
 
 use Yii;
 use yii\web\Controller;
-use yii\helpers\Url;
-use GuzzleHttp\Client;
 use yii\web\Response;
 use common\models\Organization;
 use common\models\Tag;
+use yii\web\NotFoundHttpException;
 
 class CompanyController extends Controller
 {
-  public function actionIndex()
+
+  public function actionTest($city)
   {
-    $client = new Client();
-    $res = $client->request('GET', Yii::$app->params['url']);
-
-    $body = $res->getBody();
-    // var_dump($body);die;
-    $document = \phpQuery::newDocumentHTML($body);
-    // var_dump($document);die;
-    $productsList = $document->find(Yii::$app->params['mainTag']);
-    // $test = pq($productsList)->find('a')->attr('href');
-    // var_dump($test);die;
-    // var_dump($productsList); die;
-    // print_r($productsList);die;
-    $urls = [];
-    $i = 0;
-    foreach ($productsList as $elem) {
-      if ($i > 0 && $i < 15) {
-        $urls[] = pq($elem)->find('a')->attr('href');
-      }
-      ++$i;
-    }
-    // var_dump($urls);die;
-    foreach ($urls as $url) {
-        $client = new Client();
-        $res = $client->request('GET', $url);
-        $body = $res->getBody();
-        $document = \phpQuery::newDocumentHTML($body);
-        $model = new Organization();
-        $model->name = $document->find(Yii::$app->params['title'])->text();
-        $model->type = $document->find(Yii::$app->params['description'])->text();
-        // $region = trim($document->find(Yii::$app->params['region'])->text());
-        // $city = 
-        // $street = trim($document->find(Yii::$app->params['street'])->text());
-        $model->description = trim($document->find(Yii::$app->params['description-text'])->text());
-        // $image = pq($elem)->find('.slider-for')->find('img')->attr(Yii::$app->params['attr-image']);
-        $categoryList = $document->find('.category-list');
-        // print_r($categoryList);die;
-
-        $tags = [];
-        foreach ($categoryList as $tag) {
-          $tags[] =trim(str_replace("\n", "", pq($tag)->find('.title')->text()));
-          unset($tags[0]);
-          // print_r($categoryes);die;
-        }
-        
-
-        if (!Organization::find()->where(['name' => $model->name])->one()) {
-          $model->addTagValues($tags);
-          $model->save();
-          echo "Ok";
-        } else {
-          $model = Organization::find()->where(['name' => $model->name])->one();
-          $model->addTagValues($tags);
-          $model->update();
-          echo "no";
-        }
-        // print_r($categoryes); die;
-        // $sku = pq($elem)->find(Yii::$app->params['sku'])->html();
-        // $price = $document->find(Yii::$app->params['price'])->html();
-        // Yii::$app->response->format = Response::FORMAT_JSON;
-        // $arr[] = [
-        //     'title' => $title,
-        //     'description' => $description,
-        //     'description-text' => $descriptionText,
-        //     'region' => $region,
-        //     'city' => $city,
-        //     'street' => $street,
-        //     'categoryes' => $categoryes,
-        //     // 'image' => $image,
-        //     // 'price' => $price,
-        //     // 'sku' => $sku,
-        //   ];
-    }
-    // print_r($arr);
-    
-die;
-    return $this->render('autonews', [
-      'body' => $body,
-      // 'model' => $model,
-      // 'productElem' => $productElem
-      //'product' => $product
-    ]);
-  }
-
-  public function actionForm()
-  {
-    // $organization = new Organization();
-    // $organization->name = "Lubimaya";
-    // $post = Organization::findOne(1);
-    // $organization->addTagValues('Кафе, Пекарня');
-    // $organization->save();
-    $model = Organization::find()->anyTagValues('Кафе')->all();
-    // var_dump($model);die;
-    return $this->render('autonews', [
-      // 'body' => $body,
-      'model' => $model,
-      // 'productElem' => $productElem
-      //'product' => $product
-    ]);
+    $listing = $city;
+    echo $city;
+    // // return $this->render('index', [
+    //   'listing' => $listing
+    // ]);
   }
 
   public function actionTags()
@@ -124,12 +31,81 @@ die;
     ]);
   }
 
-  public function actionListing()
+  public function actionIndex()
   {
-    $listing = Organization::find()->all();
+    $listing = Organization::find()->active()->all();
 
-    return $this->render('listing', [
-      'listing' => $listing,
+    return $this->render('index', [
+      'listing' => $listing
     ]);
   }
+
+  public function actionView($slug) {
+
+    $company = Organization::find()->where(['slug' => $slug])->one();
+
+    return $this->render('view', [
+      'company' => $company
+    ]);
+  }
+
+  public function actionTag($slug) {
+    $model = Tag::find()->where(['slug' => $slug])->one();
+    if (!$model) {
+      throw new NotFoundHttpException(Yii::t('frontend', 'Page not found.'));
+    }
+    $listing = Organization::find()->with('category')->joinWith('tags')->where('{{%tag}}.slug = :slug', [':slug' => $slug])->all();
+
+    return $this->render('index', [
+      'listing' => $listing
+    ]);
+  }
+
+  public function actionJson($slug = null)
+  {
+    if ($slug == null) {
+      $listing = Organization::find()->where(['not', ['lat' => null]])->active()->all();
+    } else {
+      $model = Tag::find()->where(['slug' => $slug])->one();
+      if (!$model) {
+        throw new NotFoundHttpException(Yii::t('frontend', 'Page not found.'));
+      }
+      $listing = Organization::find()->with('category')->joinWith('tags')->where('{{%tag}}.slug = :slug', [':slug' => $slug])->all();
+    }
+
+    Yii::$app->response->format = Response::FORMAT_JSON;
+
+    foreach ($listing as $item) {
+      $json[] = [
+        'type' => 'Feature',
+        'id' => $item->id,
+        'geometry' => [
+          'type' => 'Point',
+          'coordinates' => [$item->lat, $item->lng]
+        ],
+        'properties' => [
+          'balloonContentBody' =>
+          '<div class="map-popup-wrap">' .
+          '<div class="map-popup"><div class="infoBox-close">' .
+          '<i class="fa fa-times"></i></div><div class="property-listing property-2">' .
+          '<div class="listing-img-wrapper"><div class="list-single-img">' .
+          '<a href=""><img src="/reveal/img/f389baedd25b0b8e84ba403877d6ebdf.jpg" class="img-fluid mx-auto" alt="" /></a></div>' .
+          '<span class="property-type">' . $item->type . '</span></div><div class="listing-detail-wrapper pb-0">' .
+          '<div class="listing-short-detail"><h4 class="listing-name"><a href="">' . $item->name . '</a>' .
+          '<i class="list-status ti-check"></i></h4></div></div><div class="price-features-wrapper">' .
+          '<div class="listing-price-fx"><h6 class="listing-card-info-price price-prefix"></h6></div>' .
+          '<div class="list-fx-features"></div></div></div>' .
+          '</div></div></div>',
+          'clusterCaption' => "<strong>" . $item->name . "</strong>",
+        ],
+      ];
+    }
+
+    $results = [
+      'type' => 'FeatureCollection',
+      'features' => $json ];
+
+      return $results;
+  }
+
 }

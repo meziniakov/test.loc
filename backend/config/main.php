@@ -58,6 +58,9 @@ $config = [
         'frontendCache' => require Yii::getAlias('@frontend/config/_cache.php'),
     ],
     'modules' => [
+        'parser' => [
+            'class' => 'backend\modules\parser\Parser',
+        ],
         'db-manager' => [
             'class' => 'bs\dbManager\Module',
             // path to directory for the dumps
@@ -74,7 +77,15 @@ $config = [
                 ],
             ],
         ],
-        'phpsysinfo' => [
+        'gallery' => [
+            'class' => 'dvizh\gallery\Module',
+            'imagesStorePath' => Yii::getAlias('@storage') . '/images/original', //path to origin images
+            'imagesCachePath' => '@storage/images/cache', //path to resized copies
+            'graphicsLibrary' => 'GD',
+            'placeHolderPath' => '@storage/images/placeHolder.png',
+            // 'adminRoles' => ['administrator', 'admin', 'superadmin'],
+        ],
+       'phpsysinfo' => [
             'class' => 'bs\phpSysInfo\Module',
             'as access' => [
                 'class' => 'common\behaviors\GlobalAccessBehavior',
@@ -146,7 +157,7 @@ if (YII_ENV_DEV) {
     $config['bootstrap'][] = 'debug';
     $config['modules']['debug'] = [
         'class' => 'yii\debug\Module',
-        'allowedIPs' => ['127.0.0.1', '::1', '192.168.*.*'],
+        'allowedIPs' => ['*'],
         'as access' => [
             'class' => 'common\behaviors\GlobalAccessBehavior',
             'rules' => [

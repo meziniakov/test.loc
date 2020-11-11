@@ -54,7 +54,9 @@ class DefaultController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => Yii::$app->user->id]);
         } else {
-            return $this->render('settings', ['model' => $model]);
+            return $this->render('settings', [
+                'model' => $model,
+                ]);
         }
     }
 
@@ -103,10 +105,43 @@ class DefaultController extends Controller
      */
     public function actionView($id)
     {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-            'profile' => UserProfile::findOne($id),
-        ]);
+        $model = $this->findModel($id);
+
+        $passwd = new PasswordForm();
+        $passwd->setUser(Yii::$app->user->identity);
+
+        if ($passwd->load(Yii::$app->request->post()) && $passwd->save()) {
+            Yii::$app->session->setFlash('success', Yii::t('frontend', 'Your password has been successfully changed.'));
+
+            return $this->refresh();
+        }
+
+        $message = new MessageForm();
+        if ($message->load(Yii::$app->request->post()) && $message->validate()) {
+            // if ($message->sendEmail($user->email)) {
+            //     Yii::$app->session->setFlash('success', Yii::t('frontend', 'Your message has been sent successfully.'));
+            // } else {
+            //     Yii::$app->session->setFlash('error', Yii::t('frontend', 'There was an error sending your message.'));
+            // }
+            return $this->refresh();
+        }
+
+        $user = Yii::$app->user->identity->userProfile;
+
+        if ($user->load(Yii::$app->request->post()) && $user->save()) {
+            Yii::$app->session->setFlash('success', Yii::t('frontend', 'Your password has been successfully changed.'));
+
+            return $this->refresh();
+
+        } else {
+            return $this->render('view', [
+                'model' => $model,
+                'user' => $user,
+                'message' => $message,
+                'passwd' => $passwd,
+                'profile' => UserProfile::findOne($id),
+            ]);
+        }
     }
 
     /**

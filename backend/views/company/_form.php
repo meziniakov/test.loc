@@ -18,13 +18,15 @@ use dosamigos\tinymce\TinyMce;
 
 <div class="organization-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
 
     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'slug')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'keywords')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'lat')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'lng')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'description')->widget(TinyMce::class, [
         'language' => strtolower(substr(Yii::$app->language, 0, 2)),
@@ -51,6 +53,15 @@ use dosamigos\tinymce\TinyMce;
             'create' => true,
         ],
     ]) ?>
+
+    <?= \dvizh\gallery\widgets\Gallery::widget(
+        [
+            'model' => $model,
+            'previewSize' => '150x150',
+            'fileInputPluginLoading' => true,
+            'fileInputPluginOptions' => []
+        ]
+    ); ?>
 
     <?= $form->field($model, 'status')->checkbox(['label' => Yii::t('backend', 'Activate')]) ?>
 

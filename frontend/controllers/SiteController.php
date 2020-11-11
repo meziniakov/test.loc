@@ -2,6 +2,7 @@
 
 namespace frontend\controllers;
 
+use common\models\Organization;
 use Yii;
 use yii\web\Controller;
 use frontend\models\ContactForm;
@@ -38,7 +39,11 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        $listing = Organization::find()->all();
+
+        return $this->render('index', [
+            'listing' => $listing
+        ]);
     }
 
     /**

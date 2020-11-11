@@ -12,6 +12,18 @@ $config = [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
     ],
+    'modules' => [
+        'gallery' => [
+            'class' => 'dvizh\gallery\Module',
+            'imagesStorePath' => '@storage/images/original', //path to origin images
+            // 'imagesStorePath' => dirname(dirname(__DIR__)).'/frontend/web/images/store', //path to origin images
+            'imagesCachePath' => '@storage/images/cache', //path to resized copies
+            // 'imagesCachePath' => dirname(dirname(__DIR__)).'/frontend/web/images/cache', //path to resized copies
+            'graphicsLibrary' => 'GD',
+            'placeHolderPath' => '@storage/images/placeHolder.png',
+            'adminRoles' => ['administrator', 'admin', 'superadmin'],
+        ],
+    ],
     'components' => [
         'db' => [
             'class' => 'yii\db\Connection',

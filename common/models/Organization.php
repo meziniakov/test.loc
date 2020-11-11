@@ -4,9 +4,7 @@ namespace common\models;
 
 use Yii;
 use creocoder\taggable\TaggableBehavior;
-use common\models\Adresses;
-use common\models\Opinions;
-use common\models\OrgToCat;
+use yii\bootstrap\Html;
 use common\models\Tag;
 use common\models\query\OrganizationQuery;
 
@@ -21,13 +19,7 @@ use common\models\query\OrganizationQuery;
  * @property int $org_category
  * @property float $lon
  * @property float $lat
- * @property int $links_id
- * @property int $opinions_id
  *
- * @property Adresses[] $adresses
- * @property Opinions[] $opinions
- * @property OrgToCat[] $orgToCats
- * @property SocLinks[] $socLinks
  */
 class Organization extends \yii\db\ActiveRecord
 {
@@ -43,6 +35,12 @@ class Organization extends \yii\db\ActiveRecord
                 'tagRelation' => 'tags',
                 'tagValueAttribute' => 'name',
                 'tagFrequencyAttribute' => 'frequency',
+            ],
+            'images' => [
+                'class' => 'dvizh\gallery\behaviors\AttachImages',
+                'mode' => 'gallery',
+                'quality' => 60,
+                'galleryId' => 'picture'
             ],
         ];
     }
@@ -62,6 +60,7 @@ class Organization extends \yii\db\ActiveRecord
         return [
             [['name', 'description'], 'required'],
             [['description'], 'string'],
+            [['lat', 'lng'], 'number'],
             ['published_at', 'default',
             'value' => function () {
                 return date(DATE_ATOM);
@@ -105,26 +104,6 @@ class Organization extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[Opinions]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getOpinions()
-    {
-        return $this->hasMany(Opinions::class, ['id' => 'org_id']);
-    }
-
-    /**
-     * Gets query for [[OrgToCats]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getOrgToCats()
-    {
-        return $this->hasMany(OrgToCat::class, ['id' => 'org_id']);
-    }
-
-        /**
      * @return \yii\db\ActiveQuery
      */
     public function getCategory()
@@ -132,7 +111,7 @@ class Organization extends \yii\db\ActiveRecord
         return $this->hasOne(CompanyCategory::class, ['id' => 'category_id']);
     }
 
-        /**
+    /**
      * @return \yii\db\ActiveQuery
      */
     public function getParent()
@@ -173,5 +152,27 @@ class Organization extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Tag::class, ['id' => 'tag_id'])
             ->viaTable('{{%org_id_tag_id}}', ['org_id' => 'id']);
+    }
+
+    public function getTagLinks()
+    {
+        $tagLinks = [];
+
+        foreach ($this->tags as $tag) {
+            $tagLinks[] = Html::a($tag->name, ['tag', 'slug' => $tag->slug]);
+        }
+
+        return implode(', ', $tagLinks);
+    }
+
+    public function getTagLinksArray()
+    {
+        $tagLinks = [];
+
+        foreach ($this->tags as $tag) {
+            $tagLinks[] = Html::a($tag->name, ['tag', 'slug' => $tag->slug]);
+        }
+
+        return $tagLinks;
     }
 }

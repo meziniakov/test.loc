@@ -1,6 +1,7 @@
 <?php
-
 /* @var $this yii\web\View */
+
+use yii\bootstrap\Html;
 
 $this->title = Yii::$app->name;
 ?>
@@ -9,7 +10,7 @@ $this->title = Yii::$app->name;
 			<div class="image-cover hero-banner" style="background:url(reveal/img/33.jpg) no-repeat;" data-overlay="6">
 				<div class="container">
 					
-					<h1 class="big-header-capt">Discove Great Places</h1>
+					<h1 class="big-header-capt">Лучшие места в городе</h1>
 					<div class="full-search-2 italian-search hero-search-radius box-style">
 						<div class="hero-search-content">
 							
@@ -79,23 +80,23 @@ $this->title = Yii::$app->name;
 					<div class="row">
 						<div class="col-lg-12 col-md-12">
 							<div class="sec-heading center">
-								<h2>Most Popular Listings</h2>
-								<p>Find new & featured listings for you.</p>
+								<h2>Популярные места</h2>
+								<p>Выберите подходящие места для Вас.</p>
 							</div>
 						</div>
 					</div>
 					
 					<div class="row">
 						<div class="owl-carousel owl-theme" id="lists-slide">
-							
+							<?php foreach ($listing as $company): ?>
 							<!-- Single List -->
 							<div class="list-slide-box">
 								<div class="modern-list ml-2">
 									<div class="grid-category-thumb">
-										<a href="search-listing.html" class="overlay-cate"><img src="https://via.placeholder.com/1200x850" class="img-responsive" alt="" /></a>
-										<div class="listing-price-info"> 
+										<a href="search-listing.html" class="overlay-cate"><img src="/reveal/img/f389baedd25b0b8e84ba403877d6ebdf.jpg" class="img-responsive" alt="" /></a>
+										<!-- <div class="listing-price-info"> 
 											<span class="pricetag">$25 - $65</span>
-										</div>
+										</div> -->
 										<div class="property_meta"> 
 											<div class="list-rates">
 												<i class="ti-star filled"></i>	
@@ -103,186 +104,21 @@ $this->title = Yii::$app->name;
 												<i class="ti-star filled"></i>
 												<i class="ti-star filled"></i>
 												<i class="ti-star"></i>
-												<a href="#" class="tl-review">(24 Reviews)</a>
+												<!-- <a href="#" class="tl-review">(24 Reviews)</a> -->
 											</div>
-											<h4 class="lst-title"><a href="listing-detail.html">Castle Palace</a><span class="veryfied-author"></span></h4> 
+											<h4 class="lst-title"><?= Html::a($company->name, ['company/view', 'slug' => $company->slug])?><span class="veryfied-author"></span></h4> 
 										</div>
 									</div>
 									<div class="modern-list-content">
 										<div class="listing-cat">
-											<a href="search-listing.html" class="cat-icon cl-1"><i class="ti-briefcase bg-a"></i>Services</a>
-											<span class="more-cat">+3</span>
-										</div>
-										<div class="author-avater">
-											<img src="https://via.placeholder.com/400x400" class="author-avater-img" alt="">
+											<a href="search-listing.html" class="cat-icon cl-1"><i class="ti-briefcase bg-a"></i><?= $company->type?></a>
+											<!-- <span class="more-cat">+3</span> -->
 										</div>
 									</div>
 								</div>	
 							</div>
-							
-							<!-- Single List -->
-							<div class="list-slide-box">
-								<div class="modern-list ml-2">
-									<div class="list-badge now-open">Now Open</div>
-									<div class="grid-category-thumb">
-										<a href="search-listing.html" class="overlay-cate"><img src="https://via.placeholder.com/1200x850" class="img-responsive" alt="" /></a>
-										<div class="listing-price-info"> 
-											<span class="pricetag">$40 - $60</span>
-										</div>
-										<div class="property_meta"> 
-											<div class="list-rates">
-												<i class="ti-star filled"></i>	
-												<i class="ti-star filled"></i>
-												<i class="ti-star filled"></i>
-												<i class="ti-star filled"></i>
-												<i class="ti-star"></i>
-												<a href="#" class="tl-review">(20 Reviews)</a>
-											</div>
-											<h4 class="lst-title"><a href="listing-detail.html">Avenue Mall</a><span class="veryfied-author"></span></h4> 
-										</div>
-									</div>
-									<div class="modern-list-content">
-										<div class="listing-cat">
-											<a href="search-listing.html" class="cat-icon cl-1"><i class="ti-heart-broken bg-b"></i>Shopping Mall</a>
-											<span class="more-cat">+4</span>
-										</div>
-										<div class="author-avater">
-											<img src="https://via.placeholder.com/400x400" class="author-avater-img" alt="">
-										</div>
-									</div>
-								</div>	
-							</div>
-							
-							<!-- Single List -->
-							<div class="list-slide-box">
-								<div class="modern-list ml-2">
-									<div class="grid-category-thumb">
-										<a href="search-listing.html" class="overlay-cate"><img src="https://via.placeholder.com/1200x850" class="img-responsive" alt="" /></a>
-										<div class="listing-price-info"> 
-											<span class="pricetag">$25 - $65</span>
-										</div>
-										<div class="property_meta"> 
-											<div class="list-rates">
-												<i class="ti-star filled"></i>	
-												<i class="ti-star filled"></i>
-												<i class="ti-star filled"></i>
-												<i class="ti-star filled"></i>
-												<i class="ti-star filled"></i>
-												<a href="#" class="tl-review">(15 Reviews)</a>
-											</div>
-											<h4 class="lst-title"><a href="listing-detail.html">Beauty Spa</a><span class="veryfied-author"></span></h4> 
-										</div>
-									</div>
-									<div class="modern-list-content">
-										<div class="listing-cat">
-											<a href="search-listing.html" class="cat-icon cl-1"><i class="ti-gift bg-c"></i>Spa & Massage</a>
-											<span class="more-cat">+2</span>
-										</div>
-										<div class="author-avater">
-											<img src="https://via.placeholder.com/400x400" class="author-avater-img" alt="">
-										</div>
-									</div>
-								</div>	
-							</div>
-							
-							<!-- Single List -->
-							<div class="list-slide-box">
-								<div class="modern-list ml-2">
-									<div class="list-badge now-open">Now Open</div>
-									<div class="grid-category-thumb">
-										<a href="search-listing.html" class="overlay-cate"><img src="https://via.placeholder.com/1200x850" class="img-responsive" alt="" /></a>
-										<div class="listing-price-info"> 
-											<span class="pricetag">$70 - $110</span>
-										</div>
-										<div class="property_meta"> 
-											<div class="list-rates">
-												<i class="ti-star filled"></i>	
-												<i class="ti-star filled"></i>
-												<i class="ti-star filled"></i>
-												<i class="ti-star filled"></i>
-												<i class="ti-star"></i>
-												<a href="#" class="tl-review">(34 Reviews)</a>
-											</div>
-											<h4 class="lst-title"><a href="listing-detail.html">Sweet Restaurants</a><span class="veryfied-author"></span></h4>  
-										</div>
-									</div>
-									<div class="modern-list-content">
-										<div class="listing-cat">
-											<a href="search-listing.html" class="cat-icon cl-1"><i class="lni-fresh-juice bg-d"></i>Eat & Dring</a>
-											<span class="more-cat">+3</span>
-										</div>
-										<div class="author-avater">
-											<img src="https://via.placeholder.com/400x400" class="author-avater-img" alt="">
-										</div>
-									</div>
-								</div>	
-							</div>
-							
-							<!-- Single List -->
-							<div class="list-slide-box">
-								<div class="modern-list ml-2">
-									<div class="grid-category-thumb">
-										<a href="search-listing.html" class="overlay-cate"><img src="https://via.placeholder.com/1200x850" class="img-responsive" alt="" /></a>
-										<div class="listing-price-info"> 
-											<span class="pricetag">$25 - $65</span>
-										</div>
-										<div class="property_meta"> 
-											<div class="list-rates">
-												<i class="ti-star filled"></i>	
-												<i class="ti-star filled"></i>
-												<i class="ti-star filled"></i>
-												<i class="ti-star filled"></i>
-												<i class="ti-star"></i>
-												<a href="#" class="tl-review">(22 Reviews)</a>
-											</div>
-											<h4 class="lst-title"><a href="listing-detail.html">Veero Events</a><span class="veryfied-author"></span></h4>  
-										</div>
-									</div>
-									<div class="modern-list-content">
-										<div class="listing-cat">
-											<a href="search-listing.html" class="cat-icon cl-1"><i class="ti-calendar bg-e"></i>Events </a>
-											<span class="more-cat">+4</span>
-										</div>
-										<div class="author-avater">
-											<img src="https://via.placeholder.com/400x400" class="author-avater-img" alt="">
-										</div>
-									</div>
-								</div>	
-							</div>
-							
-							<!-- Single List -->
-							<div class="list-slide-box">
-								<div class="modern-list ml-2">
-									<div class="list-badge now-close">Now Close</div>
-									<div class="grid-category-thumb">
-										<a href="search-listing.html" class="overlay-cate"><img src="https://via.placeholder.com/1200x850" class="img-responsive" alt="" /></a>
-										<div class="listing-price-info"> 
-											<span class="pricetag">$80 - $95</span>
-										</div>
-										<div class="property_meta"> 
-											<div class="list-rates">
-												<i class="ti-star filled"></i>	
-												<i class="ti-star filled"></i>
-												<i class="ti-star filled"></i>
-												<i class="ti-star filled"></i>
-												<i class="ti-star"></i>
-												<a href="#" class="tl-review">(24 Reviews)</a>
-											</div>
-											<h4 class="lst-title"><a href="listing-detail.html">Hilly Salon</a><span class="veryfied-author"></span></h4> 
-										</div>
-									</div>
-									<div class="modern-list-content">
-										<div class="listing-cat">
-											<a href="search-listing.html" class="cat-icon cl-1"><i class="ti-briefcase bg-f"></i>Services</a>
-											<span class="more-cat">+3</span>
-										</div>
-										<div class="author-avater">
-											<img src="https://via.placeholder.com/400x400" class="author-avater-img" alt="">
-										</div>
-									</div>
-								</div>	
-							</div>
-							
+							<?php endforeach; ?>
+
 						</div>
 					</div>
 				</div>

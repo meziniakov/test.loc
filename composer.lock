@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b3e536fa830d24becaed2c97e8eded60",
+    "content-hash": "05316d52140d3b2f1403e4e70b862b68",
     "packages": [
         {
             "name": "2amigos/yii2-highcharts-widget",
@@ -184,6 +184,55 @@
             "time": "2019-04-16T15:18:48+00:00"
         },
         {
+            "name": "abeautifulsite/simpleimage",
+            "version": "2.7.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/claviska/SimpleImage.git",
+                "reference": "54a99d302355d22ee00d9842a8dbe101a52203d8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/claviska/SimpleImage/zipball/54a99d302355d22ee00d9842a8dbe101a52203d8",
+                "reference": "54a99d302355d22ee00d9842a8dbe101a52203d8",
+                "shasum": ""
+            },
+            "require": {
+                "ext-gd": "*",
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.5-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "abeautifulsite": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nazar Mokrynskyi",
+                    "email": "nazar@mokrynskyi.com",
+                    "homepage": "http://cleverstyle.org/",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Cory LaViska",
+                    "homepage": "http://www.abeautifulsite.net/",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A PHP class that simplifies working with images",
+            "time": "2017-01-06T16:38:10+00:00"
+        },
+        {
             "name": "beaten-sect0r/yii2-db-manager",
             "version": "dev-master",
             "source": {
@@ -351,7 +400,7 @@
             "version": "v3.4.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/twbs/bootstrap.git",
+                "url": "git@github.com:twbs/bootstrap.git",
                 "reference": "68b0d231a13201eb14acd3dc84e51543d16e5f7e"
             },
             "dist": {
@@ -512,7 +561,7 @@
             "version": "1.12.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/components/jqueryui.git",
+                "url": "git@github.com:components/jqueryui.git",
                 "reference": "44ecf3794cc56b65954cc19737234a3119d036cc"
             },
             "dist": {
@@ -646,7 +695,7 @@
             "version": "2.0.7.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/yiisoft/jquery-pjax.git",
+                "url": "git@github.com:yiisoft/jquery-pjax.git",
                 "reference": "aef7b953107264f00234902a3880eb50dafc48be"
             },
             "dist": {
@@ -939,6 +988,54 @@
                 "php"
             ],
             "time": "2020-10-15T17:34:58+00:00"
+        },
+        {
+            "name": "dvizh/yii2-gallery",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dvizh/yii2-gallery.git",
+                "reference": "e5f6ff72dca596f64c1bf82e9871f4a187af058a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dvizh/yii2-gallery/zipball/e5f6ff72dca596f64c1bf82e9871f4a187af058a",
+                "reference": "e5f6ff72dca596f64c1bf82e9871f4a187af058a",
+                "shasum": ""
+            },
+            "require": {
+                "abeautifulsite/simpleimage": "2.*",
+                "kartik-v/yii2-widget-fileinput": "*",
+                "php": ">=5.4.0",
+                "yiisoft/yii2": "*",
+                "yiisoft/yii2-bootstrap": "*"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "dvizh\\gallery\\": "src\\"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Ilya Pistol",
+                    "email": "admin@nethammer.ru"
+                }
+            ],
+            "description": "Модуль позволяет загружать виджетом картинки",
+            "homepage": "https://github.com/dvizh/yii2-gallery",
+            "keywords": [
+                "application",
+                "dvizh",
+                "images",
+                "yii2",
+                "yii2-images"
+            ],
+            "time": "2018-02-05T13:08:30+00:00"
         },
         {
             "name": "egulias/email-validator",
@@ -1341,6 +1438,178 @@
             "time": "2020-09-30T07:37:11+00:00"
         },
         {
+            "name": "kartik-v/bootstrap-fileinput",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/kartik-v/bootstrap-fileinput.git",
+                "reference": "809f2ecbb9ecc1d6987b410859d2f22493af6b6a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/kartik-v/bootstrap-fileinput/zipball/809f2ecbb9ecc1d6987b410859d2f22493af6b6a",
+                "reference": "809f2ecbb9ecc1d6987b410859d2f22493af6b6a",
+                "shasum": ""
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "5.1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "kartik\\plugins\\fileinput\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Kartik Visweswaran",
+                    "email": "kartikv2@gmail.com",
+                    "homepage": "http://www.krajee.com/"
+                }
+            ],
+            "description": "An enhanced HTML 5 file input for Bootstrap 3.x with features for file preview for many file types, multiple selection, ajax uploads, and more.",
+            "homepage": "https://github.com/kartik-v/bootstrap-fileinput",
+            "keywords": [
+                "ajax",
+                "bootstrap",
+                "delete",
+                "file",
+                "image",
+                "input",
+                "jquery",
+                "multiple",
+                "preview",
+                "progress",
+                "upload"
+            ],
+            "funding": [
+                {
+                    "url": "https://opencollective.com/bootstrap-fileinput",
+                    "type": "open_collective"
+                }
+            ],
+            "time": "2020-10-26T07:23:06+00:00"
+        },
+        {
+            "name": "kartik-v/yii2-krajee-base",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/kartik-v/yii2-krajee-base.git",
+                "reference": "8aa48bb2e7613db45b3c34f7a9346d7f43b1f4ec"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/kartik-v/yii2-krajee-base/zipball/8aa48bb2e7613db45b3c34f7a9346d7f43b1f4ec",
+                "reference": "8aa48bb2e7613db45b3c34f7a9346d7f43b1f4ec",
+                "shasum": ""
+            },
+            "suggest": {
+                "yiisoft/yii2-bootstrap": "for Krajee extensions to work with Bootstrap 3.x version",
+                "yiisoft/yii2-bootstrap4": "for Krajee extensions to work with Bootstrap 4.x version"
+            },
+            "type": "yii2-extension",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "kartik\\base\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Kartik Visweswaran",
+                    "email": "kartikv2@gmail.com",
+                    "homepage": "http://www.krajee.com/"
+                }
+            ],
+            "description": "Base library and foundation components for all Yii2 Krajee extensions.",
+            "homepage": "https://github.com/kartik-v/yii2-krajee-base",
+            "keywords": [
+                "base",
+                "extension",
+                "foundation",
+                "krajee",
+                "widget",
+                "yii2"
+            ],
+            "time": "2019-05-25T07:25:02+00:00"
+        },
+        {
+            "name": "kartik-v/yii2-widget-fileinput",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/kartik-v/yii2-widget-fileinput.git",
+                "reference": "d43bb9d9638ba117bbaa0045250645dc843fcf7f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/kartik-v/yii2-widget-fileinput/zipball/d43bb9d9638ba117bbaa0045250645dc843fcf7f",
+                "reference": "d43bb9d9638ba117bbaa0045250645dc843fcf7f",
+                "shasum": ""
+            },
+            "require": {
+                "kartik-v/bootstrap-fileinput": ">=5.0.0",
+                "kartik-v/yii2-krajee-base": ">=2.0.0"
+            },
+            "type": "yii2-extension",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "kartik\\file\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Kartik Visweswaran",
+                    "email": "kartikv2@gmail.com",
+                    "homepage": "http://www.krajee.com/"
+                }
+            ],
+            "description": "An enhanced FileInput widget for Bootstrap 3.x & 4.x with file preview, multiple selection, and more features (sub repo split from yii2-widgets)",
+            "homepage": "https://github.com/kartik-v/yii2-widget-fileinput",
+            "keywords": [
+                "extension",
+                "file",
+                "form",
+                "input",
+                "jquery",
+                "plugin",
+                "upload",
+                "widget",
+                "yii2"
+            ],
+            "funding": [
+                {
+                    "url": "https://opencollective.com/yii2-widget-fileinput",
+                    "type": "open_collective"
+                }
+            ],
+            "time": "2020-10-23T19:54:51+00:00"
+        },
+        {
             "name": "league/flysystem",
             "version": "1.x-dev",
             "source": {
@@ -1530,7 +1799,7 @@
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "git@github.com:MihailDev/yii2-elfinder.git",
+                "url": "https://github.com/MihailDev/yii2-elfinder.git",
                 "reference": "553f7863ec261e2958a8fad559d30c18d61cc2c7"
             },
             "dist": {
@@ -4458,6 +4727,7 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
+        "dvizh/yii2-gallery": 20,
         "fxp/composer-asset-plugin": 20,
         "electrolinux/phpquery": 20
     },
@@ -4466,5 +4736,6 @@
     "platform": {
         "php": ">=5.5.0"
     },
-    "platform-dev": []
+    "platform-dev": [],
+    "plugin-api-version": "1.1.0"
 }

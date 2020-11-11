@@ -3,7 +3,7 @@
 namespace common\models\query;
 
 use creocoder\taggable\TaggableQueryBehavior;
-
+use common\models\CompanyCategory;
 /**
  * This is the ActiveQuery class for [[\frontend\models\Organizations]].
  *
@@ -17,10 +17,10 @@ class OrganizationQuery extends \yii\db\ActiveQuery
             TaggableQueryBehavior::class,
         ];
     }
-    /*public function active()
+    public function active()
     {
-        return $this->andWhere('[[status]]=1');
-    }*/
+        return $this->andWhere(['status' => CompanyCategory::STATUS_ACTIVE]);
+    }
 
     /**
      * {@inheritdoc}
