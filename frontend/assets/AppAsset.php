@@ -19,11 +19,11 @@ class AppAsset extends AssetBundle
         'reveal/css/colors.css',
     ];
     public $js = [
-        'reveal/js/jquery.min.js',
+        // 'reveal/js/jquery.min.js',
         'reveal/js/circleMagic.min.js',
         'reveal/js/popper.min.js',
         'reveal/js/jquery.magnific-popup.min.js',
-        'reveal/js/bootstrap.min.js',
+        // 'reveal/js/bootstrap.min.js',
         'reveal/js/rangeslider.js',
         'reveal/js/select2.min.js',
         'reveal/js/aos.js',

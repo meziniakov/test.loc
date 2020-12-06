@@ -31,7 +31,7 @@ use dosamigos\tinymce\TinyMce;
     <?= $form->field($model, 'description')->widget(TinyMce::class, [
         'language' => strtolower(substr(Yii::$app->language, 0, 2)),
         'clientOptions' => [
-            'height'=> 350,
+            'height' => 350,
             'plugins' => [
                 'advlist autolink lists link image charmap print preview anchor pagebreak',
                 'searchreplace visualblocks code fullscreen',
@@ -54,33 +54,36 @@ use dosamigos\tinymce\TinyMce;
         ],
     ]) ?>
 
-    <?= \dvizh\gallery\widgets\Gallery::widget(
-        [
-            'model' => $model,
-            'previewSize' => '150x150',
-            'fileInputPluginLoading' => true,
-            'fileInputPluginOptions' => []
-        ]
-    ); ?>
+    <div class="col-sm-6">
+        <?= $form->field($model, 'imageFile')->fileInput() ?>
+        <?php $img = $model->getImage(); ?>
+        <?= Html::img($img->getUrl('300x')) ?>
+    </div>
+    <div class="col-sm-6">
+        <?= $form->field($model, 'imageFiles[]')->fileInput(['multiple' => true, 'accept' => 'image/*']) ?>
+        <?php $gallery = $model->getImages(); ?>
+        <?php foreach ($gallery as $image) : ?>
+            <?= Html::img($image->getUrl('300x')) ?>
+        <?php endforeach; ?>
+    </div>
 
     <?= $form->field($model, 'status')->checkbox(['label' => Yii::t('backend', 'Activate')]) ?>
 
     <?= $form->field($model, 'category_id')->dropDownList(ArrayHelper::map(
-            $categories,
-            'id',
-            'title'
-        ), ['prompt' => '']
-    ) ?>
+        $categories,
+        'id',
+        'title'
+    ), ['prompt' => '']) ?>
 
     <?= $form->field($model, 'published_at')->widget(FlatpickrWidget::class, [
         'locale' => strtolower(substr(Yii::$app->language, 0, 2)),
         'plugins' => [
-             'confirmDate' => [
-                   'confirmIcon'=> "<i class='fa fa-check'></i>",
-                   'confirmText' => 'OK',
-                   'showAlways' => false,
-                   'theme' => 'light',
-             ],
+            'confirmDate' => [
+                'confirmIcon' => "<i class='fa fa-check'></i>",
+                'confirmText' => 'OK',
+                'showAlways' => false,
+                'theme' => 'light',
+            ],
         ],
         'groupBtnShow' => true,
         'options' => [

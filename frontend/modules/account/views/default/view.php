@@ -6,6 +6,7 @@ use yii\widgets\DetailView;
 use common\models\UserProfile;
 use bs\Flatpickr\FlatpickrWidget;
 use vova07\fileapi\Widget as FileApi;
+use frontend\widgets\MessageFormWidget;
 
 
 /* @var $this yii\web\View */
@@ -16,6 +17,7 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('frontend', 'Users'), 'url' 
 // $this->params['breadcrumbs'][] = $this->title;
 ?>
 
+<?= MessageFormWidget::widget([]); ?>
 			<!-- ============================ Page Title Start================================== -->
 			<div class="image-cover author-profile" style="background:url(/reveal/img/11.jpg) no-repeat;" data-overlay="6">
 				<div class="container">
@@ -57,6 +59,7 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('frontend', 'Users'), 'url' 
                                         <?php if ($model->id == Yii::$app->user->id) {
                                             echo Html::a(Yii::t('frontend', 'Send email'), ['message', 'id' => $model->id], ['class' => 'btn btn-success']);
                                         } ?>										
+                                        <?php echo Html::a('Exit', ['sign-in/logout'], ['data' => ['method' => 'post',]], ['class' => 'btn btn-success']);?>										
                                     </div>                                    
 								</div>
 								

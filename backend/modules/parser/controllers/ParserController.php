@@ -6,6 +6,7 @@ use Yii;
 use yii\helpers\Url;
 use GuzzleHttp\Client;
 use backend\modules\parser\models\Parser;
+use backend\modules\parser\models\Company;
 use common\models\Organization;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
@@ -134,56 +135,131 @@ class ParserController extends Controller
     public function actionStart($id)
     {
       $model = $this->findModel($id);
-    // try {
-      $client = new Client();
-      $res = $client->request('GET', 'https://ivanovo.spravka.city/restorany-kafe-zavedeniya');
-      $body = $res->getBody();
-      $document = \phpQuery::newDocumentHTML($body);
-      $productsList = $document->find($model->main_tag);
-    //   $test = pq($productsList)->find('a')->attr('href');
-      // var_dump($productsList); die;
-      $urls = [];
-      $i = 0;
-      foreach ($productsList as $elem) {
-        if ($i > 0 && $i < $model->total_link) {
-          $urls[] = pq($elem)->find('a')->attr('href');
-        }
-        ++$i;
-      }
-      // var_dump($urls);die;
+      $productsList = $model->getDocument($model->url)->find($model->main_tag);
+      $urls = $model->getUrls($productsList, $model);
+      
+    //   var_dump($urls);die;
+
       foreach ($urls as $url) {
-          $client = new Client();
-          $res = $client->request('GET', $url);
-          $body = $res->getBody();
-          $document = \phpQuery::newDocumentHTML($body);
+          $document = $model->getDocument($url);
           $company = new Organization();
           $company->name = $document->find($model->tag_name)->text();
-          $company->type = $document->find($model->tag_description)->text();
+          $company->description = $document->find($model->tag_description)->html();
+        //   $company->address = $document->find($model->tag_addres)->text();
+        // //   $company[] = $document->find($model->tag_city)->text();
+        //   $phones[] = $document->find($model->tag_phone)->text();
+        //   foreach ($phones as $phone) {
+        //     $company->phone = trim($phone);
+        //   }
+        //   $links[] = $document->find($model->tag_links)->attr('href');
+        //   foreach ($links as $link) {
+        //     $company[] = $link . "<br>";
+        //   }
+        //   $company[] = $document->find('script:contains("geocoord:[")')->text();
+
+
+        //   $company[] = empty($model->uri) ? $document->find($model->tag_image)->attr($model->tag_attr_image) : $model->uri . $document->find($model->tag_image)->attr($model->tag_attr_image);
+
           // $region = trim($document->find(Yii::$app->params['region'])->text());
           // $city = 
           // $street = trim($document->find(Yii::$app->params['street'])->text());
-          $company->description = trim($document->find(Yii::$app->params['description-text'])->text());
           // $image = pq($elem)->find('.slider-for')->find('img')->attr(Yii::$app->params['attr-image']);
-          $categoryList = $document->find('.category-list');
+        //   $categoryList = $document->find('.category-list');
           // print_r($categoryList);die;
   
+        //   $tags = [];
+        //   foreach ($categoryList as $tag) {
+        //     $tags[] =trim(str_replace("\n", "", pq($tag)->find('.title')->text()));
+        //     unset($tags[0]);
+        //     // print_r($categoryes);die;
+        //   }
+          
+          if (!Organization::find()->where(['name' => $company->name])->one()) {
+            // $company->addTagValues($tags);
+            $company->save();
+            // return $this->redirect(['view', 'id' => $model->id]);
+            // return $this->render('update', [
+            //     'model' => $model,
+            //     'company' => $company,
+            //     ]);
+                    // echo "Saved";
+          } else {
+            $company = Organization::find()->where(['name' => $company->name])->one();
+            // $company->addTagValues($tags);
+            $company->update();
+            // return $this->redirect(['view', 'id' => $model->id]);
+            // return $this->render('update', [
+            //     'model' => $model,
+            //     'company' => $company,
+            //     ]);
+                    // echo "update";
+          }
+      }
+    if ($company->update()) {
+        return $this->redirect(['view', 'id' => $model->id]);
+    }
+    return $this->refresh();
+    }
+
+    public function actionTest($id)
+    {
+      $model = $this->findModel($id);
+      $productsList = $model->getDocument($model->url)->find($model->main_tag);
+      $urls = $model->getUrls($productsList, $model);
+
+      if (empty($model->tag_name)) {
+      var_dump($urls);die;
+      }
+      
+      $company = [];
+      foreach ($urls as $url) {
+          $document = $model->getDocument($url);
+          $company[] = $document->find($model->tag_name)->text();
+          $company[] = $document->find($model->tag_description)->html();
+        //   $company[] = $document->find($model->tag_city)->text();
+          $company[] = $document->find($model->tag_addres)->text();
+        //   $phones[] = $document->find($model->tag_phone)->text();
+        //   foreach ($phones as $phone) {
+        //     $company[] = trim($phone);
+        //   }
+
+        //   $links[] = $document->find($model->tag_links)->attr('href');
+        //   foreach ($links as $link) {
+        //     $company[] = $link . "<br>";
+        //   }
+        //   $company[] = $document->find('script:contains("geocoord:[")')->text();
+
+        //   echo $company['name'];die;
+        //   $company['description'] = trim($document->find($model->tag_description)->text());
+          // $region = trim($document->find(Yii::$app->params['region'])->text());
+          // $street = trim($document->find(Yii::$app->params['street'])->text());
+          $company[] = empty($model->uri) ? $document->find($model->tag_image)->attr($model->tag_attr_image) : $model->uri . $document->find($model->tag_image)->attr($model->tag_attr_image);
+
+          $categoryList = $document->find('.category-list');
+        //   print_r($company->name);die;
           $tags = [];
           foreach ($categoryList as $tag) {
             $tags[] =trim(str_replace("\n", "", pq($tag)->find('.title')->text()));
             unset($tags[0]);
-            // print_r($categoryes);die;
           }
-          
-          if (!Organization::find()->where(['name' => $company->name])->one()) {
-            $company->addTagValues($tags);
-            // $company->save();
-            echo "Ok";
-          } else {
-            $company = Organization::find()->where(['name' => $company->name])->one();
-            $company->addTagValues($tags);
-            // $company->update();
-            echo "no";
-          }
+            // $company->addTagValues($tags);
       }
+    //   echo '<pre>';
+    //   var_dump($company);
+    //   echo '/<pre>';
+    //   die;
+      return $this->render('test', [
+        'model' => $model,
+        'company' => $company,
+        ]);
     }
+
+    // public function getModelSubDir($organization)
+    // {
+    //     // $organization = Organization::find()
+    //     $modelName = $this->getShortClass($model);
+    //     $modelDir = $modelName . 's/' . $modelName . $organization->id;
+
+    //     return $modelDir;
+    // }
 }

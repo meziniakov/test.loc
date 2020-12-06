@@ -3,6 +3,8 @@
 namespace backend\modules\parser\models;
 
 use Yii;
+use GuzzleHttp\Client;
+
 
 /**
  * This is the model class for table "parser".
@@ -44,9 +46,8 @@ class Parser extends \yii\db\ActiveRecord
         return [
             [['uri', 'main_tag', 'url'], 'required'],
             [['total_link'], 'integer'],
-            [['user_agent', 'tag_description', 'tag_category_description'], 'string'],
-            [['uri', 'url', 'main_tag', 'tag_name', 'tag_category_title', 'tag_tags', 'tag_phone', 'tag_links', 'tag_reviews'], 'string', 'max' => 50],
-            [['tag_city', 'tag_addres', 'tag_image', 'tag_attr_image', 'tag_category'], 'string', 'max' => 11],
+            [['url'], 'string', 'max' => 500],
+            [['uri', 'main_tag', 'tag_name', 'tag_category_title', 'tag_tags', 'tag_phone', 'tag_links', 'tag_reviews', 'tag_city', 'tag_addres', 'tag_image', 'tag_attr_image', 'tag_category', 'user_agent', 'tag_description', 'tag_category_description', 'tag_address'], 'string', 'max' => 50],
         ];
     }
 
@@ -75,6 +76,37 @@ class Parser extends \yii\db\ActiveRecord
             'tag_phone' => 'Tag Phone',
             'tag_links' => 'Tag Links',
             'tag_reviews' => 'Tag Reviews',
+            'tag_address' => 'Tag Address',
         ];
+    }
+
+    public function getDocument($url) {
+        $client = new Client();
+        $res = $client->request('GET', $url);
+        $body = $res->getBody();
+        $document = \phpQuery::newDocumentHTML($body);
+        return $document;
+    }
+
+    public function getUrls($productsList, $model) {
+        $urls = [];
+        $i = 0;
+        foreach ($productsList as $elem) {
+          if ($i >= 0 && $i < $model->total_link) {
+            $urls[] = empty($model->uri) ? pq($elem)->attr('href') : $model->uri . pq($elem)->attr('href');
+          }
+          ++$i;
+        }
+        return $urls;
+    }
+
+
+    public function afterSave($insert, $changedAttributes) {
+        if ($insert) {
+            Yii::$app->session->setFlash('success', 'Запись добавлена');
+        } else {
+            Yii::$app->session->setFlash('success', 'Запись обновлена');
+        }
+        parent::afterSave($insert, $changedAttributes);
     }
 }

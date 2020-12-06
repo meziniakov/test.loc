@@ -7,6 +7,7 @@ use yii\base\InvalidParamException;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\BadRequestHttpException;
+use yii\web\HttpException;
 use yii\web\Controller;
 use common\models\LoginForm;
 use common\models\User;
@@ -77,6 +78,26 @@ class SignInController extends Controller
         }
     }
 
+    public function actionAjaxLogin() {
+        if (Yii::$app->request->isAjax) {
+            $model = new LoginForm();
+            if ($model->load(Yii::$app->request->post())) {
+                if ($model->login()) {
+                    $model = Yii::$app->user->identity;
+                    $model->ip = Yii::$app->request->userIP;
+                    $model->save();
+                    
+                    return $this->goBack();
+                } else {
+                    Yii::$app->response->format = yii\web\Response::FORMAT_JSON;
+                    return \yii\widgets\ActiveForm::validate($model);
+                }
+            }
+        } else {
+            throw new HttpException(404 ,'Page not found');
+        }
+    }
+
     /**
      * Logs out the current user.
      *
@@ -87,6 +108,41 @@ class SignInController extends Controller
         Yii::$app->user->logout();
 
         return $this->goHome();
+    }
+
+    /**
+     * Signs user up.
+     *
+     * @return mixed
+     */
+    public function actionAjaxSignup()
+    {
+        if (Yii::$app->keyStorage->get('frontend.registration')) {
+            $model = new SignupForm();
+            if ($model->load(Yii::$app->request->post())) {
+                if ($user = $model->signup()) {
+                    if (Yii::$app->keyStorage->get('frontend.email-confirm')) {
+                        // подтверждение email
+                        if ($model->sendEmail()) {
+                            Yii::$app->session->setFlash('success', Yii::t('frontend', 'Your account has been successfully created. Check your email for further instructions.'));
+                        } else {
+                            Yii::$app->session->setFlash('error', Yii::t('frontend', 'There was an error sending your message.'));
+                        }
+
+                        return $this->refresh();
+                    } else {
+                        // автологин
+                        if (Yii::$app->getUser()->login($user)) {
+                            return $this->goHome();
+                        }
+                    }
+                }
+            }
+
+            return $this->render('signup', ['model' => $model]);
+        } else {
+            return $this->goHome();
+        }
     }
 
     /**

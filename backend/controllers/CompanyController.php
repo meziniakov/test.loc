@@ -10,6 +10,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
+use yii\web\UploadedFile;
 
 /**
  * CompanyController implements the CRUD actions for Organization model.
@@ -70,7 +71,7 @@ class CompanyController extends Controller
     {
         $model = new Organization();
         $categories = CompanyCategory::find()->active()->all();
-
+        // var_dump(Yii::$app->request->post());die;
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['index']);
         }
@@ -93,6 +94,15 @@ class CompanyController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
+            if ($model->imageFile){
+                $model->uploadMainImage();
+            }
+            $model->imageFiles = UploadedFile::getInstances($model, 'imageFiles');
+            $model->uploadGallery();
+            
+            Yii::$app->session->setFlash('success', "успешно обновлено");
+            
             return $this->redirect(['index']);
         }
 

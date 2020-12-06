@@ -25,6 +25,11 @@ use backend\widgets\Menu;
                     'icon' => '<i class="fa fa-tags"></i>',
                 ],
                 [
+                    'label' => Yii::t('backend', 'Parser'),
+                    'url' => ['/parser/parser'],
+                    'icon' => '<i class="fa fa-search"></i>',
+                ],
+                [
                     'label' => Yii::t('backend', 'Companies'),
                     'url' => '#',
                     'icon' => '<i class="fa fa-edit"></i>',

@@ -85,15 +85,18 @@ $this->title = Yii::$app->name;
 							</div>
 						</div>
 					</div>
-					
 					<div class="row">
 						<div class="owl-carousel owl-theme" id="lists-slide">
+						<?php //$images = $listing->getImages()?>
 							<?php foreach ($listing as $company): ?>
+								<?php $images = $company->getImages();?>
 							<!-- Single List -->
 							<div class="list-slide-box">
 								<div class="modern-list ml-2">
 									<div class="grid-category-thumb">
-										<a href="search-listing.html" class="overlay-cate"><img src="/reveal/img/f389baedd25b0b8e84ba403877d6ebdf.jpg" class="img-responsive" alt="" /></a>
+									<?php foreach ($images as $img): ?>
+										<a href="search-listing.html" class="overlay-cate"><img src="<?= $img->getUrl()?>" class="img-responsive" alt="" /></a>
+										<?php endforeach; ?>
 										<!-- <div class="listing-price-info"> 
 											<span class="pricetag">$25 - $65</span>
 										</div> -->
@@ -118,7 +121,6 @@ $this->title = Yii::$app->name;
 								</div>	
 							</div>
 							<?php endforeach; ?>
-
 						</div>
 					</div>
 				</div>

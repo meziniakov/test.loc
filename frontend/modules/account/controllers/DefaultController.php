@@ -3,6 +3,7 @@
 namespace frontend\modules\account\controllers;
 
 use Yii;
+use yii\web\HttpException;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
@@ -144,6 +145,20 @@ class DefaultController extends Controller
         }
     }
 
+
+    public function actionAjaxMessage() {
+        if (Yii::$app->request->isAjax) {
+            $model = new MessageForm();
+            if ($model->load(Yii::$app->request->post())) {
+                return $this->goBack();
+            } else {
+                Yii::$app->response->format = yii\web\Response::FORMAT_JSON;
+                return \yii\widgets\ActiveForm::validate($model);
+            }
+        } else {
+            throw new HttpException(404 ,'Page not found');
+        }
+    }
     /**
      * Displays message page.
      *
@@ -156,8 +171,10 @@ class DefaultController extends Controller
             $model = new MessageForm();
             if ($model->load(Yii::$app->request->post()) && $model->validate()) {
                 if ($model->sendEmail($user->email)) {
+                    echo 'Ok';
                     Yii::$app->session->setFlash('success', Yii::t('frontend', 'Your message has been sent successfully.'));
                 } else {
+                    echo 'No';
                     Yii::$app->session->setFlash('error', Yii::t('frontend', 'There was an error sending your message.'));
                 }
 

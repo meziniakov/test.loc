@@ -20,11 +20,11 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'total_link')->textInput() ?>
 
-    <?= $form->field($model, 'user_agent')->textarea(['rows' => 6]) ?>
+    <?= $form->field($model, 'user_agent')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'tag_name')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'tag_description')->textarea(['rows' => 6]) ?>
+    <?= $form->field($model, 'tag_description')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'tag_city')->textInput(['maxlength' => true]) ?>
 
@@ -38,7 +38,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'tag_category_title')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'tag_category_description')->textarea(['rows' => 6]) ?>
+    <?= $form->field($model, 'tag_category_description')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'tag_tags')->textInput(['maxlength' => true]) ?>
 
@@ -47,6 +47,8 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'tag_links')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'tag_reviews')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'tag_address')->textInput(['maxlength' => true]) ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

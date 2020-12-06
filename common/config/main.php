@@ -20,8 +20,16 @@ $config = [
             'imagesCachePath' => '@storage/images/cache', //path to resized copies
             // 'imagesCachePath' => dirname(dirname(__DIR__)).'/frontend/web/images/cache', //path to resized copies
             'graphicsLibrary' => 'GD',
-            'placeHolderPath' => '@storage/images/placeHolder.png',
+            'placeHolderPath' => '@storage/avatars/5fa3094faef6d.jpg',
             'adminRoles' => ['administrator', 'admin', 'superadmin'],
+        ],
+        'yii2images' => [
+            'class' => 'alex290\yii2images\Module',
+            'imagesStorePath' => '@storage/img/original', //path to origin images
+            'imagesCachePath' => '@storage/img/resize', //path to resized copies
+            'graphicsLibrary' => 'GD', //but really its better to use 'Imagick' 
+            'placeHolderPath' => '@storage/images/placeHolder.png', // if you want to get placeholder when image not exists, string will be processed by Yii::getAlias
+            'imageCompressionQuality' => 100, // Optional. Default value is 85.
         ],
     ],
     'components' => [

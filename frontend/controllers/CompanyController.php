@@ -8,6 +8,8 @@ use yii\web\Response;
 use common\models\Organization;
 use common\models\Tag;
 use yii\web\NotFoundHttpException;
+use SimpleXMLElement;
+use Exception;
 
 class CompanyController extends Controller
 {
@@ -76,6 +78,28 @@ class CompanyController extends Controller
     Yii::$app->response->format = Response::FORMAT_JSON;
 
     foreach ($listing as $item) {
+      // Отправляем запрос к геокодеру
+      if (!$geocode = @file_get_contents( 'https://geocode-maps.yandex.ru/1.x/?apikey=23968611-fd0e-4aea-9982-22f92e32a9bf&geocode=' . urlencode($item->address))) {
+        $error = error_get_last();
+        throw new Exception( 'HTTP request failed. Error: ' . $error['message'] );
+      }
+      
+      $xml = new SimpleXMLElement($geocode);
+      
+      $xml->registerXPathNamespace( 'ymaps', 'http://maps.yandex.ru/ymaps/1.x' );
+      $xml->registerXPathNamespace( 'gml', 'http://www.opengis.net/gml' );
+      
+      $result = $xml->xpath( '/ymaps:ymaps/ymaps:GeoObjectCollection/gml:featureMember/ymaps:GeoObject/gml:Point/gml:pos' );
+      
+      if ( isset( $result[0] ) ) {
+      
+        list( $longitude, $latitude ) = explode( ' ', $result[0] );
+      
+        echo $latitude; // Широта
+        echo $longitude; // Долгота
+      }
+
+
       $json[] = [
         'type' => 'Feature',
         'id' => $item->id,
@@ -106,6 +130,30 @@ class CompanyController extends Controller
       'features' => $json ];
 
       return $results;
+  }
+
+  public function actionAddress($slug = null)
+  {
+    if ($slug == null) {
+      $listing = Organization::find()->where(['not', ['address' => null]])->active()->all();
+    } else {
+      $model = Tag::find()->where(['slug' => $slug])->one();
+      if (!$model) {
+        throw new NotFoundHttpException(Yii::t('frontend', 'Page not found.'));
+      }
+      $listing = Organization::find()->with('category')->joinWith('tags')->where('{{%tag}}.slug = :slug', [':slug' => $slug])->all();
+    }
+
+    Yii::$app->response->format = Response::FORMAT_JSON;
+
+    foreach ($listing as $item) {
+      $json[] = $item->address;
+    }
+
+    $results = [
+      'addresses' => $json
+    ];
+      return $json;
   }
 
 }

@@ -7,6 +7,8 @@ use Yii;
 use yii\web\Controller;
 use frontend\models\ContactForm;
 use vova07\fileapi\actions\UploadAction as FileAPIUpload;
+use common\models\LoginForm;
+use yii\web\HttpException;
 
 /**
  * Class SiteController.
@@ -43,6 +45,12 @@ class SiteController extends Controller
 
         return $this->render('index', [
             'listing' => $listing
+        ]);
+    }
+
+    public function actionFaq()
+    {
+        return $this->render('faq', [
         ]);
     }
 

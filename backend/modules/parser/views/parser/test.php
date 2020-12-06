@@ -2,11 +2,12 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use yii\grid\GridView;
 
 /* @var $this yii\web\View */
 /* @var $model backend\models\Parser */
 
-$this->title = $model->id;
+$this->title = 'Test parser';
 $this->params['breadcrumbs'][] = ['label' => 'Parsers', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
@@ -18,7 +19,6 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
         <?= Html::a('Start', ['start', 'id' => $model->id], ['class' => 'btn btn-success']) ?>
-        <?= Html::a('Test', ['test', 'id' => $model->id], ['class' => 'btn btn-warning']) ?>
         <?= Html::a('Delete', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
@@ -28,28 +28,11 @@ $this->params['breadcrumbs'][] = $this->title;
         ]) ?>
     </p>
 
-    <?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            'id',
-            'uri',
-            'main_tag',
-            'total_link',
-            'user_agent:ntext',
-            'tag_name',
-            'tag_description:ntext',
-            'tag_city',
-            'tag_addres',
-            'tag_image',
-            'tag_attr_image',
-            'tag_category',
-            'tag_category_title',
-            'tag_category_description:ntext',
-            'tag_tags',
-            'tag_phone',
-            'tag_links',
-            'tag_reviews',
-        ],
-    ]) ?>
+    <?php// var_dump($company); die;?>
+
+<?php foreach ($company as $name => $item):?>
+<p><?= $item ?></p>
+
+<?php endforeach;?>
 
 </div>

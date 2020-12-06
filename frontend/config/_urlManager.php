@@ -11,6 +11,8 @@ return [
         'http://msk.test.loc/' => 'company/index',
         'http://tmk.test.loc/' => 'company/index',
         'contact' => 'site/contact',
+        'ajax-login' => 'site/ajax-login',
+        'faq' => 'site/faq',
         // Pages
         'page/<slug>' => 'page/view',
         // Articles
@@ -22,11 +24,13 @@ return [
         // Companies
         'company/page/<page>' => 'company/index',
         'company/json' => 'company/json',
+        'company/address' => 'company/address',
         'company' => 'company/index',
         'company/tags' => 'company/tags',
         'company/<slug>' => 'company/view',
         'company/category/<slug>' => 'company/category',
         'tag/<slug>' => 'company/tag',
         'tag/<slug>/json' => 'company/json',
+        'tag/<slug>/address' => 'company/address',
     ],
 ];
