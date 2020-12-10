@@ -13,16 +13,16 @@ $config = [
         '@npm'   => '@vendor/npm-asset',
     ],
     'modules' => [
-        'gallery' => [
-            'class' => 'dvizh\gallery\Module',
-            'imagesStorePath' => '@storage/images/original', //path to origin images
-            // 'imagesStorePath' => dirname(dirname(__DIR__)).'/frontend/web/images/store', //path to origin images
-            'imagesCachePath' => '@storage/images/cache', //path to resized copies
-            // 'imagesCachePath' => dirname(dirname(__DIR__)).'/frontend/web/images/cache', //path to resized copies
-            'graphicsLibrary' => 'GD',
-            'placeHolderPath' => '@storage/avatars/5fa3094faef6d.jpg',
-            'adminRoles' => ['administrator', 'admin', 'superadmin'],
-        ],
+        // 'gallery' => [
+        //     'class' => 'dvizh\gallery\Module',
+        //     'imagesStorePath' => '@storage/images/original', //path to origin images
+        //     // 'imagesStorePath' => dirname(dirname(__DIR__)).'/frontend/web/images/store', //path to origin images
+        //     'imagesCachePath' => '@storage/images/cache', //path to resized copies
+        //     // 'imagesCachePath' => dirname(dirname(__DIR__)).'/frontend/web/images/cache', //path to resized copies
+        //     'graphicsLibrary' => 'GD',
+        //     'placeHolderPath' => '@storage/avatars/5fa3094faef6d.jpg',
+        //     'adminRoles' => ['administrator', 'admin', 'superadmin'],
+        // ],
         'yii2images' => [
             'class' => 'alex290\yii2images\Module',
             'imagesStorePath' => '@storage/img/original', //path to origin images

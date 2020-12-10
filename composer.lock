@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "95f0055b06e3db0b2d55f0515d65f296",
+    "content-hash": "d0485c0a8b2c45891bc78d8676a6d72b",
     "packages": [
         {
             "name": "2amigos/yii2-highcharts-widget",
@@ -251,7 +251,7 @@
         },
         {
             "name": "alex290/yii2-images",
-            "version": "dev-master",
+            "version": "1.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/alex290/yii2-images.git",
@@ -276,7 +276,6 @@
             "suggest": {
                 "ext-imagick": ""
             },
-            "default-branch": true,
             "type": "yii2-extension",
             "autoload": {
                 "psr-4": {
@@ -308,7 +307,7 @@
             ],
             "support": {
                 "issues": "https://github.com/alex290/yii2-images/issues",
-                "source": "https://github.com/alex290/yii2-images/tree/1.0.3"
+                "source": "https://github.com/alex290/yii2-images/tree/master"
             },
             "time": "2020-02-17T10:08:35+00:00"
         },
@@ -477,12 +476,12 @@
             "version": "v2.4.0-alpha1",
             "source": {
                 "type": "git",
-                "url": "git@github.com:almasaeed2010/AdminLTE.git",
+                "url": "https://github.com/ColorlibHQ/AdminLTE.git",
                 "reference": "37c8bbb01998db487382e9d62cfb398511167f3a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/almasaeed2010/AdminLTE/zipball/37c8bbb01998db487382e9d62cfb398511167f3a",
+                "url": "https://api.github.com/repos/ColorlibHQ/AdminLTE/zipball/37c8bbb01998db487382e9d62cfb398511167f3a",
                 "reference": "37c8bbb01998db487382e9d62cfb398511167f3a"
             },
             "type": "bower-asset",
@@ -495,7 +494,7 @@
             "version": "v3.4.1",
             "source": {
                 "type": "git",
-                "url": "git@github.com:twbs/bootstrap.git",
+                "url": "https://github.com/twbs/bootstrap.git",
                 "reference": "68b0d231a13201eb14acd3dc84e51543d16e5f7e"
             },
             "dist": {
@@ -790,7 +789,7 @@
             "version": "2.0.7.1",
             "source": {
                 "type": "git",
-                "url": "git@github.com:yiisoft/jquery-pjax.git",
+                "url": "https://github.com/yiisoft/jquery-pjax.git",
                 "reference": "aef7b953107264f00234902a3880eb50dafc48be"
             },
             "dist": {
@@ -1123,70 +1122,17 @@
             "time": "2020-12-02T07:27:58+00:00"
         },
         {
-            "name": "dvizh/yii2-gallery",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/dvizh/yii2-gallery.git",
-                "reference": "e5f6ff72dca596f64c1bf82e9871f4a187af058a"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/dvizh/yii2-gallery/zipball/e5f6ff72dca596f64c1bf82e9871f4a187af058a",
-                "reference": "e5f6ff72dca596f64c1bf82e9871f4a187af058a",
-                "shasum": ""
-            },
-            "require": {
-                "abeautifulsite/simpleimage": "2.*",
-                "kartik-v/yii2-widget-fileinput": "*",
-                "php": ">=5.4.0",
-                "yiisoft/yii2": "*",
-                "yiisoft/yii2-bootstrap": "*"
-            },
-            "default-branch": true,
-            "type": "yii2-extension",
-            "autoload": {
-                "psr-4": {
-                    "dvizh\\gallery\\": "src\\"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "Apache-2.0"
-            ],
-            "authors": [
-                {
-                    "name": "Ilya Pistol",
-                    "email": "admin@nethammer.ru"
-                }
-            ],
-            "description": "Модуль позволяет загружать виджетом картинки",
-            "homepage": "https://github.com/dvizh/yii2-gallery",
-            "keywords": [
-                "application",
-                "dvizh",
-                "images",
-                "yii2",
-                "yii2-images"
-            ],
-            "support": {
-                "issues": "https://github.com/dvizh/yii2-gallery/issues",
-                "source": "https://github.com/dvizh/yii2-gallery"
-            },
-            "time": "2018-02-05T13:08:30+00:00"
-        },
-        {
             "name": "egulias/email-validator",
             "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/egulias/EmailValidator.git",
-                "reference": "ca90a3291eee1538cd48ff25163240695bd95448"
+                "reference": "0878374ab8ca0b8541c2b7e6027e77428fe67cb1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/egulias/EmailValidator/zipball/ca90a3291eee1538cd48ff25163240695bd95448",
-                "reference": "ca90a3291eee1538cd48ff25163240695bd95448",
+                "url": "https://api.github.com/repos/egulias/EmailValidator/zipball/0878374ab8ca0b8541c2b7e6027e77428fe67cb1",
+                "reference": "0878374ab8ca0b8541c2b7e6027e77428fe67cb1",
                 "shasum": ""
             },
             "require": {
@@ -1234,7 +1180,7 @@
             ],
             "support": {
                 "issues": "https://github.com/egulias/EmailValidator/issues",
-                "source": "https://github.com/egulias/EmailValidator/tree/2.1.24"
+                "source": "https://github.com/egulias/EmailValidator/tree/master"
             },
             "funding": [
                 {
@@ -1242,7 +1188,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2020-11-14T15:56:27+00:00"
+            "time": "2020-12-07T16:21:29+00:00"
         },
         {
             "name": "electrolinux/phpquery",
@@ -1501,12 +1447,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/psr7.git",
-                "reference": "25f7f893f0b52b7b14e244a16679d72b1f0088de"
+                "reference": "f47ece9e6e8ce74e3be04bef47f46061dc18c095"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/psr7/zipball/25f7f893f0b52b7b14e244a16679d72b1f0088de",
-                "reference": "25f7f893f0b52b7b14e244a16679d72b1f0088de",
+                "url": "https://api.github.com/repos/guzzle/psr7/zipball/f47ece9e6e8ce74e3be04bef47f46061dc18c095",
+                "reference": "f47ece9e6e8ce74e3be04bef47f46061dc18c095",
                 "shasum": ""
             },
             "require": {
@@ -1568,194 +1514,7 @@
                 "issues": "https://github.com/guzzle/psr7/issues",
                 "source": "https://github.com/guzzle/psr7/tree/1.x"
             },
-            "time": "2020-10-22T07:42:05+00:00"
-        },
-        {
-            "name": "kartik-v/bootstrap-fileinput",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/kartik-v/bootstrap-fileinput.git",
-                "reference": "2972f16905c26bca27b2f80d51b59fed7c206479"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/bootstrap-fileinput/zipball/2972f16905c26bca27b2f80d51b59fed7c206479",
-                "reference": "2972f16905c26bca27b2f80d51b59fed7c206479",
-                "shasum": ""
-            },
-            "default-branch": true,
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "5.1.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "kartik\\plugins\\fileinput\\": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Kartik Visweswaran",
-                    "email": "kartikv2@gmail.com",
-                    "homepage": "http://www.krajee.com/"
-                }
-            ],
-            "description": "An enhanced HTML 5 file input for Bootstrap 3.x with features for file preview for many file types, multiple selection, ajax uploads, and more.",
-            "homepage": "https://github.com/kartik-v/bootstrap-fileinput",
-            "keywords": [
-                "ajax",
-                "bootstrap",
-                "delete",
-                "file",
-                "image",
-                "input",
-                "jquery",
-                "multiple",
-                "preview",
-                "progress",
-                "upload"
-            ],
-            "support": {
-                "issues": "https://github.com/kartik-v/bootstrap-fileinput/issues",
-                "source": "https://github.com/kartik-v/bootstrap-fileinput/tree/master"
-            },
-            "funding": [
-                {
-                    "url": "https://opencollective.com/bootstrap-fileinput",
-                    "type": "open_collective"
-                }
-            ],
-            "time": "2020-11-24T13:39:50+00:00"
-        },
-        {
-            "name": "kartik-v/yii2-krajee-base",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/kartik-v/yii2-krajee-base.git",
-                "reference": "8aa48bb2e7613db45b3c34f7a9346d7f43b1f4ec"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-krajee-base/zipball/8aa48bb2e7613db45b3c34f7a9346d7f43b1f4ec",
-                "reference": "8aa48bb2e7613db45b3c34f7a9346d7f43b1f4ec",
-                "shasum": ""
-            },
-            "suggest": {
-                "yiisoft/yii2-bootstrap": "for Krajee extensions to work with Bootstrap 3.x version",
-                "yiisoft/yii2-bootstrap4": "for Krajee extensions to work with Bootstrap 4.x version"
-            },
-            "default-branch": true,
-            "type": "yii2-extension",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.0.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "kartik\\base\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Kartik Visweswaran",
-                    "email": "kartikv2@gmail.com",
-                    "homepage": "http://www.krajee.com/"
-                }
-            ],
-            "description": "Base library and foundation components for all Yii2 Krajee extensions.",
-            "homepage": "https://github.com/kartik-v/yii2-krajee-base",
-            "keywords": [
-                "base",
-                "extension",
-                "foundation",
-                "krajee",
-                "widget",
-                "yii2"
-            ],
-            "support": {
-                "issues": "https://github.com/kartik-v/yii2-krajee-base/issues",
-                "source": "https://github.com/kartik-v/yii2-krajee-base/tree/master"
-            },
-            "time": "2019-05-25T07:25:02+00:00"
-        },
-        {
-            "name": "kartik-v/yii2-widget-fileinput",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/kartik-v/yii2-widget-fileinput.git",
-                "reference": "e15d65047af23a3cf25e47e8c23444e750a27f2c"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-widget-fileinput/zipball/e15d65047af23a3cf25e47e8c23444e750a27f2c",
-                "reference": "e15d65047af23a3cf25e47e8c23444e750a27f2c",
-                "shasum": ""
-            },
-            "require": {
-                "kartik-v/bootstrap-fileinput": ">=5.0.0",
-                "kartik-v/yii2-krajee-base": ">=2.0.0"
-            },
-            "default-branch": true,
-            "type": "yii2-extension",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.1.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "kartik\\file\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Kartik Visweswaran",
-                    "email": "kartikv2@gmail.com",
-                    "homepage": "http://www.krajee.com/"
-                }
-            ],
-            "description": "An enhanced FileInput widget for Bootstrap 3.x & 4.x with file preview, multiple selection, and more features (sub repo split from yii2-widgets)",
-            "homepage": "https://github.com/kartik-v/yii2-widget-fileinput",
-            "keywords": [
-                "extension",
-                "file",
-                "form",
-                "input",
-                "jquery",
-                "plugin",
-                "upload",
-                "widget",
-                "yii2"
-            ],
-            "support": {
-                "issues": "https://github.com/kartik-v/yii2-widget-fileinput/issues",
-                "source": "https://github.com/kartik-v/yii2-widget-fileinput/tree/master"
-            },
-            "funding": [
-                {
-                    "url": "https://opencollective.com/yii2-widget-fileinput",
-                    "type": "open_collective"
-                }
-            ],
-            "time": "2020-12-05T15:43:43+00:00"
+            "time": "2020-12-08T11:45:39+00:00"
         },
         {
             "name": "league/flysystem",
@@ -2401,17 +2160,17 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/swiftmailer/swiftmailer.git",
-                "reference": "f7d2961c858520dc83a594c66cde9d550f6d2226"
+                "reference": "b5f554a649372a16e1d9c058d43adf58b1cc8daa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/f7d2961c858520dc83a594c66cde9d550f6d2226",
-                "reference": "f7d2961c858520dc83a594c66cde9d550f6d2226",
+                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/b5f554a649372a16e1d9c058d43adf58b1cc8daa",
+                "reference": "b5f554a649372a16e1d9c058d43adf58b1cc8daa",
                 "shasum": ""
             },
             "require": {
                 "egulias/email-validator": "^2.0",
-                "php": ">=7.2.5",
+                "php": ">=7.0.0",
                 "symfony/polyfill-iconv": "^1.0",
                 "symfony/polyfill-intl-idn": "^1.10",
                 "symfony/polyfill-mbstring": "^1.0"
@@ -2427,7 +2186,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "6.3-dev"
+                    "dev-master": "6.2-dev"
                 }
             },
             "autoload": {
@@ -2469,7 +2228,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-10-28T07:50:18+00:00"
+            "time": "2020-12-08T18:02:35+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",
@@ -3030,12 +2789,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tinymce/tinymce-dist.git",
-                "reference": "f78490be294c347958f310e547582856b8aa8101"
+                "reference": "310051defb85fec8581ace8b739ab7b18023db8a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tinymce/tinymce-dist/zipball/f78490be294c347958f310e547582856b8aa8101",
-                "reference": "f78490be294c347958f310e547582856b8aa8101",
+                "url": "https://api.github.com/repos/tinymce/tinymce-dist/zipball/310051defb85fec8581ace8b739ab7b18023db8a",
+                "reference": "310051defb85fec8581ace8b739ab7b18023db8a",
                 "shasum": ""
             },
             "default-branch": true,
@@ -3072,9 +2831,9 @@
                 "wysiwyg"
             ],
             "support": {
-                "source": "https://github.com/tinymce/tinymce-dist/tree/5.6.1"
+                "source": "https://github.com/tinymce/tinymce-dist/tree/5.6.2"
             },
-            "time": "2020-11-25T03:13:16+00:00"
+            "time": "2020-12-08T07:23:49+00:00"
         },
         {
             "name": "vlucas/phpdotenv",
@@ -3210,12 +2969,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/yiisoft/yii2-framework.git",
-                "reference": "4eebb710c9b9e496979f2cebc084edb08bb442c8"
+                "reference": "493f8c18cd6f605300f5f27e0f8acea6e3807643"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/yii2-framework/zipball/4eebb710c9b9e496979f2cebc084edb08bb442c8",
-                "reference": "4eebb710c9b9e496979f2cebc084edb08bb442c8",
+                "url": "https://api.github.com/repos/yiisoft/yii2-framework/zipball/493f8c18cd6f605300f5f27e0f8acea6e3807643",
+                "reference": "493f8c18cd6f605300f5f27e0f8acea6e3807643",
                 "shasum": ""
             },
             "require": {
@@ -3324,7 +3083,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-11-30T13:48:37+00:00"
+            "time": "2020-12-09T13:48:39+00:00"
         },
         {
             "name": "yiisoft/yii2-bootstrap",
@@ -3686,12 +3445,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/semver.git",
-                "reference": "840b25a25f620d0ea4a1fd718499a5662c3313ac"
+                "reference": "dd61cb4efbd0cff1700b217faf24ce596af4fc4e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/semver/zipball/840b25a25f620d0ea4a1fd718499a5662c3313ac",
-                "reference": "840b25a25f620d0ea4a1fd718499a5662c3313ac",
+                "url": "https://api.github.com/repos/composer/semver/zipball/dd61cb4efbd0cff1700b217faf24ce596af4fc4e",
+                "reference": "dd61cb4efbd0cff1700b217faf24ce596af4fc4e",
                 "shasum": ""
             },
             "require": {
@@ -3760,7 +3519,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-12-03T15:47:57+00:00"
+            "time": "2020-12-10T07:55:43+00:00"
         },
         {
             "name": "composer/xdebug-handler",
@@ -3902,16 +3661,16 @@
         },
         {
             "name": "friendsofphp/php-cs-fixer",
-            "version": "2.16.x-dev",
+            "version": "2.17.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfPHP/PHP-CS-Fixer.git",
-                "reference": "6f4e62f4b69766b0d901fd63d4b2043e93a908e4"
+                "reference": "ae6fceca37615fcd08183e9c3cfb8f296d2de8c2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/6f4e62f4b69766b0d901fd63d4b2043e93a908e4",
-                "reference": "6f4e62f4b69766b0d901fd63d4b2043e93a908e4",
+                "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/ae6fceca37615fcd08183e9c3cfb8f296d2de8c2",
+                "reference": "ae6fceca37615fcd08183e9c3cfb8f296d2de8c2",
                 "shasum": ""
             },
             "require": {
@@ -3920,7 +3679,7 @@
                 "doctrine/annotations": "^1.2",
                 "ext-json": "*",
                 "ext-tokenizer": "*",
-                "php": "^5.6 || ^7.0",
+                "php": "^5.6 || ^7.0 || ^8.0",
                 "php-cs-fixer/diff": "^1.3",
                 "symfony/console": "^3.4.43 || ^4.1.6 || ^5.0",
                 "symfony/event-dispatcher": "^3.0 || ^4.0 || ^5.0",
@@ -3993,7 +3752,7 @@
             "description": "A tool to automatically fix PHP code style",
             "support": {
                 "issues": "https://github.com/FriendsOfPHP/PHP-CS-Fixer/issues",
-                "source": "https://github.com/FriendsOfPHP/PHP-CS-Fixer/tree/2.16"
+                "source": "https://github.com/FriendsOfPHP/PHP-CS-Fixer/tree/2.17"
             },
             "funding": [
                 {
@@ -4001,7 +3760,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2020-12-04T11:43:58+00:00"
+            "time": "2020-12-09T15:37:49+00:00"
         },
         {
             "name": "opis/closure",
@@ -4009,12 +3768,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/opis/closure.git",
-                "reference": "20dbf0ec37493988bd3d6995edd88746ca58adae"
+                "reference": "06b4961aabf900c72a20b7000bfa10fd7ae3035e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/opis/closure/zipball/20dbf0ec37493988bd3d6995edd88746ca58adae",
-                "reference": "20dbf0ec37493988bd3d6995edd88746ca58adae",
+                "url": "https://api.github.com/repos/opis/closure/zipball/06b4961aabf900c72a20b7000bfa10fd7ae3035e",
+                "reference": "06b4961aabf900c72a20b7000bfa10fd7ae3035e",
                 "shasum": ""
             },
             "require": {
@@ -4067,7 +3826,7 @@
                 "issues": "https://github.com/opis/closure/issues",
                 "source": "https://github.com/opis/closure/tree/master"
             },
-            "time": "2020-11-14T19:55:44+00:00"
+            "time": "2020-12-05T19:20:15+00:00"
         },
         {
             "name": "php-cs-fixer/diff",
@@ -4326,12 +4085,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "a02809c97f01fbb45f401a8e2e6ac9afec37f5a8"
+                "reference": "a3545743754dcab960a6e0145c5b4f909a406e40"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/a02809c97f01fbb45f401a8e2e6ac9afec37f5a8",
-                "reference": "a02809c97f01fbb45f401a8e2e6ac9afec37f5a8",
+                "url": "https://api.github.com/repos/symfony/console/zipball/a3545743754dcab960a6e0145c5b4f909a406e40",
+                "reference": "a3545743754dcab960a6e0145c5b4f909a406e40",
                 "shasum": ""
             },
             "require": {
@@ -4416,7 +4175,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-11-30T17:27:11+00:00"
+            "time": "2020-12-08T17:04:48+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",
@@ -4723,12 +4482,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/finder.git",
-                "reference": "fd8305521692f27eae3263895d1ef1571c71a78d"
+                "reference": "0b9231a5922fd7287ba5b411893c0ecd2733e5ba"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/finder/zipball/fd8305521692f27eae3263895d1ef1571c71a78d",
-                "reference": "fd8305521692f27eae3263895d1ef1571c71a78d",
+                "url": "https://api.github.com/repos/symfony/finder/zipball/0b9231a5922fd7287ba5b411893c0ecd2733e5ba",
+                "reference": "0b9231a5922fd7287ba5b411893c0ecd2733e5ba",
                 "shasum": ""
             },
             "require": {
@@ -4761,7 +4520,7 @@
             "description": "Symfony Finder Component",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/finder/tree/v5.2.0"
+                "source": "https://github.com/symfony/finder/tree/5.x"
             },
             "funding": [
                 {
@@ -4777,7 +4536,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-11-18T09:42:36+00:00"
+            "time": "2020-12-08T17:02:38+00:00"
         },
         {
             "name": "symfony/options-resolver",
@@ -5558,7 +5317,6 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "dvizh/yii2-gallery": 20,
         "electrolinux/phpquery": 20
     },
     "prefer-stable": false,

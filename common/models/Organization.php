@@ -7,7 +7,7 @@ use creocoder\taggable\TaggableBehavior;
 use yii\bootstrap\Html;
 use common\models\Tag;
 use common\models\query\OrganizationQuery;
-
+use yii\helpers\Url;
 /**
  * This is the model class for table "organization".
  *
@@ -214,6 +214,17 @@ class Organization extends \yii\db\ActiveRecord
         }
     }
 
+    public function getUrl($size = false){
+        $urlSize = ($size) ? '_'.$size : '';
+        $url = Url::toRoute([
+            // '/'.$this->getPrimaryKey().
+            '/yii22images/images/image-by-item-and-alias',
+            'item' => $this->modelName.$this->itemId,
+            'dirtyAlias' =>  $this->urlAlias.$urlSize.'.'.$this->getExtension()
+        ]);
+
+        return $url;
+    }
 
     // public function upload()
     // {

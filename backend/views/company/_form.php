@@ -58,6 +58,9 @@ use dosamigos\tinymce\TinyMce;
         <?= $form->field($model, 'imageFile')->fileInput() ?>
         <?php $img = $model->getImage(); ?>
         <?= Html::img($img->getUrl('300x')) ?>
+        <button class="btn btn-default" type="button" data-clear="">
+            <span class="glyphicon glyphicon-remove"></span>
+        </button>
     </div>
     <div class="col-sm-6">
         <?= $form->field($model, 'imageFiles[]')->fileInput(['multiple' => true, 'accept' => 'image/*']) ?>
