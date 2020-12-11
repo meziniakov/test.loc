@@ -30,6 +30,7 @@ class CompanyCategory extends ActiveRecord
     const STATUS_ACTIVE = 1;
 
     public $cnt;
+    public $klass;
     /**
      * @inheritdoc
      */
