@@ -4,6 +4,8 @@
 // $options = ['depends' => ['frontend\assets\AppAsset']]);
 
 use yii\bootstrap\Html;
+use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
 
 $this->registerJsFile("/reveal/js/ymap.js", 
 $options = ['depends' => ['frontend\assets\AppAsset']]);
@@ -24,7 +26,7 @@ $options = ['depends' => ['frontend\assets\AppAsset']]);
 					
 						<div class="row">
 							
-							<div class="col-lg-6 col-md-6 col-sm-12">
+							<!-- <div class="col-lg-6 col-md-6 col-sm-12">
 								<div class="form-group">
 									<div class="input-with-icon">
 										<input type="text" class="form-control" placeholder="Keyword...">
@@ -40,21 +42,15 @@ $options = ['depends' => ['frontend\assets\AppAsset']]);
 										<i class="ti-target theme-cl"></i>
 									</div>
 								</div>
-							</div>
-								
+							</div> -->
+							<?php 
+								$tags = ArrayHelper::map($tags, 'slug', 'name');
+								$categories = ArrayHelper::map($categories, 'id', 'title');
+							?>
 							<div class="col-lg-6 col-md-6 col-sm-12">
 								<div class="form-group">
 									<div class="input-with-icon">
-										<select id="choose-city" class="form-control">
-											<option value="">&nbsp;</option>
-											<option value="1">Los Angeles, CA</option>
-											<option value="2">New York City, NY</option>
-											<option value="3">Chicago, IL</option>
-											<option value="4">Houston, TX</option>
-											<option value="5">Philadelphia, PA</option>
-											<option value="6">San Antonio, TX</option>
-											<option value="7">San Jose, CA</option>
-										</select>
+										<?= Html::dropDownList('list-tags', [], $tags, ['id' => 'choose-city', 'class' => 'form-control', 'prompt' => '']) ?>
 										<i class="ti-briefcase theme-cl"></i>
 									</div>
 								</div>
@@ -63,26 +59,17 @@ $options = ['depends' => ['frontend\assets\AppAsset']]);
 							<div class="col-lg-6 col-md-6 col-sm-12">
 								<div class="form-group">
 									<div class="input-with-icon">
-										<select id="list-category" class="form-control">
-											<option value="">&nbsp;</option>
-											<option value="1">Spa & Bars</option>
-											<option value="2">Restaurants</option>
-											<option value="3">Hotels</option>
-											<option value="4">Educations</option>
-											<option value="5">Business</option>
-											<option value="6">Retail & Shops</option>
-											<option value="7">Garage & Services</option>
-										</select>
+									<?= Html::dropDownList('list-category', null, $categories, ['id' => 'list-category', 'class' => 'form-control', 'prompt' => '']) ?>
 										<i class="ti-layers theme-cl"></i>
 									</div>
 								</div>
 							</div>
 							
-							<div class="col-md-12">
+							<!-- <div class="col-md-12">
 								<div class="form-group" id="module">
 									<a role="button" class="collapsed" data-toggle="collapse" href="#advance-search" aria-expanded="false" aria-controls="advance-search"></a>
 								</div>
-							</div>
+							</div> -->
 							
 							<div class="collapse" id="advance-search" aria-expanded="false" role="banner">
 								
@@ -150,8 +137,8 @@ $options = ['depends' => ['frontend\assets\AppAsset']]);
 							<!-- Filter Result -->
 							<div class="col-lg-12 col-md-12 col-sm-12">
 								<div class="shorting-wrap">
-									<h5 class="shorting-title">507 Results</h5>
-									<div class="shorting-right">
+									<h5 class="shorting-title">Найдено: <?= $company->cnt ?></h5>
+									<!-- <div class="shorting-right">
 										<label>Short By:</label>
 										<div class="dropdown show">
 											<a class="btn btn-filter dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -164,7 +151,7 @@ $options = ['depends' => ['frontend\assets\AppAsset']]);
 												<a class="dropdown-item" href="JavaScript:Void(0);">High Rated</a>
 											</div>
 										</div>
-									</div>
+									</div> -->
 								</div>
 							</div>							
 							
@@ -173,16 +160,18 @@ $options = ['depends' => ['frontend\assets\AppAsset']]);
 						<!--- All List -->
 						<div class="row">
 							<?php foreach($listing as $company):?>
+								<?php $img = $company->getImage(); ?>
 							<!-- Single Listing -->
 							<div class="col-lg-6 col-md-12 col-sm-12">
 								<div class="list-slide-box" data-name=<?= $company->name?>>
 									<div class="modern-list ml-2">
 									<div class="list-badge now-open">Открыто</div>
 										<div class="grid-category-thumb">
-											<a href="search-listing.html" class="overlay-cate"><img src="/reveal/img/f389baedd25b0b8e84ba403877d6ebdf.jpg" class="img-responsive" alt="" /></a>
-											<div class="listing-price-info"> 
+										<a href="<?= Url::to(['company/view', 'slug' => $company->slug])?>" class="overlay-cate"><?= Html::img($img->getUrl('358x229'), ['class' => 'img-responsive', 'alt' => $company->slug]) ?></a>
+											<!-- <a href="search-listing.html" class="overlay-cate"><img src="/reveal/img/f389baedd25b0b8e84ba403877d6ebdf.jpg" class="img-responsive" alt="" /></a> -->
+											<!-- <div class="listing-price-info"> 
 												<span class="pricetag">$25 - $65</span>
-											</div>
+											</div> -->
 											<div class="property_meta"> 
 												<div class="list-rates">
 													<i class="ti-star filled"></i>	
@@ -190,14 +179,19 @@ $options = ['depends' => ['frontend\assets\AppAsset']]);
 													<i class="ti-star filled"></i>
 													<i class="ti-star filled"></i>
 													<i class="ti-star"></i>
-													<a href="#" class="tl-review">(24 Reviews)</a>
+													<!-- <a href="#" class="tl-review">(24 Reviews)</a> -->
 												</div>
 												<h4 class="lst-title"><?= Html::a($company->name, ['company/view', 'slug' => $company->slug])?><span class="veryfied-author"></span></h4> 
 											</div>
 										</div>
 										<div class="modern-list-content">
 											<div class="listing-cat">
-												<a href="search-listing.html" class="cat-icon cl-1"><i class="ti-briefcase bg-a"></i><?= $company->type?></a>
+											<?php if(isset($company->category->slug)): ?>
+											 <?= Html::a("<i class='ti-briefcase bg-a'></i>" . $company->category->title, ['company/category', 'slug' => $company->category->slug], ['class' => 'cat-icon cl-1']) ?>
+											<?php else:?>
+											 <?= Html::a("<i class='ti-briefcase bg-a'></i>" . $company->type, ['company/category', 'slug' => $company->type], ['class' => 'cat-icon cl-1']) ?>
+											<?php endif?>
+												<!-- <a href="search-listing.html" class="cat-icon cl-1"><i class="ti-briefcase bg-a"></i><?= $company->type?></a> -->
 												<span class="more-cat">+3</span>
 											</div>
 											<!-- <div class="author-avater">

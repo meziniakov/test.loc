@@ -9,6 +9,8 @@ use frontend\models\ContactForm;
 use vova07\fileapi\actions\UploadAction as FileAPIUpload;
 use common\models\LoginForm;
 use yii\web\HttpException;
+use common\models\Tag;
+use common\models\CompanyCategory;
 
 /**
  * Class SiteController.
@@ -41,10 +43,12 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        $listing = Organization::find()->all();
+        $listing = Organization::find()->active()->all();
 
         return $this->render('index', [
-            'listing' => $listing
+            'listing' => $listing,
+            'tags' => Tag::find()->all(),
+            'categories' => CompanyCategory::find()->active()->all(),
         ]);
     }
 

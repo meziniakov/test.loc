@@ -4,7 +4,7 @@ use yii\bootstrap\ActiveForm;
 use yii\bootstrap\Html;
 
 /* @var $this yii\web\View */
-/* @var $model common\models\ArticleCategory */
+/* @var $model common\models\CompanyCategory */
 /* @var $form yii\bootstrap\ActiveForm */
 ?>
 
@@ -15,6 +15,8 @@ use yii\bootstrap\Html;
     <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'slug')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'icon')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'comment')->textarea() ?>
 

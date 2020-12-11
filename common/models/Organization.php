@@ -26,6 +26,7 @@ class Organization extends \yii\db\ActiveRecord
     const STATUS_DRAFT = 0;
     const STATUS_ACTIVE = 1;
 
+    public $cnt;
     public $imageFile;
     public $imageFiles;
 
@@ -104,16 +105,6 @@ class Organization extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[Adresses]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getAdresses()
-    {
-        return $this->hasMany(Adresses::class, ['id' => 'org_id']);
-    }
-
-    /**
      * @return \yii\db\ActiveQuery
      */
     public function getCategory()
@@ -134,16 +125,6 @@ class Organization extends \yii\db\ActiveRecord
         $parent = $this->parent;
 
         return $parent ? $parent->name : '';
-    }
-
-    /**
-     * Gets query for [[SocLinks]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getSocLinks()
-    {
-        return $this->hasMany(SocLinks::class, ['id' => 'org_id']);
     }
 
     public function transactions()

@@ -26,8 +26,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
             // 'id',
             'title',
-            // 'slug',
-            'comment',
+            'slug',
+            'icon',
+            // 'comment',
             [
                 'attribute' => 'parent_id',
                 'value' => function ($model) {

@@ -29,6 +29,7 @@ class CompanyCategory extends ActiveRecord
     const STATUS_DRAFT = 0;
     const STATUS_ACTIVE = 1;
 
+    public $cnt;
     /**
      * @inheritdoc
      */
@@ -62,7 +63,7 @@ class CompanyCategory extends ActiveRecord
             ['title', 'required'],
             ['comment', 'string'],
             [['parent_id', 'status', 'created_at', 'updated_at'], 'integer'],
-            [['title', 'slug'], 'string', 'max' => 255],
+            [['title', 'slug', 'icon'], 'string', 'max' => 255],
             ['parent_id', 'exist', 'skipOnError' => true, 'targetClass' => self::class, 'targetAttribute' => ['parent_id' => 'id']],
             ['status', 'default', 'value' => self::STATUS_DRAFT],
         ];
@@ -76,6 +77,7 @@ class CompanyCategory extends ActiveRecord
         return [
             'title' => Yii::t('common', 'Title'),
             'slug' => Yii::t('common', 'Slug'),
+            'icon' => Yii::t('common', 'Icon'),
             'comment' => Yii::t('common', 'Comment'),
             'parent_id' => Yii::t('common', 'Parent'),
             'status' => Yii::t('common', 'Status'),
@@ -87,7 +89,7 @@ class CompanyCategory extends ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCompany()
+    public function getCompanies()
     {
         return $this->hasMany(Organization::class, ['category_id' => 'id']);
     }

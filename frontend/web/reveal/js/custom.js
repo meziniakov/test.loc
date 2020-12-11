@@ -407,7 +407,7 @@ $(function() {
 	
 	// Event Select Category
 	$('#event-list-category').select2({
-		placeholder: "Choose Category",
+		placeholder: "Категория",
 		allowClear: true
 	});
 	
@@ -419,7 +419,7 @@ $(function() {
 	
 	// Select Cities
 	$('#choose-city').select2({
-		placeholder: "Select City",
+		placeholder: "Метки",
 		allowClear: true
 	});
 	

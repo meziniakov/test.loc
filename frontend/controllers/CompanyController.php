@@ -2,6 +2,7 @@
 
 namespace frontend\controllers;
 
+use common\models\CompanyCategory;
 use Yii;
 use yii\web\Controller;
 use yii\web\Response;
@@ -35,10 +36,15 @@ class CompanyController extends Controller
 
   public function actionIndex()
   {
+    $company = new Organization();
     $listing = Organization::find()->active()->all();
+    $company->cnt = count($listing);
 
     return $this->render('index', [
-      'listing' => $listing
+      'company' => $company,
+      'listing' => $listing,
+      'categories' => CompanyCategory::find()->active()->all(),
+      'tags' => Tag::find()->all()
     ]);
   }
 
@@ -48,6 +54,23 @@ class CompanyController extends Controller
 
     return $this->render('view', [
       'company' => $company
+    ]);
+  }
+
+  public function actionCategory($slug) {
+    $model = CompanyCategory::find()->where(['slug' => $slug])->one();
+    if (!$model) {
+      throw new NotFoundHttpException(Yii::t('frontend', 'Page not found.'));
+    }
+    $company = new Organization();
+    $listing = Organization::find()->with('tags')->joinWith('category')->where('{{%company_category}}.slug = :slug', [':slug' => $slug])->all();
+    $company->cnt = count($listing);
+
+    return $this->render('index', [
+      'company' => $company,
+      'listing' => $listing,
+      'categories' => CompanyCategory::find()->active()->all(),
+      'tags' => Tag::find()->all()
     ]);
   }
 
