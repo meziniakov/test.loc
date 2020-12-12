@@ -140,13 +140,16 @@ $this->title = Yii::$app->name;
 			<!-- Single Category -->
 			<div class="col-lg-3 col-md-6 col-sm-12">
 				<div class="list-cats-boxr">
-					<a href="grid-with-sidebar.html" class="category-box">
-						<div class="category-desc">
+				<?php if (isset($category->slug)) : ?>
+					<a href="<?= Url::to(['company/category', 'slug' => $category->slug]) ?>" class="category-box">
+					<?php else : ?>
+						<a href="<?= Url::to(['company/category', 'slug' => $category->type]) ?>" class="category-box">
+					<?php endif ?>
+					<div class="category-desc">
 							<div class="category-icon">
 								<i class="<?= $category->icon?> theme-cl"></i>
 								<i class="<?= $category->icon?> abs-icon"></i>
 							</div>
-
 							<div class="category-detail category-desc-text">
 								<h4><?= $category->title?></h4>
 								<p>122 Listings</p>

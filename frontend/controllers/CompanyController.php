@@ -17,11 +17,17 @@ class CompanyController extends Controller
 
   public function actionTest($city)
   {
-    $listing = $city;
-    echo $city;
-    // // return $this->render('index', [
-    //   'listing' => $listing
-    // ]);
+    $company = new Organization();
+    $listing = Organization::find()->active()->all();
+    $company->cnt = count($listing);
+    
+    return $this->render('index', [
+      'city' => $city,
+      'company' => $company,
+      'listing' => $listing,
+      'categories' => CompanyCategory::find()->active()->all(),
+      'tags' => Tag::find()->all()
+    ]);
   }
 
   public function actionTags()

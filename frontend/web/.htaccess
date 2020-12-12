@@ -27,6 +27,9 @@ RewriteRule ^ http%{ENV:protossl}://%1%{REQUEST_URI} [L,R=301]
 #RewriteCond %{HTTP_HOST} ^(.+)\.test/? [NC]
 #RewriteRule (.*) http://test.loc/$2/$1/ [L]
 
+#RewriteCond %{HTTP_HOST} ^(.+)\.test.loc/? [NC]
+#RewriteRule (.*) http://test.loc/$1/ [L]
+
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 

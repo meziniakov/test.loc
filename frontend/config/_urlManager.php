@@ -7,9 +7,8 @@ return [
     'rules' => [
         // Index page
         // '' => 'site/index',
-        'http://<city>.test.loc/' => 'company/test',
-        'http://msk.test.loc/' => 'company/index',
-        'http://tmk.test.loc/' => 'company/index',
+        '//<city>.test.loc/' => 'company/test',
+        '//<city>.surf-city.ru/' => 'company/test',
         'contact' => 'site/contact',
         'ajax-login' => 'site/ajax-login',
         'faq' => 'site/faq',
