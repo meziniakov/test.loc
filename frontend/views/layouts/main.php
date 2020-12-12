@@ -74,7 +74,7 @@ AppAsset::register($this);
         <div class="header header-light nav-left-side">
             <nav class="headnavbar">
                 <div class="nav-header">
-                    <a href="#" class="brand"><img src="/reveal/img/logo.svg" alt="" /></a>
+                    <a href="#" class="brand"><img src="<?= Yii::getAlias('@storageUrl')?>/theme/logo.svg" alt="" /></a>
                     <button class="toggle-bar"><span class="ti-align-justify"></span></button>
                 </div>
                 <?php
@@ -109,7 +109,7 @@ AppAsset::register($this);
 
                         <div class="col-lg-4 col-md-6">
                             <div class="footer-widget">
-                                <img src="/reveal/img/g-logo-light.svg" class="img-fluid f-logo" alt="" />
+                                <img src="<?= Yii::getAlias('@storageUrl')?>/theme/g-logo-light.svg" class="img-fluid f-logo" alt="" />
                                 <!-- <p>407-472 Rue Saint-Sulpice, Montreal<br>Quebec, H2Y 2V8</p> -->
                                 <ul class="footer-bottom-social">
                                     <li><a href="#"><i class="ti-facebook"></i></a></li>

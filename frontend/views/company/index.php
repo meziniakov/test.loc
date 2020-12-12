@@ -138,7 +138,7 @@ $this->registerJsFile(
 				<!-- Filter Result -->
 				<div class="col-lg-12 col-md-12 col-sm-12">
 					<div class="shorting-wrap">
-						<h5 class="shorting-title">Найдено: <?= $company->cnt ?> Город: <?= $city?> </h5>
+						<h5 class="shorting-title">Найдено: <?= $company->cnt ?> <?php (isset($city) ? "Город:". $city : "") ?></h5>
 						<!-- <div class="shorting-right">
 										<label>Short By:</label>
 										<div class="dropdown show">
