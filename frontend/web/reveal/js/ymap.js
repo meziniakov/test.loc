@@ -22,7 +22,7 @@ test.geoObjects.add(objectManager);
 
 var url = window.location.href;
 $.ajax({
-url: url + "/json"
+// url: url + "/json"
 }).done(function(data) {
 objectManager.add(data);
 });
@@ -75,5 +75,4 @@ error: function (request) {
     console.log("ERROR", request);
 }
 });
-
 })

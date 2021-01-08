@@ -11,6 +11,8 @@ use common\models\Tag;
 use yii\web\NotFoundHttpException;
 use SimpleXMLElement;
 use Exception;
+use yii\base\Exception as BaseException;
+use yii\data\Pagination;
 
 class CompanyController extends Controller
 {
@@ -42,25 +44,39 @@ class CompanyController extends Controller
 
   public function actionIndex()
   {
-    $company = new Organization();
-    $listing = Organization::find()->active()->all();
-    $company->cnt = count($listing);
+    // $listing = Organization::find()->active()->limit(30)->all();
+    $query = Organization::find()->active();
+    $countQuery = clone $query;
+    $pages = new Pagination(['totalCount' => $countQuery->count()]);
+    $listing = $query->offset($pages->offset)
+        ->limit($pages->limit)
+        ->all();
+    $dataProvider = Organization::getAllPages();
 
-    return $this->render('index', [
-      'company' => $company,
+    return $this->render('index',
+    [
+      'dataProvider' => $dataProvider,
+      'pages' => $pages,
       'listing' => $listing,
       'categories' => CompanyCategory::find()->active()->all(),
       'tags' => Tag::find()->all()
-    ]);
+    ]
+  );
   }
 
   public function actionView($slug) {
 
-    $company = Organization::find()->where(['slug' => $slug])->one();
-
+    $company = $this->findModel($slug);
     return $this->render('view', [
       'company' => $company
     ]);
+  }
+
+  public function findModel($slug) {
+    if (($model = Organization::find()->where(['slug' => $slug])->orWhere(['id' => $slug])->one()) !== null) {
+      return $model;
+    }
+    throw new NotFoundHttpException('Страницы не существует');
   }
 
   public function actionCategory($slug) {
@@ -69,7 +85,7 @@ class CompanyController extends Controller
       throw new NotFoundHttpException(Yii::t('frontend', 'Page not found.'));
     }
     $company = new Organization();
-    $listing = Organization::find()->with('tags')->joinWith('category')->where('{{%company_category}}.slug = :slug', [':slug' => $slug])->all();
+    $listing = Organization::find()->with('tags')->joinWith('category')->where('{{%company_category}}.slug = :slug', [':slug' => $slug])->limit(20)->all();
     $company->cnt = count($listing);
 
     return $this->render('index', [
@@ -163,6 +179,8 @@ class CompanyController extends Controller
 
   public function actionAddress($slug = null)
   {
+    Yii::$app->response->format = Response::FORMAT_JSON;
+
     if ($slug == null) {
       $listing = Organization::find()->where(['not', ['address' => null]])->active()->all();
     } else {
@@ -170,19 +188,17 @@ class CompanyController extends Controller
       if (!$model) {
         throw new NotFoundHttpException(Yii::t('frontend', 'Page not found.'));
       }
-      $listing = Organization::find()->with('category')->joinWith('tags')->where('{{%tag}}.slug = :slug', [':slug' => $slug])->all();
+      $listing = Organization::find()->with('category')->joinWith('tags')->where('{{%tag}}.slug = :slug', [':slug' => $slug])->limit(30)->all();
     }
 
-    Yii::$app->response->format = Response::FORMAT_JSON;
-
+    $json = [];
     foreach ($listing as $item) {
-      $json[] = $item->address;
+      if (!empty($item->address)) {
+        // print_r($item);
+        $json[] = $item->address;
+      }
     }
-
-    $results = [
-      'addresses' => $json
-    ];
-      return $json;
+    // return $json;
   }
 
 }

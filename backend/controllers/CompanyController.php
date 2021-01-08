@@ -71,8 +71,18 @@ class CompanyController extends Controller
     {
         $model = new Organization();
         $categories = CompanyCategory::find()->active()->all();
-        // var_dump(Yii::$app->request->post());die;
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
+            if ($model->imageFile){
+                $model->uploadMainImage();
+            }
+            $model->imageFiles = UploadedFile::getInstances($model, 'imageFiles');
+            // var_dump($model->imageFiles);die;
+            $model->uploadGallery();
+            
+            Yii::$app->session->setFlash('success', "Успешно создано");
+            
             return $this->redirect(['index']);
         }
 
@@ -99,6 +109,7 @@ class CompanyController extends Controller
                 $model->uploadMainImage();
             }
             $model->imageFiles = UploadedFile::getInstances($model, 'imageFiles');
+            var_dump($model->imageFiles);die;
             $model->uploadGallery();
             
             Yii::$app->session->setFlash('success', "успешно обновлено");
