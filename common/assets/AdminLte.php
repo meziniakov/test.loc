@@ -12,7 +12,7 @@ class AdminLte extends AssetBundle
         'css/skins/_all-skins.min.css',
     ];
     public $js = [
-        'js/app.min.js',
+        'js/adminlte.min.js',
     ];
     public $depends = [
         'yii\web\JqueryAsset',

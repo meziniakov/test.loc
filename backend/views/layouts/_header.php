@@ -13,13 +13,13 @@ use backend\models\Log;
 <header class="main-header">
     <?= Html::a('<span class="logo-mini">APP</span><span class="logo-lg"><i class="fa fa-diamond"></i> ' . Yii::$app->name . '</span>', Yii::$app->homeUrl, ['class' => 'logo']) ?>
     <nav class="navbar navbar-static-top" role="navigation">
-        <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+        <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
             <span class="sr-only">Toggle navigation</span>
         </a>
         <div class="navbar-custom-menu">
             <ul class="nav navbar-nav">
                 <li class="dropdown tasks-menu">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="pushmenu">
                         <i class="fa fa-warning"></i>
                         <span class="label label-danger"><?= Log::find()->count() ?></span>
                     </a>
