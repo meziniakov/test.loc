@@ -20,7 +20,9 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'total_link')->textInput() ?>
 
-    <?= $form->field($model, 'user_agent')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'per_block')->textInput() ?>
+
+    <?= $form->field($model, 'user_agent')->textArea(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'tag_name')->textInput(['maxlength' => true]) ?>
 

@@ -30,9 +30,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php// var_dump($company); die;?>
 
-<?php foreach ($company as $name => $item):?>
-<p><?= $item ?></p>
+<?php //foreach ($company as $name => $item):?>
+<pre><?php print_r($company) ?></pre>
 
-<?php endforeach;?>
+<?php //endforeach;?>
 
 </div>
