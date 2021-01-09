@@ -32,7 +32,12 @@ AppAsset::register($this);
     <?php $this->head() ?>
 </head>
 
-<body class="purple-skin">
+<?= Html::beginTag('body', [
+        'class' => implode(' ', array_filter([
+            'hold-transition',
+            Yii::$app->keyStorage->get('frontend.theme-skin', 'purple-skin'),
+        ])),
+    ]) ?>
     <?php $this->beginBody() ?>
     <div id="preloader">
         <div class="preloader"><span></span><span></span></div>

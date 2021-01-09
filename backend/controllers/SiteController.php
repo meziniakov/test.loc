@@ -113,6 +113,18 @@ class SiteController extends Controller
                         'skin-green-light' => 'skin-green-light',
                     ],
                 ],
+                'frontend.theme-skin' => [
+                    'label' => Yii::t('frontend', 'Frontend theme'),
+                    'type' => FormModel::TYPE_DROPDOWN,
+                    'items' => [
+                        'yellow-skin' => 'yellow-skin',
+                        'purple-skin' => 'purple-skin',
+                    ],
+                ],
+                'frontend.index.title' => [
+                    'label' => Yii::t('frontend', 'Frontend index title'),
+                    'type' => FormModel::TYPE_TEXTINPUT,
+                ],
                 'backend.layout-fixed' => [
                     'label' => Yii::t('backend', 'Fixed backend layout'),
                     'type' => FormModel::TYPE_CHECKBOX,

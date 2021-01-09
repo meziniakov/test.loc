@@ -5,11 +5,11 @@ use yii\bootstrap\Html;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 
-$this->title = Yii::$app->name;
+$this->title = Yii::$app->keyStorage->get('frontend.index.title');
 ?>
 
 <!-- ============================ Hero Banner  Start================================== -->
-<div class="image-cover hero-banner" style="background:url(reveal/img/33.jpg) no-repeat;" data-overlay="6">
+<div class="image-cover hero-banner" style="background:url(reveal/img/33_.jpg) no-repeat;" data-overlay="6">
 	<div class="container">
 
 		<h1 class="big-header-capt">Лучшие места в городе</h1>
@@ -91,7 +91,7 @@ $this->title = Yii::$app->name;
 					<div class="list-slide-box">
 						<div class="modern-list ml-2">
 							<div class="grid-category-thumb">
-								<a href="<?= Url::to(['company/view', 'slug' => $company->slug]) ?>" class="overlay-cate"><?= Html::img($img->getUrl('358x229'), ['alt' => $company->slug]) ?></a>
+							<a href="<?= Url::to(['company/view', 'slug' => ($company->slug) ? $company->slug : $company->id]) ?>" class="overlay-cate"><?= Html::img($img->getUrl('358x229'), ['class' => 'img-responsive', 'alt' => $company->slug]) ?></a>
 								<!-- <div class="listing-price-info"> 
 											<span class="pricetag">$25 - $65</span>
 										</div> -->
@@ -104,7 +104,7 @@ $this->title = Yii::$app->name;
 										<i class="ti-star"></i>
 										<!-- <a href="#" class="tl-review">(24 Reviews)</a> -->
 									</div>
-									<h4 class="lst-title"><?= Html::a($company->name, ['company/view', 'slug' => $company->slug]) ?><span class="veryfied-author"></span></h4>
+									<h4 class="lst-title"><?= Html::a($company->name, ['company/view', 'slug' => ($company->slug) ? $company->slug : $company->id]) ?><span class="veryfied-author"></span></h4>
 								</div>
 							</div>
 							<div class="modern-list-content">
@@ -123,7 +123,7 @@ $this->title = Yii::$app->name;
 <!-- ============================ Listings End ================================== -->
 
 <!-- ============================ Categories Start ================================== -->
-<section class="image-cover" style="background:url(https://via.placeholder.com/1920x1000) no-repeat;" data-overlay="8">
+<section class="image-cover" style="background:url(<?= Yii::getAlias('@storageUrl')?>/img/1200x850.png) no-repeat;" data-overlay="8">
 	<div class="container">
 
 		<div class="row">
@@ -319,7 +319,7 @@ $this->title = Yii::$app->name;
 						<h4>Los Angeles</h4>
 						<span>24 Listins</span>
 					</div>
-					<div class="img-wrap-background" style="background-image: url(https://via.placeholder.com/1200x850);"></div>
+					<div class="img-wrap-background" style="background-image: url(<?= Yii::getAlias('@storageUrl')?>/img/1200x850.png);"></div>
 				</a>
 			</div>
 
@@ -329,7 +329,7 @@ $this->title = Yii::$app->name;
 						<h4>San Francisco</h4>
 						<span>104 Listins</span>
 					</div>
-					<div class="img-wrap-background" style="background-image: url(https://via.placeholder.com/1200x850);"></div>
+					<div class="img-wrap-background" style="background-image: url(<?= Yii::getAlias('@storageUrl')?>/img/1200x850.png);"></div>
 				</a>
 			</div>
 
@@ -343,7 +343,7 @@ $this->title = Yii::$app->name;
 						<h4>Philadelphia</h4>
 						<span>74 Listins</span>
 					</div>
-					<div class="img-wrap-background" style="background-image: url(https://via.placeholder.com/1200x850);"></div>
+					<div class="img-wrap-background" style="background-image: url(<?= Yii::getAlias('@storageUrl')?>/img/1200x850.png);"></div>
 				</a>
 			</div>
 
@@ -353,7 +353,7 @@ $this->title = Yii::$app->name;
 						<h4>New York</h4>
 						<span>312 Listins</span>
 					</div>
-					<div class="img-wrap-background" style="background-image: url(https://via.placeholder.com/1200x850);"></div>
+					<div class="img-wrap-background" style="background-image: url(<?= Yii::getAlias('@storageUrl')?>/img/1200x850.png);"></div>
 				</a>
 			</div>
 
@@ -363,7 +363,7 @@ $this->title = Yii::$app->name;
 						<h4>San Diego</h4>
 						<span>710 Listins</span>
 					</div>
-					<div class="img-wrap-background" style="background-image: url(https://via.placeholder.com/1200x850);"></div>
+					<div class="img-wrap-background" style="background-image: url(<?= Yii::getAlias('@storageUrl')?>/img/1200x850.png);"></div>
 				</a>
 			</div>
 
