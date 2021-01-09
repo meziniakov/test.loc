@@ -9,26 +9,24 @@ use common\models\CompanyCategory;
 /* @var $searchModel backend\models\search\CompanyCategorySearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('backend', 'Company categories');
+$this->title = Yii::t('backend', 'Article categories');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="article-category-index">
 
     <p>
-        <?= Html::a(Yii::t('backend', 'Create company category'), ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('backend', 'Create article category'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-            //['class' => 'yii\grid\SerialColumn'],
-
+            ['class' => 'yii\grid\SerialColumn'],
             // 'id',
             'title',
             'slug',
-            'icon',
-            // 'comment',
+            'comment',
             [
                 'attribute' => 'parent_id',
                 'value' => function ($model) {
@@ -49,7 +47,6 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             // 'created_at',
             // 'updated_at',
-
             [
                 'class' => 'yii\grid\ActionColumn',
                 'template' => '{update} {delete}',

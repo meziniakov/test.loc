@@ -23,6 +23,8 @@ use dosamigos\tinymce\TinyMce;
     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'slug')->textInput(['maxlength' => true]) ?>
+    
+    <?= $form->field($model, 'url')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'keywords')->textInput(['maxlength' => true]) ?>
     <?= $form->field($model, 'lat')->textInput(['maxlength' => true]) ?>
