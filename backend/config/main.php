@@ -18,8 +18,8 @@ $config = [
             'disabledCommands' => ['netmount'],
             'roots' => [
                 [
-                    'baseUrl' => '@storageUrl',
-                    'basePath' => '@storage',
+                    'baseUrl' => '@app',
+                    'basePath' => '@app',
                     'path' => '/',
                     'access' => ['read' => 'manager', 'write' => 'manager'],
                     'options' => [
@@ -64,7 +64,7 @@ $config = [
         'db-manager' => [
             'class' => 'bs\dbManager\Module',
             // path to directory for the dumps
-            'path' => '@root/backups',
+            'path' => '@backend/backups',
             // list of registerd db-components
             'dbList' => ['db'],
             'as access' => [

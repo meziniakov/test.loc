@@ -127,7 +127,9 @@ class Parser extends \yii\db\ActiveRecord
                     $company->url = $url->loc;
                     // $links[] = $url->loc;
                     try {
-                      $company->save(false);
+                        var_dump($company->url);die;
+                        echo "Ok";die;
+                    //   $company->save(false);
                     } catch(\yii\db\Exception $e) {
                         // echo "error";
                         }
