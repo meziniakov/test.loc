@@ -21,6 +21,7 @@ objectManager.objects.options.set('preset', 'islands#greenDotIcon');
 test.geoObjects.add(objectManager);
 
 var url = window.location.href;
+
 $.ajax({
 // url: url + "/json"
 }).done(function(data) {
@@ -37,9 +38,10 @@ $.ajax({
       // const element = array[index];
       ymaps.geocode(data[index], {
         results: 1
-    }).then(function (res) {
+    }).then(
+      function (res) {
             // Выбираем первый результат геокодирования.
-            var firstGeoObject = res.geoObjects.get(0),
+          var firstGeoObject = res.geoObjects.get(0),
                 // Координаты геообъекта.
                 coords = firstGeoObject.geometry.getCoordinates(),
                 // Область видимости геообъекта.

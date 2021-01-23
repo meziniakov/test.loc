@@ -115,6 +115,7 @@ class Organization extends ActiveRecord
             'address' => 'Address',
             'phone' => 'Org Phone',
             'category' => 'Org Category',
+            'category_id' => 'Org Category',
             'tagValues' => 'Tags',
             'imageFile' => Yii::t('backend', 'Image Upload'),
             'imageFiles' => Yii::t('backend', 'Images Upload'),

@@ -4,18 +4,20 @@
 // $options = ['depends' => ['frontend\assets\AppAsset']]);
 
 use yii\bootstrap\Html;
+use yii\widgets\ListView;
 
 $this->registerJsFile(
   "/reveal/js/ymap.js",
   $options = ['depends' => ['frontend\assets\AppAsset']]
 );
 ?>
+
 <div class="fs-container half-map">
 
   <div class="fs-left-map-box">
     <div class="home-map fl-wrap">
       <div class="map-container fw-map">
-        <div id="map-main"></div>
+        <div id="map-main" data-json="<?= json_encode($dataProvider)?>"></div>
       </div>
     </div>
   </div>
@@ -163,61 +165,26 @@ $this->registerJsFile(
       </div>
       <!--- All List -->
       <div class="row">
-      <pre>
-      </pre>
-        <?php foreach ($listing as $company) : ?>
-          <?php // var_dump($company); die?>
-
-          <!-- Single Listing -->
-          <div class="col-lg-6 col-md-12 col-sm-12">
-            <div class="list-slide-box" data-name=<?= $company->name ?>>
-              <div class="modern-list ml-2">
-                <div class="list-badge now-open">Открыто</div>
-                <div class="grid-category-thumb">
-                  <a href="search-listing.html" class="overlay-cate"><img src="/reveal/img/f389baedd25b0b8e84ba403877d6ebdf.jpg" class="img-responsive" alt="" /></a>
-                  <div class="listing-price-info">
-                    <span class="pricetag">$25 - $65</span>
-                  </div>
-                  <div class="property_meta">
-                    <div class="list-rates">
-                      <i class="ti-star filled"></i>
-                      <i class="ti-star filled"></i>
-                      <i class="ti-star filled"></i>
-                      <i class="ti-star filled"></i>
-                      <i class="ti-star"></i>
-                      <a href="#" class="tl-review">(24 Reviews)</a>
-                    </div>
-                    <h4 class="lst-title"><?= Html::a($company->name, ['company/view', 'slug' => $company->slug]) ?><span class="veryfied-author"></span></h4>
-                  </div>
-                </div>
-                <div class="modern-list-content">
-                  <div class="listing-cat">
-                    <a href="search-listing.html" class="cat-icon cl-1"><i class="ti-briefcase bg-a"></i><?= $company->type ?></a>
-                    <span class="more-cat">+3</span>
-                  </div>
-                  <!-- <div class="author-avater">
-												<img src="https://via.placeholder.com/400x400" class="author-avater-img" alt="">
-											</div> -->
-                </div>
-              </div>
-            </div>
-          </div>
-        <?php endforeach; ?>
-
-        <div class="col-md-12 col-sm-12 mt-3">
-          <div class="text-center">
-
-            <div class="spinner-grow text-danger" role="status">
-              <span class="sr-only">Loading...</span>
-            </div>
-            <div class="spinner-grow text-warning" role="status">
-              <span class="sr-only">Loading...</span>
-            </div>
-            <div class="spinner-grow text-success" role="status">
-              <span class="sr-only">Loading...</span>
-            </div>
-          </div>
-        </div>
+      <?= ListView::widget([
+		 'dataProvider' => $dataProvider,
+		//  'options' => ['class' => ['col-md-12 col-sm-12 mt-3']],
+     'itemOptions' => ['class' => ['item col-lg-6 col-md-12 col-sm-12']],
+     'itemView' => '_item_view',
+     'summary' => 'Показаны записи <strong>{begin}</strong> - {end} из {totalCount}',
+     'summaryOptions' => ['class' => 'shorting-wrap'],
+		 'pager' => [
+			'class' => \kop\y2sp\ScrollPager::class,
+			'triggerTemplate' => '<div class="text-center">
+			<button type="button" class="btn btn-theme btn-rounded btn-m">{text}</button>
+		 </div>',
+			'triggerText' => 'Показать ещё...',
+			'spinnerTemplate' => '<div class="text-center">
+			<div class="spinner-grow text-danger" role="status"><span class="sr-only">Loading...</span></div>
+			<div class="spinner-grow text-danger" role="status"><span class="sr-only">Loading...</span></div>
+			<div class="spinner-grow text-danger" role="status"><span class="sr-only">Loading...</span></div>
+			</div>',
+		],
+]); ?>
       </div>
     </div>
   </div>
@@ -225,3 +192,79 @@ $this->registerJsFile(
 <div class="clearfix"></div>
 <!-- Map -->
 <script src="https://api-maps.yandex.ru/2.1/?apikey=23968611-fd0e-4aea-9982-22f92e32a9bf&lang=ru_RU" type="text/javascript"></script>
+<script>
+	ymaps.ready(init);
+
+	function init() {
+		var Lng = $('#singleMap').data('longitude');
+		var Lat = $('#singleMap').data('latitude');
+		var addres = $('#map-main').data('addres');
+		// var addres = ["Адрес:ул Б. Хмельницкого",
+		// 	"Адрес:Ардатовский район г. Ардатов, Дючкова д. 103",
+		// 	"г. о. Саранск, р.п. Луховка-1, Мичурина"
+		// ];
+
+		var markerIcon = {
+			url: '/reveal/img/marker.png',
+		}
+		var myMap = new ymaps.Map("map-main", {
+			center: [55.76, 37.64],
+			zoom: 10,
+			controls: ['geolocationControl']
+		})
+		// objectManager = new ymaps.ObjectManager({
+		// 	// Чтобы метки начали кластеризоваться, выставляем опцию.
+		// 	clusterize: true,
+		// 	// ObjectManager принимает те же опции, что и кластеризатор.
+		// 	gridSize: 32,
+		// 	clusterDisableClickZoom: true,
+		// 	clusterBalloonContentLayout: 'cluster#balloonCarousel',
+		// 	clusterBalloonContentLayoutHeight: '100%',
+		// })
+		// objectManager.objects.options.set('preset', 'islands#greenDotIcon');
+		// // objectManager.clusters.options.set('preset', 'islands#greenClusterIcons');
+		// myMap.geoObjects.add(objectManager);
+
+		for (let $i = 0; $i < addres.length; $i++) {
+			var myGeocoder = ymaps.geocode(addres[$i]['addres']);
+			console.log(addres[$i]['id']);
+
+			myGeocoder.then(
+				function(res) {
+					// Выведем в консоль данные, полученные в результате геокодирования объекта.
+					// console.log('Все данные геообъекта: ', res.geoObjects.get(0).geometry.getCoordinates());
+					var firstGeoObject = res.geoObjects.get(0);
+					var coords = firstGeoObject.geometry.getCoordinates();
+					// Область видимости геообъекта.
+					// bounds = firstGeoObject.properties.get('boundedBy');
+
+					// firstGeoObject.options.set('preset', 'islands#darkBlueDotIconWithCaption');
+					// // Получаем строку с адресом и выводим в иконке геообъекта.
+					// firstGeoObject.properties.set('iconCaption', firstGeoObject.getAddressLine());
+
+					myPlacemark = new ymaps.Placemark(coords, {
+						iconLayout: 'default#image',
+						iconImageHref: markerIcon,
+						balloonContentBody: '<div class="map-popup-wrap">' +
+							'<div class="map-popup"></div><div class="property-listing property-2">' +
+							'<div class="listing-img-wrapper"><div class="list-single-img">' +
+							'<a href="' + addres[$i]['id'] + '"><img src="' + addres[$i]['mainImg'] + '" class="img-fluid mx-auto" alt="" /></a></div>' +
+							'<span class="property-type">' + addres[$i]['type'] + '</span></div><div class="listing-detail-wrapper pb-0">' +
+							'<div class="listing-short-detail"><h4 class="listing-name"><a href="/company/' + addres[$i]['id'] + '">' + addres[$i]['name'] + '</a>' +
+							'<i class="list-status ti-check"></i></h4></div></div><div class="price-features-wrapper">' +
+							'<div class="listing-price-fx"><h6 class="listing-card-info-price price-prefix"></h6></div>' +
+							'<div class="list-fx-features"></div></div></div>' +
+							'</div></div></div>',
+					})
+
+					myMap.geoObjects.add(myPlacemark);
+					myMap.setBounds(myMap.geoObjects.getBounds());
+
+				},
+				function(request) {
+					console.log("ERROR", request);
+				}
+			);
+		}
+	}
+</script>

@@ -13,6 +13,7 @@ use SimpleXMLElement;
 use Exception;
 use yii\base\Exception as BaseException;
 use yii\data\Pagination;
+use yii\helpers\Json;
 
 class CompanyController extends Controller
 {
@@ -52,12 +53,36 @@ class CompanyController extends Controller
         ->limit($pages->limit)
         ->all();
     $dataProvider = Organization::getAllPages();
+    // $dataJson = json_encode($dataProvider->getModels());
+    $models = $dataProvider->getModels();
+    $addressInJson = [];
+    foreach($models as $row) {
+      $img = $row->getImage();
+      $addressInJson[] = [
+        'addres' => trim($row->address),
+        'name' => $row->name,
+        'id' => $row->id,
+        'mainImg' => $img->getUrl('358x229'),
+        'type' => $row->category['title'],
+        // 'type' => $row->category['title'],
+      ];
+    }
+    $addressInJson = Json::encode($addressInJson);
+    // $array = $models->getAttributes();
+    // $json = Json::encode($models[1]->address);
+    // $ids = $dataProvider->getKeys();
+
+    // $models = $dataProvider->getModels();
+    // var_dump($addressInJson);die;
 
     return $this->render('index',
     [
       'dataProvider' => $dataProvider,
       'pages' => $pages,
       'listing' => $listing,
+      // 'models' => $models,
+      'addressInJson' => $addressInJson,
+      // 'json' => $json,
       'categories' => CompanyCategory::find()->active()->all(),
       'tags' => Tag::find()->all()
     ]
@@ -80,16 +105,61 @@ class CompanyController extends Controller
   }
 
   public function actionCategory($slug) {
+        // $listing = Organization::find()->active()->limit(30)->all();
+        $query = Organization::find()->active();
+        $countQuery = clone $query;
+        $pages = new Pagination(['totalCount' => $countQuery->count()]);
+        $listing = $query->offset($pages->offset)
+            ->limit($pages->limit)
+            ->all();
+        $dataProvider = Organization::getAllPages();
+        $models = $dataProvider->getModels();
+        $addressInJson = [];
+        foreach($models as $row) {
+          $img = $row->getImage();
+          $addressInJson[] = [
+            'addres' => trim($row->address),
+            'name' => $row->name,
+            'id' => $row->id,
+            'mainImg' => $img->getUrl('358x229'),
+            'type' => $row->category['title'],
+          ];
+        }
+        $addressInJson = Json::encode($addressInJson);
+    
+        return $this->render('index',
+        [
+          'dataProvider' => $dataProvider,
+          'pages' => $pages,
+          'listing' => $listing,
+          // 'models' => $models,
+          'addressInJson' => $addressInJson,
+          // 'json' => $json,
+          'categories' => CompanyCategory::find()->active()->all(),
+          'tags' => Tag::find()->all()
+        ]
+      );
+    
+
+
     $model = CompanyCategory::find()->where(['slug' => $slug])->one();
     if (!$model) {
       throw new NotFoundHttpException(Yii::t('frontend', 'Page not found.'));
     }
-    $company = new Organization();
-    $listing = Organization::find()->with('tags')->joinWith('category')->where('{{%company_category}}.slug = :slug', [':slug' => $slug])->limit(20)->all();
-    $company->cnt = count($listing);
 
-    return $this->render('index', [
-      'company' => $company,
+    $query = Organization::find()->with('tags')->joinWith('category')->where('{{%company_category}}.slug = :slug', [':slug' => $slug]);
+    $countQuery = clone $query;
+    $pages = new Pagination(['totalCount' => $countQuery->count()]);
+    $listing = $query->offset($pages->offset)
+        ->limit($pages->limit)
+        ->all();
+            // var_dump($query);die;
+    $dataProvider = Organization::getAllPages();
+
+    return $this->render('category', [
+      'model' => $model,
+      'dataProvider' => $dataProvider,
+      'pages' => $pages,
       'listing' => $listing,
       'categories' => CompanyCategory::find()->active()->all(),
       'tags' => Tag::find()->all()
@@ -101,10 +171,22 @@ class CompanyController extends Controller
     if (!$model) {
       throw new NotFoundHttpException(Yii::t('frontend', 'Page not found.'));
     }
-    $listing = Organization::find()->with('category')->joinWith('tags')->where('{{%tag}}.slug = :slug', [':slug' => $slug])->all();
+    
+    // $listing = Organization::find()->with('category')->joinWith('tags')->where('{{%tag}}.slug = :slug', [':slug' => $slug])->all();
+    $query = Organization::find()->with('category')->joinWith('tags')->where('{{%tag}}.slug = :slug', [':slug' => $slug]);
+    $countQuery = clone $query;
+    $pages = new Pagination(['totalCount' => $countQuery->count()]);
+    $listing = $query->offset($pages->offset)
+        ->limit($pages->limit)
+        ->all();
+    $dataProvider = Organization::getAllPages();
 
     return $this->render('index', [
-      'listing' => $listing
+      'dataProvider' => $dataProvider,
+      'pages' => $pages,
+      'listing' => $listing,
+      'categories' => CompanyCategory::find()->active()->all(),
+      'tags' => Tag::find()->all()
     ]);
   }
 
