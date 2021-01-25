@@ -24,6 +24,8 @@ return [
         'company/page/<page>' => 'company/index',
         'company/json' => 'company/json',
         'company/address' => 'company/address',
+        // 'company/searching' => 'company/searching',
+        'company/search' => 'company/search',
         'company' => 'company/index',
         // 'company/tags' => 'company/tags',
         'company/<slug>' => 'company/view',

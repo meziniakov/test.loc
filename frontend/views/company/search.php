@@ -5,6 +5,7 @@ use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 use yii\widgets\LinkPager;
 use yii\widgets\ListView;
+use yii\widgets\ActiveForm;
 
 // $this->registerJsFile(
 // 	"/reveal/js/ymap.js",
@@ -23,39 +24,59 @@ use yii\widgets\ListView;
 
 	<div class="fs-inner-container">
 		<div class="fs-content">
-
 			<div class="justify-content-center">
-			<?php echo $this->render('_search', [
-			'model' => $searchModel,
-			'tags' => $tags,
-			'categories' => $categories,
-			]); ?>
+				<?php $form = ActiveForm::begin([
+					'action' => ['company/search'],
+					'method' => 'get',
+					'options' => [
+						'data-pjax' => 1
+					],
+				]); ?>
+				<form method="get" action="<?= Url::to(['company/search']) ?>">
 
-				<!-- <div class="col-lg-6 col-md-6 col-sm-12">
-								<div class="form-group">
-									<div class="input-with-icon">
-										<input type="text" class="form-control" placeholder="Keyword...">
-										<i class="ti-search theme-cl"></i>
-									</div>
-								</div>
+					<div class="col-lg-12 col-md-12 col-sm-12 small-padd">
+						<div class="form-group">
+							<div class="input-with-icon">
+								<?= Html::input('text', 'q', '', ['class' => 'form-control b-r', 'placeholder' => 'Искать...']) ?>
+								<i class="theme-cl ti-search"></i>
 							</div>
-							
-							<div class="col-lg-6 col-md-6 col-sm-12">
-								<div class="form-group">
-									<div class="input-with-icon">
-										<input type="text" class="form-control" placeholder="Where...">
-										<i class="ti-target theme-cl"></i>
-									</div>
-								</div>
-							</div> -->
+						</div>
+					</div>
 
-				<!-- <div class="col-md-12">
+					<div class="col-lg-5 col-md-5 col-sm-6 small-padd">
+						<div class="form-group">
+							<div class="input-with-icon">
+								<?= Html::dropDownList('category_id', null, ArrayHelper::map($categories, 'id', 'title'), ['id' => 'list-category', 'class' => 'form-control', 'prompt' => '&nbsp;']) ?>
+								<i class="theme-cl ti-briefcase"></i>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-lg-5 col-md-5 col-sm-6 small-padd">
+						<div class="form-group">
+							<div class="input-with-icon">
+								<?= Html::dropDownList('tag_id', null, ArrayHelper::map($tags, 'slug', 'name'), ['id' => 'choose-city', 'class' => 'form-control', 'prompt' => '']) ?>
+								<i class="theme-cl ti-briefcase"></i>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-lg-2 col-md-2 col-sm-12 small-padd">
+						<div class="form-group">
+							<?= Html::submitButton('Поиск', ['class' => 'btn search-btn']) ?>
+						</div>
+					</div>
+				</form>
+				<?php ActiveForm::end(); ?>
+			</div>
+
+<!-- <div class="col-md-12">
 								<div class="form-group" id="module">
 									<a role="button" class="collapsed" data-toggle="collapse" href="#advance-search" aria-expanded="false" aria-controls="advance-search"></a>
 								</div>
 							</div> -->
 
-				<!-- <div class="collapse" id="advance-search" aria-expanded="false" role="banner">
+<!-- <div class="collapse" id="advance-search" aria-expanded="false" role="banner">
 
 					<div class="col-lg-12 col-md-12 col-sm-12">
 						<h4>Amenities & Features</h4>
@@ -113,10 +134,9 @@ use yii\widgets\ListView;
 
 				</div> -->
 
-			</div>
 
-			<!--- Filter List -->
-			<!-- <div class="row">
+<!--- Filter List -->
+<!-- <div class="row">
 				<div class="col-lg-12 col-md-12 col-sm-12">
 					<div class="shorting-wrap">
 						<h5 class="shorting-title"><?php (isset($city) ? "Город:" . $city : "") ?></h5>
@@ -138,29 +158,31 @@ use yii\widgets\ListView;
 				</div>
 			</div> -->
 
-			<!--- All List -->
-			<div class="row">
-				<?= ListView::widget([
-					'dataProvider' => $dataProvider,
-					//  'options' => ['class' => ['col-md-12 col-sm-12 mt-3']],
-					'itemOptions' => ['class' => ['item col-lg-6 col-md-12 col-sm-12']],
-					'itemView' => '_item_view',					
-					'pager' => [
-						'class' => \kop\y2sp\ScrollPager::class,
-						'triggerTemplate' => '<div class="text-center">
+<!--- All List -->
+<div class="row">
+	<?= ListView::widget([
+		'dataProvider' => $dataProvider,
+		'options' => ['class' => ['list-view col-md-12 col-sm-12']],
+		'itemOptions' => ['class' => ['item col-lg-6 col-md-12 col-sm-12']],
+		'layout' => "{pager}\n{summary}\n{items}\n{pager}",
+		'itemView' => '_item_view',
+		'pager' => [
+			'class' => \kop\y2sp\ScrollPager::class,
+			'triggerTemplate' => '<div class="text-center">
 			<button type="button" class="btn btn-theme btn-rounded btn-m">{text}</button>
 		 </div>',
-						'triggerText' => 'Показать ещё...',
-						'spinnerTemplate' => '<div class="text-center">
+			'triggerText' => 'Показать ещё...',
+			'spinnerTemplate' => '<div class="text-center">
 			<div class="spinner-grow text-danger" role="status"><span class="sr-only">Loading...</span></div>
 			<div class="spinner-grow text-danger" role="status"><span class="sr-only">Loading...</span></div>
 			<div class="spinner-grow text-danger" role="status"><span class="sr-only">Loading...</span></div>
-			</div>',
-					],
-				]); ?>
-			</div>
-		</div>
-	</div>
+      </div>',
+			'noneLeftText' => 'Записей больше нет'
+		],
+	]); ?>
+</div>
+</div>
+</div>
 
 </div>
 <div class="clearfix"></div>

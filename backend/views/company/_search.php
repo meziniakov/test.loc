@@ -18,17 +18,17 @@ use yii\widgets\ActiveForm;
         ],
     ]); ?>
 
-    <?= $form->field($model, 'id') ?>
+    <?php // echo $form->field($model, 'id') ?>
 
-    <?= $form->field($model, 'type') ?>
+    <?php // echo $form->field($model, 'type') ?>
 
     <?= $form->field($model, 'name') ?>
 
-    <?= $form->field($model, 'description') ?>
+    <?php // echo $form->field($model, 'description') ?>
 
-    <?= $form->field($model, 'phone') ?>
+    <?php // echo $form->field($model, 'phone') ?>
 
-    <?php // echo $form->field($model, 'category_id') ?>
+    <?php echo $form->field($model, 'category_id') ?>
 
     <?php // echo $form->field($model, 'lon') ?>
 

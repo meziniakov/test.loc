@@ -11,6 +11,7 @@ use common\models\LoginForm;
 use yii\web\HttpException;
 use common\models\Tag;
 use common\models\CompanyCategory;
+use common\models\CompanySearch;
 
 /**
  * Class SiteController.

@@ -14,9 +14,12 @@ use Exception;
 use yii\base\Exception as BaseException;
 use yii\data\Pagination;
 use yii\helpers\Json;
+use common\models\CompanySearch;
 
 class CompanyController extends Controller
 {
+
+  const PAGE_SIZE = 6;
 
   public function actionTest($city)
   {
@@ -45,7 +48,9 @@ class CompanyController extends Controller
 
   public function actionIndex()
   {
-    // $listing = Organization::find()->active()->limit(30)->all();
+    $searchModel = new CompanySearch();
+    $dataSearch = $searchModel->search(Yii::$app->request->queryParams);
+
     $query = Organization::find()->active();
     $countQuery = clone $query;
     $pages = new Pagination(['totalCount' => $countQuery->count()]);
@@ -64,7 +69,6 @@ class CompanyController extends Controller
         'id' => $row->id,
         'mainImg' => $img->getUrl('358x229'),
         'type' => $row->category['title'],
-        // 'type' => $row->category['title'],
       ];
     }
     $addressInJson = Json::encode($addressInJson);
@@ -78,11 +82,83 @@ class CompanyController extends Controller
     return $this->render('index',
     [
       'dataProvider' => $dataProvider,
+      'searchModel' => $searchModel,
       'pages' => $pages,
+      'listing' => $listing,
+      'models' => $models,
+      'addressInJson' => $addressInJson,
+      // 'json' => $json,
+      'categories' => CompanyCategory::find()->active()->all(),
+      'tags' => Tag::find()->all()
+    ]
+  );
+  }
+
+  public function actionSearching()
+  {
+    $q = Yii::$app->request->get('q');
+    $query = Organization::find()->where(['like', 'name', $q]);
+    $countQuery = clone $query;
+    $pages = new Pagination(['totalCount' => (int)$countQuery->count()]);
+    $listing = $query->offset($pages->offset)
+        ->limit($pages->limit)
+        ->all();
+    $dataProvider = Organization::getSearchPages($q);
+    // $dataJson = json_encode($listing->getModels());
+    $models = $dataProvider->getModels();
+    $addressInJson = [];
+    foreach($models as $row) {
+      $img = $row->getImage();
+      $addressInJson[] = [
+        'addres' => trim($row->address),
+        'name' => $row->name,
+        'id' => $row->id,
+        'mainImg' => $img->getUrl('358x229'),
+        'type' => $row->category['title'],
+      ];
+    }
+    $addressInJson = Json::encode($addressInJson);
+
+    // $models = $dataProvider->getModels();
+
+    return $this->render('searching',
+    [
+      'dataProvider' => $dataProvider,
+      // 'searchModel' => $searchModel,
+      // 'pages' => $pages,
       'listing' => $listing,
       // 'models' => $models,
       'addressInJson' => $addressInJson,
-      // 'json' => $json,
+      'categories' => CompanyCategory::find()->active()->all(),
+      'tags' => Tag::find()->all()
+    ]
+  );
+  }
+
+  public function actionSearch()
+  {
+    $dataProvider = Organization::getSearchPages();
+    foreach($dataProvider->getModels() as $row) {
+      $img = $row->getImage();
+      $addressInJson[] = [
+        'addres' => trim($row->address),
+        'name' => $row->name,
+        'id' => $row->id,
+        'mainImg' => $img->getUrl('358x229'),
+        'type' => $row->category['title'],
+      ];
+    }
+    $addressInJson = Json::encode($addressInJson);
+
+    // var_dump($addressInJson);die;
+    
+    return $this->render('search', [
+      'dataProvider' => $dataProvider,
+    //   // 'searchModel' => $searchModel,
+      // 'pages' => $pages,
+      // 'listing' => $listing,
+    //   // 'models' => $models,
+      'addressInJson' => $addressInJson,
       'categories' => CompanyCategory::find()->active()->all(),
       'tags' => Tag::find()->all()
     ]
@@ -106,6 +182,7 @@ class CompanyController extends Controller
 
   public function actionCategory($slug) {
         // $listing = Organization::find()->active()->limit(30)->all();
+        $searchModel = new CompanySearch();
         $query = Organization::find()->active();
         $countQuery = clone $query;
         $pages = new Pagination(['totalCount' => $countQuery->count()]);
@@ -129,6 +206,7 @@ class CompanyController extends Controller
     
         return $this->render('index',
         [
+          'searchModel' => $searchModel,
           'dataProvider' => $dataProvider,
           'pages' => $pages,
           'listing' => $listing,

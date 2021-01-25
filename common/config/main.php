@@ -28,8 +28,9 @@ $config = [
             'imagesStorePath' => '@storage/img/original', //path to origin images
             'imagesCachePath' => '@storage/img/resize', //path to resized copies
             'graphicsLibrary' => 'GD', //but really its better to use 'Imagick' 
-            'placeHolderPath' => '@storage/images/placeHolder.png', // if you want to get placeholder when image not exists, string will be processed by Yii::getAlias
-            'imageCompressionQuality' => 100, // Optional. Default value is 85.
+            'placeHolderPath' => '@frontend/web/reveal/img/place-holder.jpg', // if you want to get placeholder when image not exists, string will be processed by Yii::getAlias
+            // 'placeHolderPath' => '@storage/imgage/place-holder.jpg', // if you want to get placeholder when image not exists, string will be processed by Yii::getAlias
+            'imageCompressionQuality' => 90, // Optional. Default value is 85.
         ],
     ],
     'components' => [

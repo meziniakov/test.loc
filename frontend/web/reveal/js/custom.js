@@ -401,7 +401,7 @@ $(function() {
 	
 	// Select Category
 	$('#list-category').select2({
-		placeholder: "Choose Category",
+		placeholder: "Категория",
 		allowClear: true
 	});
 	

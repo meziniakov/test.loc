@@ -4,45 +4,42 @@
 use yii\bootstrap\Html;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
+use yii\widgets\ActiveForm;
 
 $this->title = Yii::$app->keyStorage->get('frontend.index.title');
 ?>
 
 <!-- ============================ Hero Banner  Start================================== -->
-<div class="image-cover hero-banner" style="background:url(reveal/img/33_.jpg) no-repeat;" data-overlay="6">
+<div class="image-cover hero-banner" style="background:url(reveal/img/33.jpg) no-repeat;" data-overlay="6">
 	<div class="container">
 
 		<h1 class="big-header-capt">Лучшие места в городе</h1>
 		<div class="full-search-2 italian-search hero-search-radius box-style">
 			<div class="hero-search-content">
-
 				<div class="row">
-
 					<div class="col-lg-4 col-md-4 col-sm-12 small-padd">
 						<div class="form-group">
 							<div class="input-with-icon">
-								<input type="text" class="form-control b-r" placeholder="Искать...">
-								<i class="theme-cl ti-search"></i>
+								<form method="get" action="<?= Url::to(['company/search']) ?>">
+									<?= Html::input('text', 'q', '', ['class' => 'form-control b-r', 'placeholder' => 'Искать...']) ?>
+									<i class="theme-cl ti-search"></i>
 							</div>
 						</div>
 					</div>
 
-					<div class="col-lg-3 col-md-3 col-sm-12 small-padd">
-						<div class="form-group">
-							<div class="input-with-icon">
-								<input type="text" class="form-control b-r" placeholder="Location...">
-								<i class="theme-cl ti-target"></i>
-							</div>
-						</div>
-					</div>
-
-					<?php
-					$tags = ArrayHelper::map($tags, 'slug', 'name');
-					?>
 					<div class="col-lg-3 col-md-3 col-sm-6 small-padd">
 						<div class="form-group">
 							<div class="input-with-icon">
-								<?= Html::dropDownList('list-tags', null, $tags, ['id' => 'choose-city', 'class' => 'form-control', 'prompt' => '&nbsp;']) ?>
+								<?= Html::dropDownList('category_id', null, ArrayHelper::map($categories, 'id', 'title'), ['id' => 'choose-city', 'class' => 'form-control', 'prompt' => '&nbsp;']) ?>
+								<i class="theme-cl ti-briefcase"></i>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-lg-3 col-md-3 col-sm-6 small-padd">
+						<div class="form-group">
+							<div class="input-with-icon">
+								<?= Html::dropDownList('tag_id', null, ArrayHelper::map($tags, 'slug', 'name'), ['id' => 'choose-city', 'class' => 'form-control', 'prompt' => '']) ?>
 								<i class="theme-cl ti-briefcase"></i>
 							</div>
 						</div>
@@ -50,18 +47,13 @@ $this->title = Yii::$app->keyStorage->get('frontend.index.title');
 
 					<div class="col-lg-2 col-md-2 col-sm-12 small-padd">
 						<div class="form-group">
-							<div class="form-group">
-								<a href="#" class="btn search-btn">Поиск</a>
-							</div>
+							<?= Html::submitButton('Поиск', ['class' => 'btn search-btn']) ?>
 						</div>
+						</form>
 					</div>
-
 				</div>
-
 			</div>
-
 		</div>
-
 		<div class="help-video">
 			<a href="#" class="wt-video"><span class="pulse"></span>Смотреть видео</a>
 			<!-- <a href="#" class="sb-directory">Add Listing</a> -->
@@ -91,7 +83,7 @@ $this->title = Yii::$app->keyStorage->get('frontend.index.title');
 					<div class="list-slide-box">
 						<div class="modern-list ml-2">
 							<div class="grid-category-thumb">
-							<a href="<?= Url::to(['company/view', 'slug' => ($company->slug) ? $company->slug : $company->id]) ?>" class="overlay-cate"><?= Html::img($img->getUrl('358x229'), ['class' => 'img-responsive', 'alt' => $company->slug]) ?></a>
+								<a href="<?= Url::to(['company/view', 'slug' => ($company->slug) ? $company->slug : $company->id]) ?>" class="overlay-cate"><?= Html::img($img->getUrl('358x229'), ['class' => 'img-responsive', 'alt' => $company->slug]) ?></a>
 								<!-- <div class="listing-price-info"> 
 											<span class="pricetag">$25 - $65</span>
 										</div> -->
@@ -123,7 +115,7 @@ $this->title = Yii::$app->keyStorage->get('frontend.index.title');
 <!-- ============================ Listings End ================================== -->
 
 <!-- ============================ Categories Start ================================== -->
-<section class="image-cover" style="background:url(<?= Yii::getAlias('@storageUrl')?>/img/1200x850.png) no-repeat;" data-overlay="8">
+<section class="image-cover" style="background:url(<?= Yii::getAlias('@storageUrl') ?>/img/1200x850.png) no-repeat;" data-overlay="8">
 	<div class="container">
 
 		<div class="row">
@@ -136,29 +128,29 @@ $this->title = Yii::$app->keyStorage->get('frontend.index.title');
 		</div>
 
 		<div class="row">
-<?php foreach ($categories as $category):?>
-			<!-- Single Category -->
-			<div class="col-lg-3 col-md-6 col-sm-12">
-				<div class="list-cats-boxr">
-				<?php if (isset($category->slug)) : ?>
-					<a href="<?= Url::to(['company/category', 'slug' => $category->slug]) ?>" class="category-box">
-					<?php else : ?>
-						<a href="<?= Url::to(['company/category', 'slug' => $category->type]) ?>" class="category-box">
-					<?php endif ?>
-					<div class="category-desc">
-							<div class="category-icon">
-								<i class="<?= $category->icon?> theme-cl"></i>
-								<i class="<?= $category->icon?> abs-icon"></i>
-							</div>
-							<div class="category-detail category-desc-text">
-								<h4><?= $category->title?></h4>
-								<p>122 Listings</p>
-							</div>
-						</div>
-					</a>
+			<?php foreach ($categories as $category) : ?>
+				<!-- Single Category -->
+				<div class="col-lg-3 col-md-6 col-sm-12">
+					<div class="list-cats-boxr">
+						<?php if (isset($category->slug)) : ?>
+							<a href="<?= Url::to(['company/category', 'slug' => $category->slug]) ?>" class="category-box">
+							<?php else : ?>
+								<a href="<?= Url::to(['company/category', 'slug' => $category->type]) ?>" class="category-box">
+								<?php endif ?>
+								<div class="category-desc">
+									<div class="category-icon">
+										<i class="<?= $category->icon ?> theme-cl"></i>
+										<i class="<?= $category->icon ?> abs-icon"></i>
+									</div>
+									<div class="category-detail category-desc-text">
+										<h4><?= $category->title ?></h4>
+										<p>122 Listings</p>
+									</div>
+								</div>
+								</a>
+					</div>
 				</div>
-			</div>
-<?php endforeach;?>
+			<?php endforeach; ?>
 			<!-- Single Category -->
 			<div class="col-lg-3 col-md-6 col-sm-12">
 				<div class="list-cats-boxr">
@@ -319,7 +311,7 @@ $this->title = Yii::$app->keyStorage->get('frontend.index.title');
 						<h4>Los Angeles</h4>
 						<span>24 Listins</span>
 					</div>
-					<div class="img-wrap-background" style="background-image: url(<?= Yii::getAlias('@storageUrl')?>/img/1200x850.png);"></div>
+					<div class="img-wrap-background" style="background-image: url(<?= Yii::getAlias('@storageUrl') ?>/img/1200x850.png);"></div>
 				</a>
 			</div>
 
@@ -329,7 +321,7 @@ $this->title = Yii::$app->keyStorage->get('frontend.index.title');
 						<h4>San Francisco</h4>
 						<span>104 Listins</span>
 					</div>
-					<div class="img-wrap-background" style="background-image: url(<?= Yii::getAlias('@storageUrl')?>/img/1200x850.png);"></div>
+					<div class="img-wrap-background" style="background-image: url(<?= Yii::getAlias('@storageUrl') ?>/img/1200x850.png);"></div>
 				</a>
 			</div>
 
@@ -343,7 +335,7 @@ $this->title = Yii::$app->keyStorage->get('frontend.index.title');
 						<h4>Philadelphia</h4>
 						<span>74 Listins</span>
 					</div>
-					<div class="img-wrap-background" style="background-image: url(<?= Yii::getAlias('@storageUrl')?>/img/1200x850.png);"></div>
+					<div class="img-wrap-background" style="background-image: url(<?= Yii::getAlias('@storageUrl') ?>/img/1200x850.png);"></div>
 				</a>
 			</div>
 
@@ -353,7 +345,7 @@ $this->title = Yii::$app->keyStorage->get('frontend.index.title');
 						<h4>New York</h4>
 						<span>312 Listins</span>
 					</div>
-					<div class="img-wrap-background" style="background-image: url(<?= Yii::getAlias('@storageUrl')?>/img/1200x850.png);"></div>
+					<div class="img-wrap-background" style="background-image: url(<?= Yii::getAlias('@storageUrl') ?>/img/1200x850.png);"></div>
 				</a>
 			</div>
 
@@ -363,7 +355,7 @@ $this->title = Yii::$app->keyStorage->get('frontend.index.title');
 						<h4>San Diego</h4>
 						<span>710 Listins</span>
 					</div>
-					<div class="img-wrap-background" style="background-image: url(<?= Yii::getAlias('@storageUrl')?>/img/1200x850.png);"></div>
+					<div class="img-wrap-background" style="background-image: url(<?= Yii::getAlias('@storageUrl') ?>/img/1200x850.png);"></div>
 				</a>
 			</div>
 

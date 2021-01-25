@@ -132,7 +132,37 @@ class Organization extends ActiveRecord
 
     public static function getAllPages(): ActiveDataProvider
     {
-        $query = self::find()->active();;
+        $query = self::find()->active();
+        $countQuery = clone $query;
+
+        return new ActiveDataProvider([
+            'query' => $query,
+            'totalCount' => (int)$countQuery->count(),
+            'pagination' => [
+                'pageSize' => self::PAGE_SIZE,
+                'pageSizeParam' => false,
+                'forcePageParam' => false
+            ],
+            'sort' => [
+                'defaultOrder' => [
+                    'name' => SORT_ASC,
+                    'created_at' => SORT_DESC
+                ]
+            ],
+        ]);
+    }
+
+    public static function getSearchPages(): ActiveDataProvider
+    {
+        $q = Yii::$app->request->get('q');
+        $category_id = Yii::$app->request->get('category_id');
+        $tag_id = Yii::$app->request->get('tag_id');
+        $query = self::find();
+        $query->andFilterWhere([
+            'category_id' => $category_id,
+            'tag_id' => $tag_id,
+        ]);
+        $query->andFilterWhere(['like', 'name', $q]);
         $countQuery = clone $query;
 
         return new ActiveDataProvider([
