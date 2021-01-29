@@ -109,7 +109,6 @@ class CompanyController extends Controller
                 $model->uploadMainImage();
             }
             $model->imageFiles = UploadedFile::getInstances($model, 'imageFiles');
-            var_dump($model->imageFiles);die;
             $model->uploadGallery();
             
             Yii::$app->session->setFlash('success', "успешно обновлено");

@@ -174,7 +174,7 @@ html body .mdi-set {
   line-height: initial;
 }
 section{
-	padding:80px 0 80px;
+	padding:40px 0 40px;
 	position:relative;
 }
 .section-bot-min{
@@ -4250,7 +4250,7 @@ button.btn.adv-btn {
     border-top-right-radius: 4px;
 }
 .map-container {
-	float:left;
+	/* float:left; */
 	width:100%;
 	position:relative;
 	overflow: hidden;

@@ -1,4 +1,7 @@
 <?php
+
+use yii\helpers\Html;
+
 $this->title = $company->name;
 // $this->registerJsFile(
 // 	"/reveal/js/ymap.js",
@@ -24,7 +27,11 @@ $this->title = $company->name;
 
 					<div class="slide-property-first">
 						<div class="listname-into">
-							<h2><?= $company->name ?> <span class="prt-type rent"><?= $company->type ?></span></h2>
+							<h2><?= $company->name ?>
+								<span class="prt-type rent">
+									<?= Html::a($company->category['title'], ['company/category', 'slug' => $company->category['slug']], ['class' => 'cat-icon cl-1']) ?>
+								</span>
+							</h2>
 							<span><?= $company->address ? '<i class="lni-map-marker"></i>' . $company->address : '' ?></span>
 						</div>
 					</div>
@@ -82,7 +89,7 @@ $this->title = $company->name;
 				<div class="block-wrap">
 
 					<div class="block-header">
-						<h4 class="block-title">О компании "<?= $company->name ?>"</h4>
+						<h4 class="block-title">Информация про "<?= $company->name ?>"</h4>
 					</div>
 
 					<div class="block-body">
@@ -117,21 +124,25 @@ $this->title = $company->name;
 								
 							</div> -->
 				<!-- Карта -->
-				<div class="block-wrap">
+				<?php if ($company->address || $company->lng) : ?>
+					<div class="block-wrap">
 
-					<div class="block-header">
-						<h4 class="block-title">Location</h4>
-					</div>
-
-					<div class="block-body">
-						<div class="map-container">
-							<!-- <div id="map" style="width: 600px; height: 400px"></div> -->
-							<div id="singleMap" data-addres="<?= $company->address?>" data-latitude="37.73199260" data-longitude="55.91591129" data-mapTitle="Our Location"></div>
-							<!-- <div id="singleMap" data-latitude="<?php // $company->lat ?>" data-longitude="<?php // $company->lng ?>" data-mapTitle="Our Location"></div> -->
+						<div class="block-header">
+							<h4 class="block-title">Местоположение</h4>
 						</div>
 
+						<div class="block-body">
+							<div class="map-container">
+								<!-- <div id="map" style="width: 600px; height: 400px"></div> -->
+								<div id="singleMap" data-addres="<?= $company->address ?>" data-latitude="37.73199260" data-longitude="55.91591129" data-mapTitle="Our Location"></div>
+								<!-- <div id="singleMap" data-latitude="<?php // $company->lat 
+																												?>" data-longitude="<?php // $company->lng 
+																																																		?>" data-mapTitle="Our Location"></div> -->
+							</div>
+
+						</div>
 					</div>
-				</div>
+				<?php endif; ?>
 
 				<!-- Review Block Wrap -->
 				<div class="rating-overview">
@@ -386,13 +397,13 @@ $this->title = $company->name;
 			<div class="col-lg-4 col-md-12 col-sm-12">
 
 				<div class="verified-list mb-4">
-					<i class="ti-check"></i>Verified Listing
+					<i class="ti-check"></i>Проверенное место
 				</div>
 
 				<div class="page-sidebar">
 
 					<!-- Agent Detail -->
-					<div class="agent-widget">
+					<!-- <div class="agent-widget">
 						<div class="agent-title">
 							<div class="agent-photo"><img src="https://via.placeholder.com/400x400" alt=""></div>
 							<div class="agent-details">
@@ -412,7 +423,7 @@ $this->title = $company->name;
 							<textarea class="form-control" placeholder="Send Message to author..."></textarea>
 						</div>
 						<button class="btn btn-theme full-width">Send Message</button>
-					</div>
+					</div> -->
 					<!-- Listing Hour Detail -->
 					<div class="tr-single-box">
 						<div class="tr-single-header listing-hours-header open">
@@ -462,7 +473,7 @@ $this->title = $company->name;
 					<!-- Statics Info -->
 					<div class="tr-single-box">
 						<div class="tr-single-header">
-							<h4><i class="ti-bar-chart"></i> Statics Info</h4>
+							<h4><i class="ti-bar-chart"></i> Статистика</h4>
 						</div>
 
 						<div class="tr-single-body">
@@ -553,22 +564,24 @@ $this->title = $company->name;
 					<!-- Business Info -->
 					<div class="tr-single-box">
 						<div class="tr-single-header">
-							<h4><i class="ti-direction"></i> Listing Info</h4>
+							<h4><i class="ti-direction"></i> Информация</h4>
 						</div>
 
 						<div class="tr-single-body">
 							<ul class="extra-service">
 								<li>
-									<div class="icon-box-icon-block">
-										<a href="#">
-											<div class="icon-box-round">
-												<i class="lni-map-marker"></i>
-											</div>
-											<div class="icon-box-text">
-												524 New Ave, CA 548, USA
-											</div>
-										</a>
-									</div>
+									<?php if ($company->address) : ?>
+										<div class="icon-box-icon-block">
+											<a href="#">
+												<div class="icon-box-round">
+													<i class="lni-map-marker"></i>
+												</div>
+												<div class="icon-box-text">
+													<?= $company->address ?>
+												</div>
+											</a>
+										</div>
+									<?php endif ?>
 								</li>
 
 								<li>
@@ -615,35 +628,36 @@ $this->title = $company->name;
 
 					</div>
 					<!-- Tags -->
-					<div class="tr-single-box">
-						<div class="tr-single-header">
-							<h4><i class="lni-tag"></i> Метки</h4>
+					<?php if ($company->tagLinksArray) : ?>
+						<div class="tr-single-box">
+							<div class="tr-single-header">
+								<h4><i class="lni-tag"></i> Метки</h4>
+							</div>
+							<div class="tr-single-body">
+								<ul class="extra-service half">
+									<?php foreach ($company->tagLinksArray as $tag) : ?>
+										<li>
+											<div class="icon-box-icon-block">
+												<a href="<?php// $tag->name?>">
+													<div class="icon-box-round">
+														<i class="lni-car-alt"></i>
+													</div>
+													<div class="icon-box-text">
+														<?= $tag ?>
+													</div>
+												</a>
+											</div>
+										</li>
+									<?php endforeach; ?>
+								</ul>
+							</div>
 						</div>
-						<div class="tr-single-body">
-							<ul class="extra-service half">
-								<?php foreach ($company->tagLinksArray as $tag) : ?>
-									<li>
-										<div class="icon-box-icon-block">
-											<a href="<?php// $tag->name?>">
-												<div class="icon-box-round">
-													<i class="lni-car-alt"></i>
-												</div>
-												<div class="icon-box-text">
-													<?= $tag ?>
-												</div>
-											</a>
-										</div>
-									</li>
-								<?php endforeach; ?>
-							</ul>
-						</div>
-
-					</div>
+					<?php endif ?>
 
 					<!-- Tags -->
 					<div class="tr-single-box">
 						<div class="tr-single-header">
-							<h4><i class="lni-tag"></i> Tags</h4>
+							<h4><i class="lni-tag"></i> Преимущества</h4>
 						</div>
 						<div class="tr-single-body">
 							<ul class="extra-service half">
@@ -776,30 +790,30 @@ $this->title = $company->name;
 		var addres = $('#singleMap').data('addres');
 
 		var markerIcon2 = {
-            url: '/reveal/img/marker.png',
+			url: '/reveal/img/marker.png',
 		}
 
 		var myGeocoder = ymaps.geocode(addres);
-			myGeocoder.then(
-				function (res) {
-						// Выведем в консоль данные, полученные в результате геокодирования объекта.
-						console.log('Все данные геообъекта: ', res.geoObjects.get(0).geometry.getCoordinates());
-						var coords = res.geoObjects.get(0).geometry.getCoordinates();
-						var myMap = new ymaps.Map("singleMap", {
-							center: coords,
-							zoom: 10,
-							controls: ['geolocationControl']
-						})
-						var myPlacemark = new ymaps.Placemark(coords, {}, {
-							iconLayout: 'default#image',
-							iconImageHref: '/reveal/img/marker.png'
-						})
-		
-						myMap.geoObjects.add(myPlacemark);
-				},
-				function (err) {
-						// Обработка ошибки.
-				}
-			);
-	}	
+		myGeocoder.then(
+			function(res) {
+				// Выведем в консоль данные, полученные в результате геокодирования объекта.
+				console.log('Все данные геообъекта: ', res.geoObjects.get(0).geometry.getCoordinates());
+				var coords = res.geoObjects.get(0).geometry.getCoordinates();
+				var myMap = new ymaps.Map("singleMap", {
+					center: coords,
+					zoom: 10,
+					controls: ['geolocationControl']
+				})
+				var myPlacemark = new ymaps.Placemark(coords, {}, {
+					iconLayout: 'default#image',
+					iconImageHref: '/reveal/img/marker.png'
+				})
+
+				myMap.geoObjects.add(myPlacemark);
+			},
+			function(err) {
+				// Обработка ошибки.
+			}
+		);
+	}
 </script>

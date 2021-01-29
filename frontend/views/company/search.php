@@ -17,7 +17,7 @@ use yii\widgets\ActiveForm;
 	<div class="fs-left-map-box">
 		<div class="home-map fl-wrap">
 			<div class="map-container fw-map">
-				<div id="map-main" data-addres='<?= $addressInJson ?>'></div>
+				<div id="map-main" data-addres='<?= (isset($addressInJson)) ? $addressInJson : "" ?>'></div>
 			</div>
 		</div>
 	</div>

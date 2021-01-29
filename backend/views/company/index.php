@@ -20,9 +20,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <?= Html::a('Create Organization', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
-
     <?php Pjax::begin(); ?>
-    <?php echo $this->render('_search', ['model' => $searchModel]); ?>
+    <?php //echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -31,7 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
             // 'id',
             'name',
-            'type',
+            // 'type',
             // 'description:ntext',
             [
                 'attribute' => 'status',
@@ -51,11 +50,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
                 'filter' => ArrayHelper::map(CompanyCategory::find()->all(), 'id', 'title'),
             ],
-            [
-            'attribute' =>'tagValues',
-            'headerOptions' => ['width' => '60%'],
-            ],
-
+            // [
+            // 'attribute' =>'tagValues',
+            // 'headerOptions' => ['width' => '40%'],
+            // ],
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>

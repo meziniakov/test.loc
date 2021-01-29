@@ -16,7 +16,7 @@ use yii\widgets\ListView;
 	<div class="fs-left-map-box">
 		<div class="home-map fl-wrap">
 			<div class="map-container fw-map">
-				<div id="map-main" data-addres='<?= $addressInJson ?>'></div>
+				<div id="map-main" data-addres='<?php echo ($addressInJson) ? $addressInJson : "" ?>'></div>
 			</div>
 		</div>
 	</div>
@@ -25,11 +25,11 @@ use yii\widgets\ListView;
 		<div class="fs-content">
 
 			<div class="justify-content-center">
-			<?php echo $this->render('_search', [
-			'model' => $searchModel,
-			'tags' => $tags,
-			'categories' => $categories,
-			]); ?>
+				<?php echo $this->render('_search', [
+					'model' => $searchModel,
+					'tags' => $tags,
+					'categories' => $categories,
+				]); ?>
 
 				<!-- <div class="col-lg-6 col-md-6 col-sm-12">
 								<div class="form-group">
@@ -144,7 +144,7 @@ use yii\widgets\ListView;
 					'dataProvider' => $dataProvider,
 					//  'options' => ['class' => ['col-md-12 col-sm-12 mt-3']],
 					'itemOptions' => ['class' => ['item col-lg-6 col-md-12 col-sm-12']],
-					'itemView' => '_item_view',					
+					'itemView' => '_item_view',
 					'pager' => [
 						'class' => \kop\y2sp\ScrollPager::class,
 						'triggerTemplate' => '<div class="text-center">
@@ -170,6 +170,22 @@ use yii\widgets\ListView;
 	ymaps.ready(init);
 
 	function init() {
+		var myMap = new ymaps.Map("map-main", {
+			center: [55.76, 37.64],
+			zoom: 15,
+			controls: ['geolocationControl'],
+			zoomMargin: [20]
+		})
+
+		// var geolocation = ymaps.geolocation,
+		// myMap = new ymaps.Map('map-main', {
+		//     center: [55, 34],
+		//     zoom: 17
+		// }, {
+		//     searchControlProvider: 'yandex#search'
+		// });
+
+
 		var Lng = $('#singleMap').data('longitude');
 		var Lat = $('#singleMap').data('latitude');
 		var addres = $('#map-main').data('addres');
@@ -177,60 +193,67 @@ use yii\widgets\ListView;
 		var markerIcon = {
 			url: '/reveal/img/marker.png',
 		}
-		var myMap = new ymaps.Map("map-main", {
-			center: [55.76, 37.64],
-			zoom: 10,
-			controls: ['geolocationControl']
-		})
-		// objectManager = new ymaps.ObjectManager({
-		// 	// Чтобы метки начали кластеризоваться, выставляем опцию.
-		// 	clusterize: true,
-		// 	// ObjectManager принимает те же опции, что и кластеризатор.
-		// 	gridSize: 32,
-		// 	clusterDisableClickZoom: true,
-		// 	clusterBalloonContentLayout: 'cluster#balloonCarousel',
-		// 	clusterBalloonContentLayoutHeight: '100%',
-		// })
-		// objectManager.objects.options.set('preset', 'islands#greenDotIcon');
-		// // objectManager.clusters.options.set('preset', 'islands#greenClusterIcons');
-		// myMap.geoObjects.add(objectManager);
 
 		for (let $i = 0; $i < addres.length; $i++) {
-			var myGeocoder = ymaps.geocode(addres[$i]['addres']);
+			if (addres[$i]['lng']) {
+				console.log(addres[$i]['lng'] + '-' + addres[$i]['lat'])
+				var type = addres[$i]['type'] ? addres[$i]['type'] : '';
 
-			myGeocoder.then(
-				function(res) {
-					// Выведем в консоль данные, полученные в результате геокодирования объекта.
-					// console.log('Все данные геообъекта: ', res.geoObjects.get(0).geometry.getCoordinates());
-					var firstGeoObject = res.geoObjects.get(0);
-					var coords = firstGeoObject.geometry.getCoordinates();
-					// Область видимости геообъекта.
-					// bounds = firstGeoObject.properties.get('boundedBy');
+				var placemark = new ymaps.Placemark([addres[$i]['lng'], addres[$i]['lat']], {
+					iconLayout: 'default#image',
+					iconImageHref: markerIcon,
+					balloonContentBody: '<div class="map-popup-wrap">' +
+						'<div class="map-popup"></div><div class="property-listing property-2">' +
+						'<div class="listing-img-wrapper"><div class="list-single-img">' +
+						'<a href="' + addres[$i]['id'] + '"><img src="' + addres[$i]['mainImg'] + '" class="img-fluid mx-auto" alt="" /></a></div>' +
+						'<span class="property-type">' + type + '</span></div><div class="listing-detail-wrapper pb-0">' +
+						'<div class="listing-short-detail"><h4 class="listing-name"><a href="/company/' + addres[$i]['id'] + '">' + addres[$i]['name'] + '</a>' +
+						'<i class="list-status ti-check"></i></h4></div></div></div></div></div></div>'
+				})
+				myMap.geoObjects.add(placemark);
+			} else  {
+				var myGeocoder = ymaps.geocode(addres[$i]['addres']).then(
+					function(res) {
+						var firstGeoObject = res.geoObjects.get(0);
+						var coords = firstGeoObject.geometry.getCoordinates();
+						var type = addres[$i]['type'] ? addres[$i]['type'] : '';
 
-					// firstGeoObject.options.set('preset', 'islands#darkBlueDotIconWithCaption');
-					// // Получаем строку с адресом и выводим в иконке геообъекта.
-					// firstGeoObject.properties.set('iconCaption', firstGeoObject.getAddressLine());
+						// Область видимости геообъекта.
+						// bounds = firstGeoObject.properties.get('boundedBy');
 
-					myPlacemark = new ymaps.Placemark(coords, {
-						iconLayout: 'default#image',
-						iconImageHref: markerIcon,
-						balloonContentBody: '<div class="map-popup-wrap">' +
-							'<div class="map-popup"></div><div class="property-listing property-2">' +
-							'<div class="listing-img-wrapper"><div class="list-single-img">' +
-							'<a href="' + addres[$i]['id'] + '"><img src="' + addres[$i]['mainImg'] + '" class="img-fluid mx-auto" alt="" /></a></div>' +
-							'<span class="property-type">' + addres[$i]['type'] + '</span></div><div class="listing-detail-wrapper pb-0">' +
-							'<div class="listing-short-detail"><h4 class="listing-name"><a href="/company/' + addres[$i]['id'] + '">' + addres[$i]['name'] + '</a>' +
-							'<i class="list-status ti-check"></i></h4></div></div></div></div></div></div>'
-					})
+						// firstGeoObject.options.set('preset', 'islands#darkBlueDotIconWithCaption');
 
-					myMap.geoObjects.add(myPlacemark);
-					myMap.setBounds(myMap.geoObjects.getBounds());
+						myPlacemark = new ymaps.Placemark(coords, {
+							iconLayout: 'default#image',
+							iconImageHref: markerIcon,
+							balloonContentBody: '<div class="map-popup-wrap">' +
+								'<div class="map-popup"></div><div class="property-listing property-2">' +
+								'<div class="listing-img-wrapper"><div class="list-single-img">' +
+								'<a href="' + addres[$i]['id'] + '"><img src="' + addres[$i]['mainImg'] + '" class="img-fluid mx-auto" alt="" /></a></div>' +
+								'<span class="property-type">' + type + '</span></div><div class="listing-detail-wrapper pb-0">' +
+								'<div class="listing-short-detail"><h4 class="listing-name"><a href="/company/' + addres[$i]['id'] + '">' + addres[$i]['name'] + '</a>' +
+								'<i class="list-status ti-check"></i></h4></div></div></div></div></div></div>'
+						})
+						myMap.geoObjects.add(myPlacemark);
+						myMap.setBounds(myMap.geoObjects.getBounds(), {
+							checkZoomRange: true
+						}).then(function() {
+							if (myMap.getZoom() > 15) myMap.setZoom(15); // Если значение zoom превышает 15, то устанавливаем 15.
+						});
+					},
+					function(request) {
+						console.log("ERROR", request);
+					}
+				);
+			}
 
-				},
-				function(request) {
-					console.log("ERROR", request);
-				}
-			);
 		}
+		// myMap.geoObjects.add(myCollection);
+
+		// myMap.setBounds(myMap.geoObjects.getBounds(), {
+		// 	checkZoomRange: true
+		// }).then(function() {
+		// 	if (myMap.getZoom() > 10) myMap.setZoom(10)
+		// });
 	}
 </script>

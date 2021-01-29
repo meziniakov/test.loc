@@ -33,7 +33,7 @@ use yii\helpers\HtmlPurifier;
 											<?= Html::a("<i class='ti-briefcase bg-a'></i>" . $model->type, ['company/category', 'slug' => $model->type], ['class' => 'cat-icon cl-1']) ?>
 										<?php endif ?>
 										<!-- <a href="search-listing.html" class="cat-icon cl-1"><i class="ti-briefcase bg-a"></i><?= $model->type ?></a> -->
-										<span class="more-cat">+3</span>
+										<!-- <span class="more-cat">+3</span> -->
 									</div>
 								</div>
 							</div>

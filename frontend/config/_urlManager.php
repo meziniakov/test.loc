@@ -1,14 +1,19 @@
 <?php
 
+use yii\web\UrlNormalizer;
+
 return [
     'class' => 'yii\web\UrlManager',
     'enablePrettyUrl' => true,
     'showScriptName' => false,
+    'normalizer' => [
+        'class' => 'yii\web\UrlNormalizer',
+        'action' => UrlNormalizer::ACTION_REDIRECT_TEMPORARY,
+    ],
     'rules' => [
         // Index page
         // '' => 'site/index',
-        '//<city>.test.loc/' => 'company/test',
-        '//<city>.surf-city.ru/' => 'company/test',
+        '//blog.surf-city.ru/' => 'article/index',
         'contact' => 'site/contact',
         'ajax-login' => 'site/ajax-login',
         'faq' => 'site/faq',
@@ -34,5 +39,7 @@ return [
         'tag/<slug>' => 'company/tag',
         'tag/<slug>/json' => 'company/json',
         'tag/<slug>/address' => 'company/address',
+        '//blog.test.loc/' => 'article/index',
+
     ],
 ];

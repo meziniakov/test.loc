@@ -69,9 +69,13 @@ class CompanyController extends Controller
         'id' => $row->id,
         'mainImg' => $img->getUrl('358x229'),
         'type' => $row->category['title'],
+        'lng' => $row->lng,
+        'lat' => $row->lat,
       ];
     }
-    $addressInJson = Json::encode($addressInJson);
+    if (isset($addressInJson) && $addressInJson){
+      $addressInJson = Json::encode($addressInJson);
+    }
     // $array = $models->getAttributes();
     // $json = Json::encode($models[1]->address);
     // $ids = $dataProvider->getKeys();
@@ -146,11 +150,13 @@ class CompanyController extends Controller
         'id' => $row->id,
         'mainImg' => $img->getUrl('358x229'),
         'type' => $row->category['title'],
+        'lng' => $row->lng,
+        'lat' => $row->lat,
       ];
     }
-    $addressInJson = Json::encode($addressInJson);
-
-    // var_dump($addressInJson);die;
+    if (isset($addressInJson) && $addressInJson){
+      $addressInJson = Json::encode($addressInJson);
+    }
     
     return $this->render('search', [
       'dataProvider' => $dataProvider,

@@ -101,7 +101,7 @@ $this->title = Yii::$app->keyStorage->get('frontend.index.title');
 							</div>
 							<div class="modern-list-content">
 								<div class="listing-cat">
-									<a href="search-listing.html" class="cat-icon cl-1"><i class="ti-briefcase bg-a"></i><?= $company->type ?></a>
+								<?= Html::a('<i class=' . $company->category['icon'] . ' bg-a"></i>' . $company->category['title'], ['company/category', 'slug' => $company->category['slug']], ['class' => 'cat-icon cl-1']) ?>
 									<!-- <span class="more-cat">+3</span> -->
 								</div>
 							</div>

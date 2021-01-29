@@ -74,6 +74,8 @@ use dosamigos\tinymce\TinyMce;
 
     <?= $form->field($model, 'status')->checkbox(['label' => Yii::t('backend', 'Activate')]) ?>
 
+    <?= $form->field($model, 'is_home')->checkbox(['label' => Yii::t('backend', 'Is home')]) ?>
+
     <?= $form->field($model, 'category_id')->dropDownList(ArrayHelper::map(
         $categories,
         'id',

@@ -115,7 +115,6 @@ AppAsset::register($this);
                         <div class="col-lg-4 col-md-6">
                             <div class="footer-widget">
                                 <img src="<?= Yii::getAlias('@storageUrl')?>/theme/g-logo-light.svg" class="img-fluid f-logo" alt="" />
-                                <!-- <p>407-472 Rue Saint-Sulpice, Montreal<br>Quebec, H2Y 2V8</p> -->
                                 <ul class="footer-bottom-social">
                                     <li><a href="#"><i class="ti-facebook"></i></a></li>
                                     <li><a href="#"><i class="ti-twitter"></i></a></li>
