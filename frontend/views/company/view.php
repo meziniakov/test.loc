@@ -1,18 +1,28 @@
 <?php
 
 use yii\helpers\Html;
+use yii\web\View;
 
 $this->title = $company->name;
-// $this->registerJsFile(
-// 	"/reveal/js/ymap.js",
-// 	$options = ['depends' => ['frontend\assets\AppAsset']]
-// );
+$this->registerJsFile(
+	"/reveal/js/singleMap.js",
+	$options = [
+		// 'appendTimestamp' => false,
+		'depends' => [
+			'yii\web\YiiAsset',
+			'yii\bootstrap\BootstrapAsset',
+		]
+	]);
 ?>
 <div class="featured-slick">
 	<div class="featured-slick-slide">
 		<?php $images = $company->getImages(); ?>
 		<?php foreach ($images as $img) : ?>
-			<div><a href="<?= $img->getUrl('560x359'); ?>" class="mfp-gallery"><img src="<?= $img->getUrl('560x359'); ?>" class="img-fluid mx-auto" title="<?= $img->title ?>" alt="<?= $img->alt ?>" /></a></div>
+			<div>
+				<a href="<?= $img->getUrl('560x359'); ?>" class="mfp-gallery">
+					<img src="<?= $img->getUrl('560x359'); ?>" class="img-fluid mx-auto" title="<?= $img->title ?>" alt="<?= $img->alt ?>" />
+				</a>
+			</div>
 		<?php endforeach; ?>
 	</div>
 </div>
@@ -133,11 +143,7 @@ $this->title = $company->name;
 
 						<div class="block-body">
 							<div class="map-container">
-								<!-- <div id="map" style="width: 600px; height: 400px"></div> -->
-								<div id="singleMap" data-addres="<?= $company->address ?>" data-latitude="37.73199260" data-longitude="55.91591129" data-mapTitle="Our Location"></div>
-								<!-- <div id="singleMap" data-latitude="<?php // $company->lat 
-																												?>" data-longitude="<?php // $company->lng 
-																																																		?>" data-mapTitle="Our Location"></div> -->
+								<div id="singleMap" data-addres='<?php echo ($addressInJson) ? $addressInJson : "" ?>'></div>
 							</div>
 
 						</div>
@@ -780,40 +786,3 @@ $this->title = $company->name;
 </section>
 <!-- ============================ Newsletter End ================================== -->
 </div>
-<script src="https://api-maps.yandex.ru/2.1/?apikey=23968611-fd0e-4aea-9982-22f92e32a9bf&lang=ru_RU" type="text/javascript"></script>
-<script>
-	ymaps.ready(init);
-
-	function init() {
-		var Lng = $('#singleMap').data('longitude');
-		var Lat = $('#singleMap').data('latitude');
-		var addres = $('#singleMap').data('addres');
-
-		var markerIcon2 = {
-			url: '/reveal/img/marker.png',
-		}
-
-		var myGeocoder = ymaps.geocode(addres);
-		myGeocoder.then(
-			function(res) {
-				// Выведем в консоль данные, полученные в результате геокодирования объекта.
-				console.log('Все данные геообъекта: ', res.geoObjects.get(0).geometry.getCoordinates());
-				var coords = res.geoObjects.get(0).geometry.getCoordinates();
-				var myMap = new ymaps.Map("singleMap", {
-					center: coords,
-					zoom: 10,
-					controls: ['geolocationControl']
-				})
-				var myPlacemark = new ymaps.Placemark(coords, {}, {
-					iconLayout: 'default#image',
-					iconImageHref: '/reveal/img/marker.png'
-				})
-
-				myMap.geoObjects.add(myPlacemark);
-			},
-			function(err) {
-				// Обработка ошибки.
-			}
-		);
-	}
-</script>

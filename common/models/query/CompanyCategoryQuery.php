@@ -17,9 +17,7 @@ class CompanyCategoryQuery extends ActiveQuery
      */
     public function active()
     {
-        $this->andWhere(['status' => CompanyCategory::STATUS_ACTIVE]);
-
-        return $this;
+        return $this->andWhere(['status' => CompanyCategory::STATUS_ACTIVE]);
     }
 
     /**

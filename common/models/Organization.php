@@ -12,6 +12,7 @@ use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\behaviors\BlameableBehavior;
 use yii\data\ActiveDataProvider;
+use yii\helpers\Json;
 
 /**
  * This is the model class for table "organization".
@@ -32,6 +33,7 @@ class Organization extends ActiveRecord
 {
     const STATUS_DRAFT = 0;
     const STATUS_ACTIVE = 1;
+
     const PAGE_SIZE = 6;
 
     public $cnt;
@@ -129,9 +131,8 @@ class Organization extends ActiveRecord
         return $this->hasOne(CompanyCategory::class, ['id' => 'category_id']);
     }
 
-    public static function getAllPages(): ActiveDataProvider
+    public static function getDataProvider($query)
     {
-        $query = self::find()->active();
         $countQuery = clone $query;
 
         return new ActiveDataProvider([
@@ -151,34 +152,34 @@ class Organization extends ActiveRecord
         ]);
     }
 
-    public static function getSearchPages(): ActiveDataProvider
+    public static function getJsonForMap($models)
     {
-        $q = Yii::$app->request->get('q');
-        $category_id = Yii::$app->request->get('category_id');
-        $tag_id = Yii::$app->request->get('tag_id');
-        $query = self::find();
-        $query->andFilterWhere([
-            'category_id' => $category_id,
-            'tag_id' => $tag_id,
-        ]);
-        $query->andFilterWhere(['like', 'name', $q]);
-        $countQuery = clone $query;
-
-        return new ActiveDataProvider([
-            'query' => $query,
-            'totalCount' => (int)$countQuery->count(),
-            'pagination' => [
-                'pageSize' => self::PAGE_SIZE,
-                'pageSizeParam' => false,
-                'forcePageParam' => false
-            ],
-            'sort' => [
-                'defaultOrder' => [
-                    'name' => SORT_ASC,
-                    'created_at' => SORT_DESC
-                ]
-            ],
-        ]);
+        if (is_array($models)) {
+            foreach ($models as $row) {
+                $img = $row->getImage();
+                $addressInJson[] = [
+                    'addres' => trim($row['address']),
+                    'name' => $row['name'],
+                    'id' => $row['id'],
+                    'mainImg' => $img->getUrl('358x229'),
+                    'category' => $row['category']['title'],
+                    'lng' => $row['lng'],
+                    'lat' => $row['lat'],
+                ];
+            }
+        } else {
+            $addressInJson[] = [
+                'addres' => trim($models['address']),
+                'name' => $models['name'],
+                'id' => $models['id'],
+                'category' => $models['category']['title'],
+                'lng' => $models['lng'],
+                'lat' => $models['lat'],
+            ];
+        }
+        if (isset($addressInJson) && $addressInJson) {
+            return $addressInJson = Json::encode($addressInJson);
+        }
     }
 
     /**

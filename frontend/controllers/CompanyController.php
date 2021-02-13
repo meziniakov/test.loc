@@ -11,10 +11,7 @@ use common\models\Tag;
 use yii\web\NotFoundHttpException;
 use SimpleXMLElement;
 use Exception;
-use yii\base\Exception as BaseException;
-use yii\data\Pagination;
-use yii\helpers\Json;
-use common\models\CompanySearch;
+use yii\data\ActiveDataProvider;
 
 class CompanyController extends Controller
 {
@@ -48,123 +45,52 @@ class CompanyController extends Controller
 
   public function actionIndex()
   {
-    $searchModel = new CompanySearch();
-    $dataSearch = $searchModel->search(Yii::$app->request->queryParams);
+    // $query = Organization::find()->active()->with('category', 'tags');
 
-    $query = Organization::find()->active();
-    $countQuery = clone $query;
-    $pages = new Pagination(['totalCount' => $countQuery->count()]);
-    $listing = $query->offset($pages->offset)
-        ->limit($pages->limit)
-        ->all();
-    $dataProvider = Organization::getAllPages();
-    // $dataJson = json_encode($dataProvider->getModels());
+    $q = Yii::$app->request->get('q');
+    $category_id = Yii::$app->request->get('category_id');
+    $tag_id = Yii::$app->request->get('tag_id');
+
+    $query = Organization::find()->active()->with('category');
+    $query->andFilterWhere([
+        'category_id' => $category_id,
+        'tag_id' => $tag_id,
+    ]);
+    $query->andFilterWhere(['like', 'name', $q]);
+
+    $dataProvider = Organization::getDataProvider($query);
+
     $models = $dataProvider->getModels();
-    $addressInJson = [];
-    foreach($models as $row) {
-      $img = $row->getImage();
-      $addressInJson[] = [
-        'addres' => trim($row->address),
-        'name' => $row->name,
-        'id' => $row->id,
-        'mainImg' => $img->getUrl('358x229'),
-        'type' => $row->category['title'],
-        'lng' => $row->lng,
-        'lat' => $row->lat,
-      ];
-    }
-    if (isset($addressInJson) && $addressInJson){
-      $addressInJson = Json::encode($addressInJson);
-    }
-    // $array = $models->getAttributes();
-    // $json = Json::encode($models[1]->address);
-    // $ids = $dataProvider->getKeys();
-
-    // $models = $dataProvider->getModels();
-    // var_dump($addressInJson);die;
-
+    
     return $this->render('index',
     [
       'dataProvider' => $dataProvider,
-      'searchModel' => $searchModel,
-      'pages' => $pages,
-      'listing' => $listing,
-      'models' => $models,
-      'addressInJson' => $addressInJson,
-      // 'json' => $json,
-      'categories' => CompanyCategory::find()->active()->all(),
-      'tags' => Tag::find()->all()
-    ]
-  );
-  }
-
-  public function actionSearching()
-  {
-    $q = Yii::$app->request->get('q');
-    $query = Organization::find()->where(['like', 'name', $q]);
-    $countQuery = clone $query;
-    $pages = new Pagination(['totalCount' => (int)$countQuery->count()]);
-    $listing = $query->offset($pages->offset)
-        ->limit($pages->limit)
-        ->all();
-    $dataProvider = Organization::getSearchPages($q);
-    // $dataJson = json_encode($listing->getModels());
-    $models = $dataProvider->getModels();
-    $addressInJson = [];
-    foreach($models as $row) {
-      $img = $row->getImage();
-      $addressInJson[] = [
-        'addres' => trim($row->address),
-        'name' => $row->name,
-        'id' => $row->id,
-        'mainImg' => $img->getUrl('358x229'),
-        'type' => $row->category['title'],
-      ];
-    }
-    $addressInJson = Json::encode($addressInJson);
-
-    // $models = $dataProvider->getModels();
-
-    return $this->render('searching',
-    [
-      'dataProvider' => $dataProvider,
-      // 'searchModel' => $searchModel,
-      // 'pages' => $pages,
-      'listing' => $listing,
-      // 'models' => $models,
-      'addressInJson' => $addressInJson,
-      'categories' => CompanyCategory::find()->active()->all(),
-      'tags' => Tag::find()->all()
-    ]
-  );
+      'addressInJson' => Organization::getJsonForMap($models),
+      'categories' => CompanyCategory::find()->active()->asArray()->all(),
+      'tags' => Tag::find()->asArray()->all()
+    ]);
   }
 
   public function actionSearch()
   {
-    $dataProvider = Organization::getSearchPages();
-    foreach($dataProvider->getModels() as $row) {
-      $img = $row->getImage();
-      $addressInJson[] = [
-        'addres' => trim($row->address),
-        'name' => $row->name,
-        'id' => $row->id,
-        'mainImg' => $img->getUrl('358x229'),
-        'type' => $row->category['title'],
-        'lng' => $row->lng,
-        'lat' => $row->lat,
-      ];
-    }
-    if (isset($addressInJson) && $addressInJson){
-      $addressInJson = Json::encode($addressInJson);
-    }
+    $q = Yii::$app->request->get('q');
+    $category_id = Yii::$app->request->get('category_id');
+    $tag_id = Yii::$app->request->get('tag_id');
+
+    $query = Organization::find()->active();
+    $query->andFilterWhere([
+        'category_id' => $category_id,
+        'tag_id' => $tag_id,
+    ]);
+    $query->andFilterWhere(['like', 'name', $q]);
+
+    $dataProvider = Organization::getDataProvider($query);
+
+    $models = $dataProvider->getModels();
     
     return $this->render('search', [
       'dataProvider' => $dataProvider,
-    //   // 'searchModel' => $searchModel,
-      // 'pages' => $pages,
-      // 'listing' => $listing,
-    //   // 'models' => $models,
-      'addressInJson' => $addressInJson,
+      'addressInJson' => Organization::getJsonForMap($models),
       'categories' => CompanyCategory::find()->active()->all(),
       'tags' => Tag::find()->all()
     ]
@@ -174,13 +100,15 @@ class CompanyController extends Controller
   public function actionView($slug) {
 
     $company = $this->findModel($slug);
+    
     return $this->render('view', [
-      'company' => $company
+      'company' => $company,
+      'addressInJson' => Organization::getJsonForMap($company),
     ]);
   }
 
   public function findModel($slug) {
-    if (($model = Organization::find()->where(['slug' => $slug])->orWhere(['id' => $slug])->one()) !== null) {
+    if (($model = Organization::find()->active()->where(['slug' => $slug])->orWhere(['id' => $slug])->with('category', 'tags')->one()) !== null) {
       return $model;
     }
     throw new NotFoundHttpException('Страницы не существует');
@@ -188,65 +116,23 @@ class CompanyController extends Controller
 
   public function actionCategory($slug) {
         // $listing = Organization::find()->active()->limit(30)->all();
-        $searchModel = new CompanySearch();
-        $query = Organization::find()->active();
-        $countQuery = clone $query;
-        $pages = new Pagination(['totalCount' => $countQuery->count()]);
-        $listing = $query->offset($pages->offset)
-            ->limit($pages->limit)
-            ->all();
-        $dataProvider = Organization::getAllPages();
-        $models = $dataProvider->getModels();
-        $addressInJson = [];
-        foreach($models as $row) {
-          $img = $row->getImage();
-          $addressInJson[] = [
-            'addres' => trim($row->address),
-            'name' => $row->name,
-            'id' => $row->id,
-            'mainImg' => $img->getUrl('358x229'),
-            'type' => $row->category['title'],
-          ];
-        }
-        $addressInJson = Json::encode($addressInJson);
-    
-        return $this->render('index',
-        [
-          'searchModel' => $searchModel,
-          'dataProvider' => $dataProvider,
-          'pages' => $pages,
-          'listing' => $listing,
-          // 'models' => $models,
-          'addressInJson' => $addressInJson,
-          // 'json' => $json,
-          'categories' => CompanyCategory::find()->active()->all(),
-          'tags' => Tag::find()->all()
-        ]
-      );
-    
-
-
     $model = CompanyCategory::find()->where(['slug' => $slug])->one();
     if (!$model) {
       throw new NotFoundHttpException(Yii::t('frontend', 'Page not found.'));
     }
 
-    $query = Organization::find()->with('tags')->joinWith('category')->where('{{%company_category}}.slug = :slug', [':slug' => $slug]);
-    $countQuery = clone $query;
-    $pages = new Pagination(['totalCount' => $countQuery->count()]);
-    $listing = $query->offset($pages->offset)
-        ->limit($pages->limit)
-        ->all();
-            // var_dump($query);die;
-    $dataProvider = Organization::getAllPages();
+    $query = Organization::find()->active()->with('tags')->joinWith('category')->active()->where('{{%company_category}}.slug = :slug', [':slug' => $slug]);
+    
+    $dataProvider = Organization::getDataProvider($query);
+
+    $models = $dataProvider->getModels();
 
     return $this->render('category', [
       'model' => $model,
       'dataProvider' => $dataProvider,
-      'pages' => $pages,
-      'listing' => $listing,
-      'categories' => CompanyCategory::find()->active()->all(),
-      'tags' => Tag::find()->all()
+      'addressInJson' => Organization::getJsonForMap($models),
+      'categories' => CompanyCategory::find()->active()->asArray()->all(),
+      'tags' => Tag::find()->asArray()->all()
     ]);
   }
 
@@ -258,19 +144,15 @@ class CompanyController extends Controller
     
     // $listing = Organization::find()->with('category')->joinWith('tags')->where('{{%tag}}.slug = :slug', [':slug' => $slug])->all();
     $query = Organization::find()->with('category')->joinWith('tags')->where('{{%tag}}.slug = :slug', [':slug' => $slug]);
-    $countQuery = clone $query;
-    $pages = new Pagination(['totalCount' => $countQuery->count()]);
-    $listing = $query->offset($pages->offset)
-        ->limit($pages->limit)
-        ->all();
-    $dataProvider = Organization::getAllPages();
+    $dataProvider = Organization::getDataProvider($query);
+
+    $models = $dataProvider->getModels();
 
     return $this->render('index', [
       'dataProvider' => $dataProvider,
-      'pages' => $pages,
-      'listing' => $listing,
-      'categories' => CompanyCategory::find()->active()->all(),
-      'tags' => Tag::find()->all()
+      'categories' => CompanyCategory::find()->active()->asArray()->all(),
+      'addressInJson' => Organization::getJsonForMap($models),
+      'tags' => Tag::find()->asArray()->all()
     ]);
   }
 

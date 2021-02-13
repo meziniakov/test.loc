@@ -44,7 +44,7 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        $listing = Organization::find()->where(['is_home' => 1])->all();
+        $listing = Organization::find()->where(['is_home' => 1])->with('category')->all();
         // var_dump($listing);die;
         return $this->render('index', [
             'listing' => $listing,

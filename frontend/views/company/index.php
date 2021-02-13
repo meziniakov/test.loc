@@ -6,10 +6,12 @@ use yii\helpers\ArrayHelper;
 use yii\widgets\LinkPager;
 use yii\widgets\ListView;
 
-// $this->registerJsFile(
-// 	"/reveal/js/ymap.js",
-// 	$options = ['depends' => ['frontend\assets\AppAsset']]
-// );
+$this->registerJsFile(
+	"/reveal/js/ymaps.js",
+	$options = ['depends' => [
+		'yii\web\YiiAsset',
+		'yii\bootstrap\BootstrapAsset',
+		]]);
 ?>
 <div class="fs-container half-map">
 
@@ -26,7 +28,7 @@ use yii\widgets\ListView;
 
 			<div class="justify-content-center">
 				<?php echo $this->render('_search', [
-					'model' => $searchModel,
+					'model' => $dataProvider,
 					'tags' => $tags,
 					'categories' => $categories,
 				]); ?>
@@ -142,7 +144,7 @@ use yii\widgets\ListView;
 			<div class="row">
 				<?= ListView::widget([
 					'dataProvider' => $dataProvider,
-					//  'options' => ['class' => ['col-md-12 col-sm-12 mt-3']],
+					'options' => ['class' => ['list-view col-md-12 col-sm-12']],
 					'itemOptions' => ['class' => ['item col-lg-6 col-md-12 col-sm-12']],
 					'itemView' => '_item_view',
 					'pager' => [
@@ -165,95 +167,4 @@ use yii\widgets\ListView;
 </div>
 <div class="clearfix"></div>
 <!-- Map -->
-<script src="https://api-maps.yandex.ru/2.1/?apikey=23968611-fd0e-4aea-9982-22f92e32a9bf&lang=ru_RU" type="text/javascript"></script>
-<script>
-	ymaps.ready(init);
-
-	function init() {
-		var myMap = new ymaps.Map("map-main", {
-			center: [55.76, 37.64],
-			zoom: 15,
-			controls: ['geolocationControl'],
-			zoomMargin: [20]
-		})
-
-		// var geolocation = ymaps.geolocation,
-		// myMap = new ymaps.Map('map-main', {
-		//     center: [55, 34],
-		//     zoom: 17
-		// }, {
-		//     searchControlProvider: 'yandex#search'
-		// });
-
-
-		var Lng = $('#singleMap').data('longitude');
-		var Lat = $('#singleMap').data('latitude');
-		var addres = $('#map-main').data('addres');
-
-		var markerIcon = {
-			url: '/reveal/img/marker.png',
-		}
-
-		for (let $i = 0; $i < addres.length; $i++) {
-			if (addres[$i]['lng']) {
-				console.log(addres[$i]['lng'] + '-' + addres[$i]['lat'])
-				var type = addres[$i]['type'] ? addres[$i]['type'] : '';
-
-				var placemark = new ymaps.Placemark([addres[$i]['lng'], addres[$i]['lat']], {
-					iconLayout: 'default#image',
-					iconImageHref: markerIcon,
-					balloonContentBody: '<div class="map-popup-wrap">' +
-						'<div class="map-popup"></div><div class="property-listing property-2">' +
-						'<div class="listing-img-wrapper"><div class="list-single-img">' +
-						'<a href="' + addres[$i]['id'] + '"><img src="' + addres[$i]['mainImg'] + '" class="img-fluid mx-auto" alt="" /></a></div>' +
-						'<span class="property-type">' + type + '</span></div><div class="listing-detail-wrapper pb-0">' +
-						'<div class="listing-short-detail"><h4 class="listing-name"><a href="/company/' + addres[$i]['id'] + '">' + addres[$i]['name'] + '</a>' +
-						'<i class="list-status ti-check"></i></h4></div></div></div></div></div></div>'
-				})
-				myMap.geoObjects.add(placemark);
-			} else  {
-				var myGeocoder = ymaps.geocode(addres[$i]['addres']).then(
-					function(res) {
-						var firstGeoObject = res.geoObjects.get(0);
-						var coords = firstGeoObject.geometry.getCoordinates();
-						var type = addres[$i]['type'] ? addres[$i]['type'] : '';
-
-						// Область видимости геообъекта.
-						// bounds = firstGeoObject.properties.get('boundedBy');
-
-						// firstGeoObject.options.set('preset', 'islands#darkBlueDotIconWithCaption');
-
-						myPlacemark = new ymaps.Placemark(coords, {
-							iconLayout: 'default#image',
-							iconImageHref: markerIcon,
-							balloonContentBody: '<div class="map-popup-wrap">' +
-								'<div class="map-popup"></div><div class="property-listing property-2">' +
-								'<div class="listing-img-wrapper"><div class="list-single-img">' +
-								'<a href="' + addres[$i]['id'] + '"><img src="' + addres[$i]['mainImg'] + '" class="img-fluid mx-auto" alt="" /></a></div>' +
-								'<span class="property-type">' + type + '</span></div><div class="listing-detail-wrapper pb-0">' +
-								'<div class="listing-short-detail"><h4 class="listing-name"><a href="/company/' + addres[$i]['id'] + '">' + addres[$i]['name'] + '</a>' +
-								'<i class="list-status ti-check"></i></h4></div></div></div></div></div></div>'
-						})
-						myMap.geoObjects.add(myPlacemark);
-						myMap.setBounds(myMap.geoObjects.getBounds(), {
-							checkZoomRange: true
-						}).then(function() {
-							if (myMap.getZoom() > 15) myMap.setZoom(15); // Если значение zoom превышает 15, то устанавливаем 15.
-						});
-					},
-					function(request) {
-						console.log("ERROR", request);
-					}
-				);
-			}
-
-		}
-		// myMap.geoObjects.add(myCollection);
-
-		// myMap.setBounds(myMap.geoObjects.getBounds(), {
-		// 	checkZoomRange: true
-		// }).then(function() {
-		// 	if (myMap.getZoom() > 10) myMap.setZoom(10)
-		// });
-	}
-</script>
+<script async src="https://api-maps.yandex.ru/2.1/?apikey=23968611-fd0e-4aea-9982-22f92e32a9bf&load=package.standard&lang=ru_RU&onload=init" type="text/javascript"></script>

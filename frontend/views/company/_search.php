@@ -11,13 +11,13 @@ use yii\helpers\Url;
 ?>
 
 <?php $form = ActiveForm::begin([
-	'action' => ['company/search'],
+	'action' => ['company/index'],
 	'method' => 'get',
 	'options' => [
-		'data-pjax' => 1
+		'data-pjax' => true
 	],
 ]); ?>
-<form method="get" action="<?= Url::to(['company/search']) ?>">
+<form method="get" action="<?= Url::to(['company/index']) ?>">
 	<div class="col-lg-12 col-md-12 col-sm-12 small-padd">
 		<div class="form-group">
 			<div class="input-with-icon">
@@ -26,7 +26,6 @@ use yii\helpers\Url;
 			</div>
 		</div>
 	</div>
-
 	<div class="col-lg-5 col-md-5 col-sm-6 small-padd">
 		<div class="form-group">
 			<div class="input-with-icon">

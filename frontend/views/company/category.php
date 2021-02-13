@@ -7,9 +7,11 @@ use yii\bootstrap\Html;
 use yii\widgets\ListView;
 
 $this->registerJsFile(
-  "/reveal/js/ymap.js",
-  $options = ['depends' => ['frontend\assets\AppAsset']]
-);
+	"/reveal/js/ymaps.js",
+	$options = ['depends' => [
+		'yii\web\YiiAsset',
+		'yii\bootstrap\BootstrapAsset',
+		]]);
 ?>
 
 <div class="fs-container half-map">
@@ -17,7 +19,7 @@ $this->registerJsFile(
   <div class="fs-left-map-box">
     <div class="home-map fl-wrap">
       <div class="map-container fw-map">
-        <div id="map-main" data-json="<?= json_encode($dataProvider)?>"></div>
+        <div id="map-main" data-addres='<?php echo ($addressInJson) ? $addressInJson : "" ?>'></div>
       </div>
     </div>
   </div>
@@ -191,7 +193,7 @@ $this->registerJsFile(
 </div>
 <div class="clearfix"></div>
 <!-- Map -->
-<script src="https://api-maps.yandex.ru/2.1/?apikey=23968611-fd0e-4aea-9982-22f92e32a9bf&lang=ru_RU" type="text/javascript"></script>
+<!-- <script src="https://api-maps.yandex.ru/2.1/?apikey=23968611-fd0e-4aea-9982-22f92e32a9bf&lang=ru_RU" type="text/javascript"></script>
 <script>
 	ymaps.ready(init);
 
@@ -267,4 +269,4 @@ $this->registerJsFile(
 			);
 		}
 	}
-</script>
+</script> -->

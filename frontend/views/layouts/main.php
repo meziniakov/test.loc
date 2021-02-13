@@ -27,6 +27,8 @@ AppAsset::register($this);
 <head>
     <meta charset="<?= Yii::$app->charset ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="preconnect" href="//api-maps.yandex.ru">
+	<link rel="dns-prefetch" href="//api-maps.yandex.ru">
     <?php $this->registerCsrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
@@ -76,7 +78,7 @@ AppAsset::register($this);
         }
         ?>
 
-        <div class="header header-light nav-left-side">
+        <div class="header nav-left-side"> <!-- header-light -->
             <nav class="headnavbar">
                 <div class="nav-header">
                     <a href="#" class="brand"><img src="<?= Yii::getAlias('@storageUrl')?>/theme/logo.svg" alt="" /></a>
