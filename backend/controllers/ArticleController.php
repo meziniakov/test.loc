@@ -35,7 +35,7 @@ class ArticleController extends Controller
             'upload-file' => [
                 'class' => UploadImageAction::class,
                 'mode' => UploadImageAction::MODE_FILE,
-                'url' => 'http://storage.test.loc/img/',
+                'url' => Yii::getAlias('@storageUrl/img'),
                 'path' => '@storage/img',
                 'validatorOptions' => [
                     'maxWidth' => 2000,
@@ -45,7 +45,7 @@ class ArticleController extends Controller
             'fetch-url' => [
                 'class' => UploadImageAction::class,
                 'mode' => UploadImageAction::MODE_URL,
-                'url' => 'http://storage.test.loc/img/',
+                'url' => Yii::getAlias('@storageUrl/img'),
                 'path' => '@storage/img',
                 'validatorOptions' => [
                     'maxWidth' => 1000,
