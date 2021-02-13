@@ -84,11 +84,22 @@ return [
       'сarousel' => [
           'repository' => '@backend/web/static/carousel/bundle.js',
           'class' => new JsExpression('Carousel'),
+          'inlineToolbar' => true,
           'config' => [
             'additionalRequestHeaders' => [],
             'endpoints' => [
             ]
           ]
+        ],
+      'checklist' => [
+          'repository' => 'https://cdn.jsdelivr.net/npm/@editorjs/checklist@1.3.0/dist/bundle.min.js',
+          'class' => new JsExpression('Checklist'),
+          'inlineToolbar' => true,
+      ],
+      'marker' => [
+          'repository' => 'https://cdn.jsdelivr.net/npm/@editorjs/marker@1.2.2/dist/bundle.min.js',
+          'class' => new JsExpression('Marker'),
+          'inlineToolbar' => true,
       ]
   ],
 ];

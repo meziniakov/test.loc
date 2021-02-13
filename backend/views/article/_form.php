@@ -22,6 +22,23 @@ $this->registerJsFile(
 			'yii\bootstrap\BootstrapAsset',
 		]
 	]);
+$this->registerJsFile(
+	"https://cdn.jsdelivr.net/npm/@editorjs/checklist@1.3.0/dist/bundle.min.js",
+	$options = [
+		// 'appendTimestamp' => false,
+		'depends' => [
+			'yii\web\YiiAsset',
+			'yii\bootstrap\BootstrapAsset',
+		]
+	]);
+$this->registerJsFile(
+	"https://cdn.jsdelivr.net/npm/@editorjs/marker@1.2.2/dist/bundle.min.js",
+	$options = [
+		'depends' => [
+			'yii\web\YiiAsset',
+			'yii\bootstrap\BootstrapAsset',
+		]
+	]);
 ?>
 
 <div class="article-form">

@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 use yii\helpers\HtmlPurifier;
 use common\assets\Highlight;
-use metalguardian\fotorama\fotorama;
+use metalguardian\fotorama\Fotorama;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\Article */
@@ -45,6 +45,22 @@ $this->title = $model->title;
 										case 'image':
 											echo (isset($blocks['data']['file']['url'])) ? Html::img($blocks['data']['file']['url'], ['alt' => $blocks['data']['caption'], 'class' => 'image-tool__image-picture']) : "";
 											break;
+										case 'delimiter':
+											echo '<div class="delimiter"></div>' . PHP_EOL;
+											break;
+										case 'checklist':
+											foreach($blocks['data']['items'] as $items) {
+												echo ($items['checked']) ? '<div class="cdx-checklist__item cdx-checklist__item--checked"><span class="cdx-checklist__item-checkbox"></span><div class="cdx-checklist__item-text">' . $items['text'] . '</div></div>' : '<div class="cdx-checklist__item"><span class="cdx-checklist__item-checkbox"></span><div class="cdx-checklist__item-text">' . $items['text'] . '</div></div>';
+											}
+											break;
+										case 'list':
+											echo ($blocks['data']['style'] == 'ordered') ? "<ol>" : "<ul>";
+											foreach($blocks['data']['items'] as $items) {
+												echo '<li>' . $items . '</li>' . PHP_EOL;
+											}
+											echo ($blocks['data']['style'] == 'ordered') ? "</ol>" : "</ul>";
+											break;
+										
 										case 'сarousel':
 											$fotorama = Fotorama::begin(
 												[
@@ -53,7 +69,7 @@ $this->title = $model->title;
 														'hash' => true,
 														'ratio' => 800 / 600,
 														'nav' => 'thumbs',
-														'arrows' => false
+														'arrows' => false,
 													],
 													'spinner' => [
 														'lines' => 20,
@@ -69,6 +85,7 @@ $this->title = $model->title;
 											foreach ($blocks['data'] as $image) {
 												echo (isset($image['url'])) ? Html::img($image['url'], [
 													'alt' => $image['caption'],
+													'data-caption' => $image['caption'],
 													'class' => 'image-tool__image-picture'
 												]) : "";
 											}
