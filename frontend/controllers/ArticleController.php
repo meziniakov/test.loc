@@ -9,6 +9,7 @@ use yii\web\NotFoundHttpException;
 use common\models\Article;
 use common\models\ArticleCategory;
 use common\models\Tag;
+use yii\helpers\Json;
 
 /**
  * Class ArticleController.
@@ -51,6 +52,7 @@ class ArticleController extends Controller
         if (!$model) {
             throw new NotFoundHttpException(Yii::t('frontend', 'Page not found.'));
         }
+        $data = Json::decode($model->json, true);
 
         // meta keywords
         $this->getView()->registerMetaTag([
@@ -65,7 +67,10 @@ class ArticleController extends Controller
 
         return $this->render('view', [
             'model' => $model,
+            'data' => $data,
             'menuItems' => self::getMenuItems(),
+            'tags' => Tag::find()->all(),
+            'categories' => ArticleCategory::find()->all(),
         ]);
     }
 

@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 use yii\helpers\HtmlPurifier;
 use common\assets\Highlight;
-use dosamigos\disqus\Comments;
+use metalguardian\fotorama\fotorama;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\Article */
@@ -11,72 +11,96 @@ use dosamigos\disqus\Comments;
 Highlight::register($this);
 
 $this->title = $model->title;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('frontend', 'Articles'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
 ?>
-			<!-- ============================ Page Title Start================================== -->
-			<div class="page-title">
-				<div class="container">
-					<div class="row">
-						<div class="col-lg-12 col-md-12">
-							
-							<h2 class="ipt-title"><?= Html::encode($this->title) ?></h2>
-							<span class="ipn-subtitle"><?= HtmlPurifier::process($model->preview) ?></span>
-							
-						</div>
-					</div>
-				</div>
-			</div>
-			<!-- ============================ Page Title End ================================== -->
-			
-			<!-- ============================ Agency List Start ================================== -->
-			<section>
-			
-				<div class="container">
-				
-					<!-- row Start -->
-					<div class="row">
-					
-						<!-- Blog Detail -->
-						<div class="col-lg-8 col-md-12 col-sm-12 col-12">
-							<div class="blog-details single-post-item format-standard">
-								<div class="post-details">
-								
-									<div class="post-featured-img">
-										<img class="img-fluid" src="https://via.placeholder.com/1200x850" alt="">
-									</div>
-									
-									<div class="post-top-meta">
-										<ul class="meta-comment-tag">
-											<li><a href="#"><span class="icons"><i class="ti-user"></i></span><?= Html::a($model->author->username, ['account/default/view', 'id' => $model->author->id]) ?></a></li>
-											<!-- <li><a href="#"><span class="icons"><i class="ti-comment-alt"></i></span>45 Comments</a></li> -->
-											<li><a href="#"><span class="icons"><i class="ti-folder"></i></span><?= Html::a($model->category->title, ['article/category', 'slug' => $model->category->slug]) ?></a></li>
-											<li><a href="#"><span class="icons"><i class="ti-time"></i></span><?= Yii::$app->formatter->asDatetime($model->published_at) ?></a></li>
+<article class="wallpaper">
+	<header class="article-header">
+		<div class="article-header__meta">
+			<ul class="meta-comment-tag">
+				<li><a href="#"><span class="icons"><i class="ti-user"></i></span><?= Html::a($model->author->username, ['account/default/view', 'id' => $model->author->id]) ?></a></li>
+				<!-- <li><a href="#"><span class="icons"><i class="ti-comment-alt"></i></span>45 Comments</a></li> -->
+				<li><a href="#"><span class="icons"><i class="ti-map"></i></span><?= Html::a($model->category->title, ['article/category', 'slug' => $model->category->slug]) ?></a></li>
+				<li><a href="#"><span class="icons"><i class="ti-time"></i></span><?= Yii::$app->formatter->asDatetime($model->published_at) ?></a></li>
+			</ul>
+		</div>
+		<?php $img = $model->getImage(); ?>
+		<div class="article-header__cover" style="background-image: url(<?= $img->getUrl('1800x') ?>)"></div>
+		<h1 class="article-header__title"><?= Html::encode($this->title) ?></h1>
+	</header>
+
+	<section>
+		<div class="container">
+			<div class="row">
+				<div class="blog-page col-lg-9 col-md-12 col-sm-12 col-12">
+					<div class="blog-details single-post-item format-standard">
+						<div class="post-details">
+							<?php foreach ($data['blocks'] as $blocks) {
+								if (isset($blocks['data'])) {
+									switch ($blocks['type']):
+										case 'header':
+											echo "<h2>" . $blocks['data']['text'] . "</h2>" . PHP_EOL;
+											break;
+										case 'paragraph':
+											echo '<p class="heading">' . $blocks['data']['text'] . '</p>' . PHP_EOL;
+											break;
+										case 'image':
+											echo (isset($blocks['data']['file']['url'])) ? Html::img($blocks['data']['file']['url'], ['alt' => $blocks['data']['caption'], 'class' => 'image-tool__image-picture']) : "";
+											break;
+										case 'сarousel':
+											$fotorama = Fotorama::begin(
+												[
+													'options' => [
+														'loop' => true,
+														'hash' => true,
+														'ratio' => 800 / 600,
+														'nav' => 'thumbs',
+														'arrows' => false
+													],
+													'spinner' => [
+														'lines' => 20,
+													],
+													'tagName' => 'span',
+													'useHtmlData' => false,
+													'htmlOptions' => [
+														'class' => 'custom-class',
+														'id' => 'custom-id',
+													],
+												]
+											);
+											foreach ($blocks['data'] as $image) {
+												echo (isset($image['url'])) ? Html::img($image['url'], [
+													'alt' => $image['caption'],
+													'class' => 'image-tool__image-picture'
+												]) : "";
+											}
+											Fotorama::end();
+											break;
+									endswitch;
+								}
+							}
+							?>
+							<div class="post-bottom-meta">
+								<?php if ($model->tagValues) : ?>
+									<div class="post-tags">
+										<!-- <h4 class="pbm-title">Метки</h4> -->
+										<ul class="list">
+											<?php foreach ($model->tagLinksArray as $tag) : ?>
+												<li><?= $tag ?></li>
+											<?php endforeach ?>
 										</ul>
 									</div>
-									<h2 class="post-title"><?= Html::encode($this->title) ?></h2>
-									<p><?= HtmlPurifier::process($model->body) ?></p>
-									<div class="post-bottom-meta">
-                                    <?php if ($model->tagValues) : ?>
-										<div class="post-tags">
-											<h4 class="pbm-title">Related Tags</h4>
-											<ul class="list">
-												<li><a href="#"><?php var_dump($model->tagLinks)  ?></a></li>
-											</ul>
-                                        </div>
-                                    <?php endif ?>
-										<div class="post-share">
-											<h4 class="pbm-title">Social Share</h4>
-											<ul class="list">
-												<li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
-												<li><a href="#"><i class="fab fa-twitter"></i></a></li>
-												<li><a href="#"><i class="fab fa-linkedin-in"></i></a></li>
-												<li><a href="#"><i class="fab fa-vk"></i></a></li>
-												<li><a href="#"><i class="fab fa-tumblr"></i></a></li>
-											</ul>
-										</div>
-									</div>
-									<div class="single-post-pagination">
+								<?php endif ?>
+								<div class="post-share">
+									<!-- <h4 class="pbm-title">Соц. сети</h4> -->
+									<ul class="list">
+										<li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+										<li><a href="#"><i class="fab fa-twitter"></i></a></li>
+										<li><a href="#"><i class="fab fa-linkedin-in"></i></a></li>
+										<li><a href="#"><i class="fab fa-vk"></i></a></li>
+										<li><a href="#"><i class="fab fa-tumblr"></i></a></li>
+									</ul>
+								</div>
+							</div>
+							<!-- <div class="single-post-pagination">
 										<div class="prev-post">
 											<a href="#">
 												<div class="title-with-link">
@@ -96,13 +120,13 @@ $this->params['breadcrumbs'][] = $this->title;
 												</div>
 											</a>
 										</div>
-									</div>
-									
-								</div>
-							</div>
-							
-							<!-- Author Detail -->
-							<!-- <div class="blog-details single-post-item format-standard">
+									</div> -->
+
+						</div>
+					</div>
+
+					<!-- Author Detail -->
+					<!-- <div class="blog-details single-post-item format-standard">
 								
 								<div class="posts-author">
 									<span class="img"><img class="img-fluid" src="https://via.placeholder.com/400x400" alt=""></span>
@@ -120,9 +144,9 @@ $this->params['breadcrumbs'][] = $this->title;
 								</div>
 								
 							</div> -->
-							
-							<!-- Blog Comment -->
-							<div class="blog-details single-post-item format-standard">
+
+					<!-- Blog Comment -->
+					<!-- <div class="blog-details single-post-item format-standard">
 								
 								<div class="comment-area">
 									<div class="all-comments">
@@ -255,37 +279,35 @@ $this->params['breadcrumbs'][] = $this->title;
 									</div>
 								</div>
 								
-							</div>
-							
-							
-						</div>
-						
-						<!-- Single blog Grid -->
-						<div class="col-lg-4 col-md-12 col-sm-12 col-12">
-							
-							<!-- Searchbard -->
-							<div class="single-widgets widget_search">
+							</div> -->
+
+
+				</div>
+
+				<!-- Single blog Grid -->
+				<div class="col-lg-3 col-md-12 col-sm-12 col-12">
+
+					<!-- Searchbard -->
+					<!-- <div class="single-widgets widget_search">
 								<h4 class="title">Search</h4>
 								<form action="#" class="sidebar-search-form">
 									<input type="search" name="search" placeholder="Search..">
 									<button type="submit"><i class="ti-search"></i></button>
 								</form>
-							</div>
+							</div> -->
 
-							<!-- Categories -->
-							<div class="single-widgets widget_category">
-								<h4 class="title">Categories</h4>
-								<ul>
-									<li><a href="#">Lifestyle <span>09</span></a></li>
-									<li><a href="#">Travel <span>12</span></a></li>
-									<li><a href="#">Fashion <span>19</span></a>
-									</li><li><a href="#">Branding <span>17</span></a></li>
-									<li><a href="#">Music <span>10</span></a></li>
-								</ul>
-							</div>
-							
-							<!-- Trending Posts -->
-							<div class="single-widgets widget_thumb_post">
+					<!-- Categories -->
+					<div class="single-widgets widget_category">
+						<h4 class="title">Категории</h4>
+						<ul>
+							<?php foreach ($categories as $category) : ?>
+								<li><?= Html::a($category->title, ['category', 'slug' => $category->slug]) ?></li>
+							<?php endforeach ?>
+						</ul>
+					</div>
+
+					<!-- Trending Posts -->
+					<!-- <div class="single-widgets widget_thumb_post">
 								<h4 class="title">Trending Posts</h4>
 								<ul>
 									<li>
@@ -334,26 +356,24 @@ $this->params['breadcrumbs'][] = $this->title;
 										</span>
 									</li>
 								</ul>
-							</div>
-							
-							<!-- Tags Cloud -->
-							<div class="single-widgets widget_tags">
-								<h4 class="title">Tags Cloud</h4>
-								<ul>
-									<li><a href="#">Lifestyle</a></li>
-									<li><a href="#">Travel</a></li>
-									<li><a href="#">Fashion</a></li>
-									<li><a href="#">Branding</a></li>
-									<li><a href="#">Music</a></li>
-								</ul>
-							</div>
-							
-						</div>
-						
+							</div> -->
+
+					<!-- Tags Cloud -->
+					<div class="single-widgets widget_tags">
+						<h4 class="title">Метки</h4>
+						<ul>
+							<?php foreach ($tags as $tag) : ?>
+								<li><?= Html::a($tag->name, ['tag', 'slug' => $tag->slug]) ?></li>
+							<?php endforeach ?>
+						</ul>
 					</div>
-					<!-- /row -->					
-					
+
 				</div>
-						
-			</section>
-			<!-- ============================ Agency List End ================================== -->		
+
+			</div>
+			<!-- /row -->
+
+		</div>
+
+	</section>
+</article>

@@ -270,8 +270,9 @@ h1 {
   font-size: 36px; }
 
 h2 {
-  line-height: 36px;
-  font-size: 30px; }
+    margin: 70px 0 10px;
+    font-size: 34px;
+    line-height: 40px;}
 
 h3 {
   line-height: 30px;
@@ -967,6 +968,7 @@ div[data-overlay] ul {
   height: $spinner-height-sm;
   border-width: $spinner-border-width-sm;
 }
+
 .sr-only {
     position: absolute;
     width: 1px;
@@ -5565,9 +5567,6 @@ a.btn.width-170 {
     opacity: 1;
 }
 
-/*------------------------------------------------
-	Listings Elements
-------------------------------------------------*/
 /*-------------- Listings Elements: Rixel Bar Design --------------*/
 .rixel-bar {
     background: #ffffff;
@@ -9234,14 +9233,56 @@ a.bl-continue:before {
 }
 
 /*--------- Blog Detail Page -----------*/
+article.wallpaper {
+    max-width: 1460px;
+    padding-left: 30px;
+    padding-right: 30px;
+    margin-left: auto;
+    margin-right: auto;
+    outline: 0;
+}
+
+.article-header {
+    height: 600px;
+    margin-bottom: 35px;
+    position: relative;
+    /* margin-bottom: 69px; */
+    padding: 20px 20px 30px;
+    border-radius: 10px;
+}
+
+.article-header__cover {
+    position: absolute;
+    z-index: 0;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: bottom center;
+    border-radius: 10px;
+    box-shadow: inset 0px 80px 100px 0px #272525;
+}
+
+.article-header__title {
+    position: relative;
+    top: 2px;
+    font-size: 55px;
+    font-weight: 600;
+    line-height: 60px;
+    text-transform: inherit;
+    color: white;
+}
+
 .single-post-item {
     display: block;
     width: 100%;
-    background: #ffffff;
+    /* background: #ffffff;
     padding: 40px;
     border-radius: 4px;
     margin-bottom: 30px;
-    border: 2px solid #e5e8f3;
+    border: 2px solid #e5e8f3; */
 }
 .post-featured-img {
     display: block;
@@ -9249,6 +9290,40 @@ a.bl-continue:before {
 }
 .post-featured-img img {
     border-radius:6px;
+}
+.post-details {
+    font-family: Georgia,"Times New Roman",Times,serif;
+    font-size: 21px;
+    line-height: 30px;
+    color: #000;
+}
+
+.post-details p {
+    /* position: relative; */
+    top: 9 px;
+    margin-bottom: 20px;    
+}
+
+.article-header__meta {
+    position: relative;
+    z-index: 2;
+}
+.article-header__meta .meta-comment-tag {
+    padding: 0;
+    list-style: none;
+}
+.article-header__meta .meta-comment-tag li {
+    display: inline-flex;
+    margin-right: 19px;
+}
+.article-header__meta .meta-comment-tag li a {
+    display: block;
+    letter-spacing: 0;
+    line-height: 18px;
+    color: #fff;
+}
+.article-header__meta .meta-comment-tag li a .icons {
+    margin-right: 10px;
 }
 .single-post-item .post-details .meta-comment-tag {
     padding: 0;
@@ -9274,11 +9349,19 @@ a.bl-continue:before {
 	line-height:1.4;
     margin: 15px 0 0;
 }
-.single-post-item .post-details p, .single-post-item .post-details .text {
-    color: #6e7c90;
+/* .single-post-item .post-details p, .single-post-item .post-details .text {
+    color: #000;
     font-size:18px;
-    margin: 35px 0 0;
+    top: 9 px;
+    /* margin: 35px 0 0; 
+    margin-bottom: 20px;
 }
+.heading {
+    position: relative;
+    top: 9 px;
+    margin-bottom: 20px;    
+} */
+
 .blog-page .blog-details blockquote {
     background:#f7f9fc;
     padding: 28px 28px 28px 100px;

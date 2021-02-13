@@ -41,6 +41,8 @@ class Article extends ActiveRecord
     const STATUS_DRAFT = 0;
     const STATUS_ACTIVE = 1;
 
+    public $imageFile;
+
     /**
      * @inheritdoc
      */
@@ -68,6 +70,9 @@ class Article extends ActiveRecord
                 'immutable' => true,
             ],
             TaggableBehavior::class,
+            'image' => [
+                'class' => 'alex290\yii2images\behaviors\ImageBehave',
+            ],
         ];
     }
 
@@ -91,7 +96,8 @@ class Article extends ActiveRecord
             ['author_id', 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['author_id' => 'id']],
             ['category_id', 'exist', 'skipOnError' => true, 'targetClass' => ArticleCategory::class, 'targetAttribute' => ['category_id' => 'id']],
             ['updater_id', 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['updater_id' => 'id']],
-            ['tagValues', 'safe'],
+            [['tagValues', 'json'], 'safe'],
+            [['imageFile'], 'file', 'extensions' => 'png, jpg, jpeg'],
         ];
     }
 
@@ -107,6 +113,7 @@ class Article extends ActiveRecord
             'keywords' => Yii::t('common', 'Keywords'),
             'preview' => Yii::t('common', 'Preview'),
             'body' => Yii::t('common', 'Text'),
+            'json' => 'Json',
             'status' => Yii::t('common', 'Status'),
             'category_id' => Yii::t('common', 'Category'),
             'author_id' => Yii::t('common', 'Author'),
@@ -115,6 +122,7 @@ class Article extends ActiveRecord
             'created_at' => Yii::t('common', 'Created at'),
             'updated_at' => Yii::t('common', 'Updated at'),
             'tagValues' => Yii::t('common', 'Tags'),
+            'imageFile' => Yii::t('common', 'Обложка'),
         ];
     }
 
@@ -176,6 +184,17 @@ class Article extends ActiveRecord
         return implode(', ', $tagLinks);
     }
 
+    public function getTagLinksArray()
+    {
+        $tagLinks = [];
+
+        foreach ($this->tags as $tag) {
+            $tagLinks[] = Html::a($tag->name, ['tag', 'slug' => $tag->slug]);
+        }
+
+        return $tagLinks;
+    }
+
     /**
      * @inheritdoc
      * @return \common\models\query\ArticleQuery the active query used by this AR class.
@@ -184,4 +203,18 @@ class Article extends ActiveRecord
     {
         return new ArticleQuery(get_called_class());
     }
+
+    public function uploadMainImage()
+    {
+        if ($this->validate()) {
+            $path = Yii::getAlias('@storage') . '/img/' . $this->imageFile->baseName . '.' . $this->imageFile->extension;
+            $this->imageFile->saveAs($path, false);
+            $this->attachImage($path, true);
+            @unlink($path);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 }

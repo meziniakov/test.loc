@@ -9,6 +9,8 @@ use yii\web\NotFoundHttpException;
 use backend\models\search\ArticleSearch;
 use common\models\Article;
 use common\models\ArticleCategory;
+use zakurdaev\editorjs\actions\UploadImageAction;
+use yii\web\UploadedFile;
 
 /**
  * Class ArticleController.
@@ -27,6 +29,32 @@ class ArticleController extends Controller
         ];
     }
 
+    public function actions()
+    {
+        return [
+            'upload-file' => [
+                'class' => UploadImageAction::class,
+                'mode' => UploadImageAction::MODE_FILE,
+                'url' => 'http://storage.test.loc/img/',
+                'path' => '@storage/img',
+                'validatorOptions' => [
+                    'maxWidth' => 2000,
+                    'maxHeight' => 2000
+                ]
+            ],
+            'fetch-url' => [
+                'class' => UploadImageAction::class,
+                'mode' => UploadImageAction::MODE_URL,
+                'url' => 'http://storage.test.loc/img/',
+                'path' => '@storage/img',
+                'validatorOptions' => [
+                    'maxWidth' => 1000,
+                    'maxHeight' => 1000
+                ]
+
+            ]
+        ];
+    }
     /**
      * Lists all Article models.
      *
@@ -58,6 +86,11 @@ class ArticleController extends Controller
         $model = new Article();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
+            if ($model->imageFile){
+                $model->uploadMainImage();
+            }
+            Yii::$app->session->setFlash('success', "Успешно создано");            
             return $this->redirect(['index']);
         } else {
             return $this->render('create', [
@@ -79,8 +112,14 @@ class ArticleController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
+            if ($model->imageFile){
+                $model->uploadMainImage();
+            }
+            Yii::$app->session->setFlash('success', "Успешно создано");            
             return $this->redirect(['index']);
         } else {
+            // var_dump($model);die;
             return $this->render('update', [
                 'model' => $model,
                 'categories' => ArticleCategory::find()->active()->all(),
