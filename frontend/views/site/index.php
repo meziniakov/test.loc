@@ -9,18 +9,17 @@ use yii\widgets\ActiveForm;
 $this->title = Yii::$app->keyStorage->get('frontend.index.title');
 ?>
 
-<!-- ============================ Hero Banner  Start================================== -->
 <div class="image-cover hero-banner" style="background:url(reveal/img/33.jpg) no-repeat;" data-overlay="6">
-	<div class="container">
+<div class="container">
 
-		<h1 class="big-header-capt">Лучшие места в городе</h1>
+		<h1 class="big-header-capt">Лучшие места в городе <?= isset($city->name) ? $city->name : ""?></h1>
 		<div class="full-search-2 italian-search hero-search-radius box-style">
 			<div class="hero-search-content">
 				<div class="row">
 					<div class="col-lg-4 col-md-4 col-sm-12 small-padd">
 						<div class="form-group">
 							<div class="input-with-icon">
-								<form method="get" action="<?= Url::to(['company/search']) ?>">
+								<form method="get" action="<?= Url::to(['place/search']) ?>">
 									<?= Html::input('text', 'q', '', ['class' => 'form-control b-r', 'placeholder' => 'Искать...']) ?>
 									<i class="theme-cl ti-search"></i>
 							</div>
@@ -39,7 +38,7 @@ $this->title = Yii::$app->keyStorage->get('frontend.index.title');
 					<div class="col-lg-3 col-md-3 col-sm-6 small-padd">
 						<div class="form-group">
 							<div class="input-with-icon">
-								<?= Html::dropDownList('tag_id', null, ArrayHelper::map($tags, 'slug', 'name'), ['id' => 'choose-city', 'class' => 'form-control', 'prompt' => '']) ?>
+								<?= Html::dropDownList('tag_id', null, ArrayHelper::map($tags, 'slug', 'name'), ['id' => 'list-category', 'class' => 'form-control', 'prompt' => '']) ?>
 								<i class="theme-cl ti-briefcase"></i>
 							</div>
 						</div>
@@ -77,13 +76,13 @@ $this->title = Yii::$app->keyStorage->get('frontend.index.title');
 			<div class="owl-carousel owl-theme" id="lists-slide">
 				<?php //$images = $listing->getImages()
 				?>
-				<?php foreach ($listing as $company) : ?>
-					<?php $img = $company->getImage(); ?>
+				<?php foreach ($listing as $place) : ?>
+					<?php $img = $place->getImage(); ?>
 					<!-- Single List -->
 					<div class="list-slide-box">
 						<div class="modern-list ml-2">
 							<div class="grid-category-thumb">
-								<a href="<?= Url::to(['company/view', 'slug' => ($company->slug) ? $company->slug : $company->id]) ?>" class="overlay-cate"><?= Html::img($img->getUrl('358x229'), ['class' => 'img-responsive', 'alt' => $company->slug]) ?></a>
+								<a href="<?= Url::to(['place/view', 'slug' => ($place->slug) ? $place->slug : $place->id]) ?>" class="overlay-cate"><?= Html::img($img->getUrl('358x229'), ['class' => 'img-responsive', 'alt' => $place->slug]) ?></a>
 								<!-- <div class="listing-price-info"> 
 											<span class="pricetag">$25 - $65</span>
 										</div> -->
@@ -96,12 +95,12 @@ $this->title = Yii::$app->keyStorage->get('frontend.index.title');
 										<i class="ti-star"></i>
 										<!-- <a href="#" class="tl-review">(24 Reviews)</a> -->
 									</div>
-									<h4 class="lst-title"><?= Html::a($company->name, ['company/view', 'slug' => ($company->slug) ? $company->slug : $company->id]) ?><span class="veryfied-author"></span></h4>
+									<h4 class="lst-title"><?= Html::a($place->name, ['place/view', 'slug' => ($place->slug) ? $place->slug : $place->id]) ?><span class="veryfied-author"></span></h4>
 								</div>
 							</div>
 							<div class="modern-list-content">
 								<div class="listing-cat">
-								<?= Html::a('<i class=' . $company->category['icon'] . ' bg-a"></i>' . $company->category['title'], ['company/category', 'slug' => $company->category['slug']], ['class' => 'cat-icon cl-1']) ?>
+								<?= Html::a('<i class=' . $place->category['icon'] . ' bg-a"></i>' . $place->category['title'], ['place/category', 'slug' => $place->category['slug']], ['class' => 'cat-icon cl-1']) ?>
 									<!-- <span class="more-cat">+3</span> -->
 								</div>
 							</div>
@@ -133,9 +132,9 @@ $this->title = Yii::$app->keyStorage->get('frontend.index.title');
 				<div class="col-lg-3 col-md-6 col-sm-12">
 					<div class="list-cats-boxr">
 						<?php if (isset($category->slug)) : ?>
-							<a href="<?= Url::to(['company/category', 'slug' => $category->slug]) ?>" class="category-box">
+							<a href="<?= Url::to(['place/category', 'slug' => $category->slug]) ?>" class="category-box">
 							<?php else : ?>
-								<a href="<?= Url::to(['company/category', 'slug' => $category->type]) ?>" class="category-box">
+								<a href="<?= Url::to(['place/category', 'slug' => $category->type]) ?>" class="category-box">
 								<?php endif ?>
 								<div class="category-desc">
 									<div class="category-icon">

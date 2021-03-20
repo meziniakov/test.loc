@@ -2,7 +2,7 @@
 
 namespace backend\modules\parser\models;
 
-use common\models\Organization;
+use common\models\Place;
 use Yii;
 use GuzzleHttp\Client;
 use yii\helpers\HtmlPurifier;
@@ -123,13 +123,13 @@ class Parser extends \yii\db\ActiveRecord
         $links = [];
             foreach ($xml as $url) {
                 if (preg_match("/what-to-visit\/nature|what-to-visit\/culture/", $url->loc)) {
-                    $company = new Organization(); //
-                    $company->url = $url->loc;
+                    $place = new Place(); //
+                    $place->url = $url->loc;
                     // $links[] = $url->loc;
                     try {
-                        var_dump($company->url);die;
+                        var_dump($place->url);die;
                         echo "Ok";die;
-                    //   $company->save(false);
+                    //   $place->save(false);
                     } catch(\yii\db\Exception $e) {
                         // echo "error";
                         }
@@ -140,43 +140,43 @@ class Parser extends \yii\db\ActiveRecord
 
         while(true) {
             $tmp_uniq = md5(uniqid().time());
-            Yii::$app->db->createCommand("UPDATE {{organization}} SET tmp_uniq = '{$tmp_uniq}' WHERE date_parsed is null AND tmp_uniq is null LIMIT ".$this->per_block)->execute();
-            $companies = Yii::$app->db->createCommand("SELECT url FROM {{organization}} WHERE tmp_uniq = '{$tmp_uniq}'")->queryAll();
+            Yii::$app->db->createCommand("UPDATE {{Place}} SET tmp_uniq = '{$tmp_uniq}' WHERE date_parsed is null AND tmp_uniq is null LIMIT ".$this->per_block)->execute();
+            $companies = Yii::$app->db->createCommand("SELECT url FROM {{Place}} WHERE tmp_uniq = '{$tmp_uniq}'")->queryAll();
             // var_dump($companies[0]['url']);die;
             if (!$companies) {
                 echo "All done";
                 exit;
             }
-            foreach ($companies as $company) {
-                $company = Organization::find()->where(['url' => $company['url']])->one();
-                $document = $this->getDocument($company->url);
-                $company->date_parsed = date('Y-m-d H:i:s');
-                $company->name = trim($document->find($this->tag_name)->text());
-                $company->address = HtmlPurifier::process($document->find('div.transport-brief > p:eq(0)')->text());
+            foreach ($companies as $place) {
+                $place = Place::find()->where(['url' => $place['url']])->one();
+                $document = $this->getDocument($place->url);
+                $place->date_parsed = date('Y-m-d H:i:s');
+                $place->name = trim($document->find($this->tag_name)->text());
+                $place->address = HtmlPurifier::process($document->find('div.transport-brief > p:eq(0)')->text());
                 // var_dump($document->find('div.transport-brief > p:eq(0)')->text());die;
                 // $addres = explode(",", substr($document->find('div.transport-brief > p:eq(0)')->text(), 12));
                 //   if (is_array($addres)) {
-                //     $company->city = $addres[0];
+                //     $place->city = $addres[0];
                 //   }
                 $document->find('.transport-brief')->remove();
                 $document->find('.room-3d-popup')->remove();
                 $document->find('.transport-link')->remove();
-                $company->description = str_replace("\n", "", trim($document->find($this->tag_description)->text()));
+                $place->description = str_replace("\n", "", trim($document->find($this->tag_description)->text()));
                 //get images
                 $entry = $document->find($this->tag_image);
                 if ($entry) {
                     foreach ($entry as $row) {
                         $imageUrl = $this->uri . pq($row)->attr($this->tag_attr_image);
-                        $company->images[] = pathinfo($imageUrl);
+                        $place->images[] = pathinfo($imageUrl);
                         $pathinfo = pathinfo($imageUrl);
-                        $company->imageFiles[] = $company->download($imageUrl, $pathinfo);
+                        $place->imageFiles[] = $place->download($imageUrl, $pathinfo);
                     }
                 }
-                $imageFiles = $company->images;
-                $company->tmp_uniq = "";
-                $company->update();
+                $imageFiles = $place->images;
+                $place->tmp_uniq = "";
+                $place->update();
                 if ($imageFiles) {
-                    $company->uploadImages($imageFiles);
+                    $place->uploadImages($imageFiles);
                 }
             }
         }
@@ -184,36 +184,36 @@ class Parser extends \yii\db\ActiveRecord
     }
 
     private function parseAndSave(array $array) {
-        foreach ($array as $company) {
-            $company = Organization::find()->where(['url' => $company['url']])->one();
-            $document = $this->getDocument($company->url);
-            $company->date_parsed = date('Y-m-d H:i:s');
-            $company->name = trim($document->find($this->tag_name)->text());
-            $company->address = HtmlPurifier::process($document->find('div.transport-brief > p:eq(0)')->text());
+        foreach ($array as $place) {
+            $place = Place::find()->where(['url' => $place['url']])->one();
+            $document = $this->getDocument($place->url);
+            $place->date_parsed = date('Y-m-d H:i:s');
+            $place->name = trim($document->find($this->tag_name)->text());
+            $place->address = HtmlPurifier::process($document->find('div.transport-brief > p:eq(0)')->text());
             // var_dump($document->find('div.transport-brief > p:eq(0)')->text());die;
             // $addres = explode(",", substr($document->find('div.transport-brief > p:eq(0)')->text(), 12));
             //   if (is_array($addres)) {
-            //     $company->city = $addres[0];
+            //     $place->city = $addres[0];
             //   }
             $document->find('.transport-brief')->remove();
             $document->find('.room-3d-popup')->remove();
             $document->find('.transport-link')->remove();
-            $company->description = str_replace("\n", "", trim($document->find($this->tag_description)->text()));
+            $place->description = str_replace("\n", "", trim($document->find($this->tag_description)->text()));
             //get images
             $entry = $document->find($this->tag_image);
             if ($entry) {
                 foreach ($entry as $row) {
                     $imageUrl = $this->uri . pq($row)->attr($this->tag_attr_image);
-                    $company->images[] = pathinfo($imageUrl);
+                    $place->images[] = pathinfo($imageUrl);
                     $pathinfo = pathinfo($imageUrl);
-                    $company->imageFiles[] = $company->download($imageUrl, $pathinfo);
+                    $place->imageFiles[] = $place->download($imageUrl, $pathinfo);
                 }
             }
-            $imageFiles = $company->images;
-            $company->tmp_uniq = "";
-            $company->update();
+            $imageFiles = $place->images;
+            $place->tmp_uniq = "";
+            $place->update();
             if ($imageFiles) {
-                $company->uploadImages($imageFiles);
+                $place->uploadImages($imageFiles);
             }
         }
     }

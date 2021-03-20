@@ -35,11 +35,14 @@ $config = [
             'identityClass' => 'common\models\User',
             'loginUrl'=>['/account/sign-in/login'],
             'enableAutoLogin' => true,
-            'identityCookie' => ['name' => '_identity-frontend', 'httpOnly' => true],
+            'identityCookie' => ['name' => '_identity-frontend', 'httpOnly' => true, 'path' => '/', 'domain' => '.' . Yii::getAlias('@domain')],
         ],
         'session' => [
             // this is the name of the session cookie used for login on the frontend
             'name' => 'app-frontend',
+            'cookieParams' => [
+                'domain' => '.' . Yii::getAlias('@domain'),
+            ]
         ],
         'errorHandler' => [
             'errorAction' => 'site/error',
@@ -47,6 +50,12 @@ $config = [
         'urlManager' => require __DIR__ . '/_urlManager.php',
         'cache' => require __DIR__ . '/_cache.php',
     ],
+    'on beforeAction' => function ($event) {
+        $_city = explode(".", Yii::$app->request->serverName)[0];
+        if (common\models\City::find()->where('url = :url', [':url' => $_city])->one()) {
+            Yii::$app->params['city'] = $_city;
+        }
+    },
     'as beforeAction' => [
         'class' => 'common\behaviors\LastActionBehavior',
     ],

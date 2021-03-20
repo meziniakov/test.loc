@@ -58,6 +58,12 @@ $config = [
         'frontendCache' => require Yii::getAlias('@frontend/config/_cache.php'),
     ],
     'modules' => [
+        'roundSwitch' => [
+            'class' => 'nickdenry\grid\toggle\Module' ,
+        ],
+        'noty' => [
+            'class' => 'lo\modules\noty\Module',
+        ],
         'parser' => [
             'class' => 'backend\modules\parser\Parser',
         ],

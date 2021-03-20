@@ -4,6 +4,7 @@ namespace frontend\modules\account\controllers;
 
 use Yii;
 use yii\base\InvalidParamException;
+use Symfony\Component\Cache\Exception\InvalidArgumentException;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\BadRequestHttpException;
@@ -66,9 +67,9 @@ class SignInController extends Controller
     {
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            $model = Yii::$app->user->identity;
-            $model->ip = Yii::$app->request->userIP;
-            $model->save();
+            // $model = Yii::$app->user->identity;
+            // $model->ip = Yii::$app->request->userIP;
+            // $model->save();
 
             return $this->goBack();
         } else {
@@ -83,9 +84,9 @@ class SignInController extends Controller
             $model = new LoginForm();
             if ($model->load(Yii::$app->request->post())) {
                 if ($model->login()) {
-                    $model = Yii::$app->user->identity;
-                    $model->ip = Yii::$app->request->userIP;
-                    $model->save();
+                    // $model = Yii::$app->user->identity;
+                    // $model->ip = Yii::$app->request->userIP;
+                    // $model->save();
                     
                     return $this->goBack();
                 } else {
@@ -235,7 +236,7 @@ class SignInController extends Controller
     {
         try {
             $model = new ResetPasswordForm($token);
-        } catch (InvalidParamException $e) {
+        } catch (InvalidArgumentException $e) {
             throw new BadRequestHttpException($e->getMessage());
         }
 

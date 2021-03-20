@@ -608,3 +608,7 @@ $(function() {
 	});
 	
 });
+
+$(document).ready(function() {
+    $("#preload").removeClass();
+});

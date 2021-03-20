@@ -189,6 +189,30 @@ class User extends ActiveRecord implements IdentityInterface
         $this->access_token = null;
     }
 
+        /**
+     * Generates new password reset token
+     */
+    public function generatePasswordResetToken()
+    {
+        $this->password_reset_token = Yii::$app->security->generateRandomString() . '_' . time();
+    }
+
+    /**
+     * Generates new token for email verification
+     */
+    public function generateEmailVerificationToken()
+    {
+        $this->verification_token = Yii::$app->security->generateRandomString() . '_' . time();
+    }
+
+    /**
+     * Removes password reset token
+     */
+    public function removePasswordResetToken()
+    {
+        $this->password_reset_token = null;
+    }
+
     /**
      * Returns user statuses list
      *

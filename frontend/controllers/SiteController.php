@@ -2,7 +2,7 @@
 
 namespace frontend\controllers;
 
-use common\models\Organization;
+use common\models\Place;
 use Yii;
 use yii\web\Controller;
 use frontend\models\ContactForm;
@@ -10,14 +10,36 @@ use vova07\fileapi\actions\UploadAction as FileAPIUpload;
 use common\models\LoginForm;
 use yii\web\HttpException;
 use common\models\Tag;
-use common\models\CompanyCategory;
-use common\models\CompanySearch;
+use common\models\PlaceCategory;
+use common\models\PlaceSearch;
+use common\models\City;
 
 /**
  * Class SiteController.
  */
 class SiteController extends Controller
 {
+    public $city;
+
+    // public function init()
+    // {
+    //     parent::init();
+
+    //     // $uri = explode(".", Yii::$app->request->serverName);
+    //     var_dump(Yii::$app->params['city']);
+    //     // echo "Hi";
+    //     // return $this->city = $city;
+    // }
+    // public function __construct($city)
+    // {
+    //     echo $this->city = $city;
+    // }
+
+    // public function beforeAction($action)
+    // {
+    //     // var_dump($action);die;
+    //     // return parent::beforeAction($action);
+    // }
     /**
      * @inheritdoc
      */
@@ -44,12 +66,18 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        $listing = Organization::find()->where(['is_home' => 1])->with('category')->all();
+        // if (false) {
+        if ($city = City::find()->where('url = :url', [':url' => Yii::$app->params['city']])->one()) {
+            $listing = Place::find()->where(['is_home' => 1])->andWhere(['city' => $city->url])->with('category')->all();
+        } else {
+            $listing = Place::find()->where(['is_home' => 1])->with('category')->all();
+        }
         // var_dump($listing);die;
         return $this->render('index', [
+            'city' => $city,
             'listing' => $listing,
             'tags' => Tag::find()->all(),
-            'categories' => CompanyCategory::find()->active()->all(),
+            'categories' => PlaceCategory::find()->active()->all(),
         ]);
     }
 

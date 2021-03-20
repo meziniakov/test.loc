@@ -26,17 +26,22 @@ use backend\widgets\Menu;
                 ],
                 [
                     'label' => Yii::t('backend', 'Parser'),
-                    'url' => ['/parser/parser'],
+                    'url' => ['/parser/index'],
                     'icon' => '<i class="fa fa-search"></i>',
                 ],
                 [
-                    'label' => Yii::t('backend', 'Companies'),
+                    'label' => Yii::t('backend', 'Cities'),
+                    'url' => ['/city'],
+                    'icon' => '<i class="fa fa-globe"></i>',
+                ],
+                [
+                    'label' => Yii::t('backend', 'Places'),
                     'url' => '#',
-                    'icon' => '<i class="fa fa-edit"></i>',
+                    'icon' => '<i class="fa fa-map-marker"></i>',
                     'options' => ['class' => 'treeview'],
                     'items' => [
-                        ['label' => Yii::t('backend', 'Companies'), 'url' => ['/company/index'], 'icon' => '<i class="fa fa-angle-double-right"></i>'],
-                        ['label' => Yii::t('backend', 'Company categories'), 'url' => ['/company-category/index'], 'icon' => '<i class="fa fa-angle-double-right"></i>'],
+                        ['label' => Yii::t('backend', 'Place'), 'url' => ['/place/index'], 'icon' => '<i class="fa fa-angle-double-right"></i>'],
+                        ['label' => Yii::t('backend', 'Place categories'), 'url' => ['/place-category/index'], 'icon' => '<i class="fa fa-angle-double-right"></i>'],
                     ],
                 ],                [
                     'label' => Yii::t('backend', 'Content'),

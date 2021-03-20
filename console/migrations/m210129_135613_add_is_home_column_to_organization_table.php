@@ -10,9 +10,13 @@ class m210129_135613_add_is_home_column_to_organization_table extends Migration
     /**
      * {@inheritdoc}
      */
+    const DB_TABLE = '{{%organization}}';
+    
     public function safeUp()
     {
-        $this->addColumn('{{%organization}}', 'is_home', $this->integer());
+        if(Yii::$app->db->schema->getTableSchema(self::DB_TABLE, true) === null) {
+            $this->addColumn('{{%organization}}', 'is_home', $this->integer());
+        }
     }
 
     /**

@@ -13,6 +13,9 @@ $config = [
         '@npm'   => '@vendor/npm-asset',
     ],
     'modules' => [
+        'noty' => [
+            'class' => 'lo\modules\noty\Module',
+        ],
         'yii2images' => [
             'class' => 'alex290\yii2images\Module',
             'imagesStorePath' => '@storage/img/original', //path to origin images

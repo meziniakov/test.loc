@@ -13,4 +13,6 @@ return [
   'sku' => 'div.article',
   'price' => 'span.new',
   'attr-image' => 'src',
+  'city_id' => '1',
+  'city' => ''
 ];

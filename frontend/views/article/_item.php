@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\helpers\HtmlPurifier;
 use common\assets\Highlight;
+use yii\helpers\Url;
 
 /**
  * @var yii\web\View
@@ -14,84 +15,18 @@ Highlight::register($this);
 <!-- Single blog Grid -->
 <div class="col-lg-4 col-md-6">
     <div class="blog-wrap-grid">
-
         <div class="blog-thumb">
-            <a href="blog-detail.html"><img src="https://via.placeholder.com/1200x850" class="img-fluid" alt="" /></a>
+        <?php $img = $model->getImage(); ?>
+            <a href="<?= Url::to(['article/view', 'slug' => ($model->slug) ? $model->slug : $model->id]) ?>">
+                <?= Html::img($img->getUrl('358x229'), ['class' => 'img-responsive', 'alt' => $model->slug]) ?>
+            </a>
         </div>
-
-        <div class="blog-info">
-            <span class="post-date"><i class="ti-calendar"></i><?= Yii::$app->formatter->asDatetime($model->published_at) ?></span>
-        </div>
-
         <div class="blog-body">
-            <h4 class="bl-title"><a href="blog-detail.html"><?= Html::a($model->title, ['view', 'slug' => $model->slug]) ?></a></h4>
-            <p><?= HtmlPurifier::process($model->preview) ?></p>
-            <a href="blo-detail.html" class="bl-continue">Читать</a>
+            <h3 class="bl-title"><?= Html::a($model->title, ['view', 'slug' => $model->slug]) ?></h3>
         </div>
-
-    </div>
-</div>
-
-<!-- Single blog Grid -->
-<div class="col-lg-4 col-md-6">
-    <div class="blog-wrap-grid">
-
-        <div class="blog-thumb">
-            <a href="blog-detail.html"><img src="https://via.placeholder.com/1200x850" class="img-fluid" alt="" /></a>
-        </div>
-
         <div class="blog-info">
-            <span class="post-date"><i class="ti-calendar"></i>10 August 2018</span>
+            <span class="post-date"><i class="ti-calendar"></i><?= Yii::$app->formatter->asDate($model->published_at, 'long') ?></span>
         </div>
-
-        <div class="blog-body">
-            <h4 class="bl-title"><a href="blog-detail.html">List of benifits and impressive listeo services</a></h4>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore. </p>
-            <a href="blo-detail.html" class="bl-continue">Continue</a>
-        </div>
-
-    </div>
-</div>
-
-<!-- Single blog Grid -->
-<div class="col-lg-4 col-md-6">
-    <div class="blog-wrap-grid">
-
-        <div class="blog-thumb">
-            <a href="blog-detail.html"><img src="https://via.placeholder.com/1200x850" class="img-fluid" alt="" /></a>
-        </div>
-
-        <div class="blog-info">
-            <span class="post-date"><i class="ti-calendar"></i>30 Sep 2018</span>
-        </div>
-
-        <div class="blog-body">
-            <h4 class="bl-title"><a href="blog-detail.html">What people says about listio properties</a></h4>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore. </p>
-            <a href="blo-detail.html" class="bl-continue">Continue</a>
-        </div>
-
-    </div>
-</div>
-
-<!-- Single blog Grid -->
-<div class="col-lg-4 col-md-6">
-    <div class="blog-wrap-grid">
-
-        <div class="blog-thumb">
-            <a href="blog-detail.html"><img src="https://via.placeholder.com/1200x850" class="img-fluid" alt="" /></a>
-        </div>
-
-        <div class="blog-info">
-            <span class="post-date"><i class="ti-calendar"></i>30 july 2018</span>
-        </div>
-
-        <div class="blog-body">
-            <h4 class="bl-title"><a href="blog-detail.html">Why people choose listio for own properties</a></h4>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore. </p>
-            <a href="blo-detail.html" class="bl-continue">Continue</a>
-        </div>
-
     </div>
 </div>
 
@@ -141,7 +76,7 @@ Highlight::register($this);
 <!-- /row -->
 
 <!-- Pagination -->
-<div class="row">
+<!-- <div class="row">
     <div class="col-lg-12 col-md-12 col-sm-12">
         <ul class="pagination p-center">
             <li class="page-item">
@@ -163,14 +98,14 @@ Highlight::register($this);
             </li>
         </ul>
     </div>
-</div>
+</div> -->
 
 </div>
 
 </section>
 <!-- ============================ Agency List End ================================== -->
 <!-- ============================ Newsletter Start ================================== -->
-<section class="newsletter theme-bg" style="background-image:url(assets/img/bg-new.png)">
+<!-- <section class="newsletter theme-bg" style="background-image:url(assets/img/bg-new.png)">
     <div class="container">
 
         <div class="row justify-content-center">
@@ -194,5 +129,5 @@ Highlight::register($this);
             </div>
         </div>
     </div>
-</section>
+</section> -->
 <!-- ============================ Newsletter End ================================== -->
