@@ -13,6 +13,7 @@ use common\models\Tag;
 use common\models\PlaceCategory;
 use common\models\PlaceSearch;
 use common\models\City;
+use yii\web\NotFoundHttpException;
 
 /**
  * Class SiteController.
@@ -66,13 +67,13 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        // if (false) {
         if ($city = City::find()->where('url = :url', [':url' => Yii::$app->params['city']])->one()) {
-            $listing = Place::find()->where(['is_home' => 1])->andWhere(['city' => $city->url])->with('category')->all();
-        } else {
+            $listing = Place::find()->where(['is_home' => 1])->andWhere(['city_id' => $city->id])->with('category')->all();
+        } elseif (Yii::$app->params['city'] == 'global') {
             $listing = Place::find()->where(['is_home' => 1])->with('category')->all();
+        } else {
+            throw new NotFoundHttpException(Yii::t('frontend', 'Page not found.'));
         }
-        // var_dump($listing);die;
         return $this->render('index', [
             'city' => $city,
             'listing' => $listing,

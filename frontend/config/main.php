@@ -1,4 +1,5 @@
 <?php
+use yii\web\NotFoundHttpException;
 
 $params = array_merge(
     require __DIR__ . '/../../common/config/params.php',
@@ -51,9 +52,8 @@ $config = [
         'cache' => require __DIR__ . '/_cache.php',
     ],
     'on beforeAction' => function ($event) {
-        $_city = explode(".", Yii::$app->request->serverName)[0];
-        if (common\models\City::find()->where('url = :url', [':url' => $_city])->one()) {
-            Yii::$app->params['city'] = $_city;
+        if (count(explode(".", Yii::$app->request->serverName)) > 2) {
+            return Yii::$app->params['city'] = explode(".", Yii::$app->request->serverName)[0];
         }
     },
     'as beforeAction' => [

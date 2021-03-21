@@ -14,5 +14,5 @@ return [
   'price' => 'span.new',
   'attr-image' => 'src',
   'city_id' => '1',
-  'city' => ''
+  'city' => 'global'
 ];
