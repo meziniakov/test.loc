@@ -135,23 +135,20 @@ class Parser extends \yii\db\ActiveRecord
                         }
                 }
             }
-        // die;
-        // var_dump($links);die;
-
         while(true) {
             $tmp_uniq = md5(uniqid().time());
-            Yii::$app->db->createCommand("UPDATE {{Place}} SET tmp_uniq = '{$tmp_uniq}' WHERE date_parsed is null AND tmp_uniq is null LIMIT ".$this->per_block)->execute();
-            $companies = Yii::$app->db->createCommand("SELECT url FROM {{Place}} WHERE tmp_uniq = '{$tmp_uniq}'")->queryAll();
-            // var_dump($companies[0]['url']);die;
-            if (!$companies) {
+            Yii::$app->db->createCommand("UPDATE {{place}} SET tmp_uniq = '{$tmp_uniq}' WHERE date_parsed is null AND tmp_uniq is null LIMIT ".$this->per_block)->execute();
+            $places = Yii::$app->db->createCommand("SELECT url FROM {{place}} WHERE tmp_uniq = '{$tmp_uniq}'")->queryAll();
+            // var_dump($places[0]['url']);die;
+            if (!$places) {
                 echo "All done";
                 exit;
             }
-            foreach ($companies as $place) {
+            foreach ($places as $place) {
                 $place = Place::find()->where(['url' => $place['url']])->one();
                 $document = $this->getDocument($place->url);
                 $place->date_parsed = date('Y-m-d H:i:s');
-                $place->name = trim($document->find($this->tag_name)->text());
+                $place->title = trim($document->find($this->tag_name)->text());
                 $place->address = HtmlPurifier::process($document->find('div.transport-brief > p:eq(0)')->text());
                 // var_dump($document->find('div.transport-brief > p:eq(0)')->text());die;
                 // $addres = explode(",", substr($document->find('div.transport-brief > p:eq(0)')->text(), 12));
@@ -188,7 +185,7 @@ class Parser extends \yii\db\ActiveRecord
             $place = Place::find()->where(['url' => $place['url']])->one();
             $document = $this->getDocument($place->url);
             $place->date_parsed = date('Y-m-d H:i:s');
-            $place->name = trim($document->find($this->tag_name)->text());
+            $place->title = trim($document->find($this->tag_name)->text());
             $place->address = HtmlPurifier::process($document->find('div.transport-brief > p:eq(0)')->text());
             // var_dump($document->find('div.transport-brief > p:eq(0)')->text());die;
             // $addres = explode(",", substr($document->find('div.transport-brief > p:eq(0)')->text(), 12));

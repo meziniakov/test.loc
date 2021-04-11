@@ -6,7 +6,7 @@ use Yii;
 use yii\helpers\Url;
 use GuzzleHttp\Client;
 use backend\modules\parser\models\Parser;
-// use common\models\Place;
+use common\models\Place;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -131,6 +131,24 @@ class IndexController extends Controller
     throw new NotFoundHttpException('The requested page does not exist.');
   }
 
+  public function actionResave()
+  {
+    $null = Place::find()->where(['slug' => ''])->all();
+    $i = 0;
+    foreach($null as $item) {
+      if(!empty($item->text)) {
+        $item->save();
+        var_dump($item->title);
+        // var_dump(empty($item->text));
+        // var_dump($item->getErrors());die;
+        $i++;
+      }
+    }
+    echo "Up {$i}";
+    die;
+
+  }
+
   public function actionStart($id)
   {
     $model = $this->findModel($id);
@@ -140,7 +158,7 @@ class IndexController extends Controller
     foreach ($urls as $url) {
       $document = $model->getDocument($url, $model->uri, $model->user_agent);
       $place = new Place();
-      $place->name = $document->find($model->tag_name)->text();
+      $place->title = $document->find($model->tag_name)->text();
       $place->description = $document->find($model->tag_description)->html();
 
       //   $place->address = $document->find($model->tag_addres)->text();
@@ -172,7 +190,7 @@ class IndexController extends Controller
       //     // print_r($categoryes);die;
       //   }
 
-      if (!Place::find()->where(['name' => $place->name])->one()) {
+      if (!Place::find()->where(['title' => $place->title])->one()) {
         // $place->addTagValues($tags);
         $place->save();
         // return $this->redirect(['view', 'id' => $model->id]);
@@ -182,7 +200,7 @@ class IndexController extends Controller
         //     ]);
         // echo "Saved";
       } else {
-        $place = Place::find()->where(['name' => $place->name])->one();
+        $place = Place::find()->where(['title' => $place->title])->one();
         // $place->addTagValues($tags);
         $place->imageFile = UploadedFile::getInstance($model, 'imageFile');
         if ($place->imageFile) {
@@ -209,7 +227,6 @@ class IndexController extends Controller
   public function actionPusk($id)
   {
     setlocale(LC_ALL, 'ru_RU.utf8');
-    // echo date(DATE_ATOM);die;
     $parser = $this->findModel($id);
 
     $parser->getPageByLinkFromXml('https://turizmrm.ru/sitemap.xml');
@@ -255,9 +272,9 @@ class IndexController extends Controller
       $entry = $document->find('.breadcrumbs span a');
       foreach ($entry as $row) {
         $ent = pq($row);
-        $name = $ent->text();
+        $title = $ent->text();
         $url = $ent->attr('href');
-        $place['breadcrumbs'][$name] = $url;
+        $place['breadcrumbs'][$title] = $url;
       }
       // if (empty($addres)) {
       //   $place['addres']['city'] = $addres[0];
@@ -269,7 +286,7 @@ class IndexController extends Controller
       // print_r($place['breadcrumbs']);
 
       //   $categoryList = $document->find('.category-list');
-      // //   print_r($place->name);die;
+      // //   print_r($place->title);die;
       //   $tags = [];
       //   foreach ($categoryList as $tag) {
       //     $tags[] =trim(str_replace("\n", "", pq($tag)->find('.title')->text()));
@@ -285,7 +302,7 @@ class IndexController extends Controller
 
     foreach ($urls as $url) {
       $document = $parser->getDocument($url);
-      $place->name = trim($document->find($parser->tag_name)->text());
+      $place->title = trim($document->find($parser->tag_name)->text());
       $place->address = substr($document->find('div.transport-brief > p:eq(0)')->text(), 12);
       $addres = explode(",", substr($document->find('div.transport-brief > p:eq(0)')->text(), 12));
       $place->city = $addres[0];
@@ -301,7 +318,7 @@ class IndexController extends Controller
         $place->imageFiles[] = $place->download($imageUrl, $pathinfo);
       }
       $imageFiles = $place->images;
-      if (Place::find()->where(['name' => $place->name])->one()) {
+      if (Place::find()->where(['title' => $place->title])->one()) {
         $place->save();
         $place->uploadImages($imageFiles);
       } else {
