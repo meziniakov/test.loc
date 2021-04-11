@@ -12,6 +12,20 @@ use common\models\Page;
  */
 class PageController extends Controller
 {
+    public function behaviors()
+    {
+      return [
+        [
+          'class' => 'yii\filters\HttpCache',
+          // 'only' => ['index'],
+          'lastModified' => function ($action, $params) {
+            $q = new \yii\db\Query();
+            return $q->from('page')->max('updated_at');
+          },
+        ],
+      ];
+    }
+  
     /**
      * Displays a single Page model.
      *

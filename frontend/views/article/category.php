@@ -1,32 +1,32 @@
 <?php
 
-use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\ListView;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\ArticleCategory */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('frontend', 'Articles');
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = Yii::t('frontend', 'Articles from category {title}', ['title' => $model->title]);
+$this->params['breadcrumbs'][] = [
+    'label' => Yii::t('frontend', 'Articles'),
+    'url' => Url::to('/article')
+];
+$this->params['breadcrumbs'][] = [
+    'label' => Yii::t('frontend', 'Categories'),
+    'url' => Url::to('/article/category')
+];
+$this->params['breadcrumbs'][] = Yii::t('frontend', '{title}', ['title' => $model->title]);
 ?>
-<div class="article-category">
-    <h1><?= Yii::t('frontend', 'Articles category &laquo;{title}&raquo;', ['title' => $model->title]) ?></h1>
 
-    <div class="row">
-        <div class="col-md-9">
+<section>
+    <div class="container">
+        <div class="row">
             <?= ListView::widget([
                 'dataProvider' => $dataProvider,
                 'itemView' => '_item',
                 'summary' => false,
             ]) ?>
         </div>
-
-        <div class="col-md-3">
-            <?= $this->render(
-                '_categoryItem.php',
-                ['menuItems' => $menuItems]
-            ) ?>
-        </div>
     </div>
-</div>
+</section>

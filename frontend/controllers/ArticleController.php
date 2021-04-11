@@ -16,6 +16,21 @@ use yii\helpers\Json;
  */
 class ArticleController extends Controller
 {
+
+    public function behaviors()
+    {
+      return [
+        [
+          'class' => 'yii\filters\HttpCache',
+          // 'only' => ['index'],
+          'lastModified' => function ($action, $params) {
+            $q = new \yii\db\Query();
+            return $q->from('article')->max('updated_at');
+          },
+        ],
+      ];
+    }  
+
     /**
      * Lists all Article models.
      *

@@ -17,8 +17,8 @@ class PlaceSearch extends Place
     public function rules()
     {
         return [
-            [['id', 'phone', 'category_id', 'status', 'city_id'], 'integer'],
-            [['type', 'name', 'description'], 'safe'],
+            [['id', 'phone', 'category_id', 'status', 'is_home', 'city_id'], 'integer'],
+            [['title', 'text'], 'safe'],
         ];
     }
 
@@ -62,12 +62,12 @@ class PlaceSearch extends Place
             'phone' => $this->phone,
             'category_id' => $this->category_id,
             'city_id' => $this->city_id,
-            'status' => $this->status
+            'status' => $this->status,
+            'is_home' => $this->is_home,
         ]);
 
-        $query->andFilterWhere(['like', 'type', $this->type])
-            ->andFilterWhere(['like', 'name', $this->name])
-            ->andFilterWhere(['like', 'description', $this->description]);
+        $query->andFilterWhere(['like', 'title', $this->title])
+            ->andFilterWhere(['like', 'text', $this->description]);
 
         return $dataProvider;
     }

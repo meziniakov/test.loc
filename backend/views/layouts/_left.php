@@ -18,6 +18,7 @@ use backend\widgets\Menu;
                     'label' => Yii::t('backend', 'Menu'),
                     'url' => ['/menu/index'],
                     'icon' => '<i class="fa fa-sitemap"></i>',
+                    'template' => '<a href="{url}">{icon}<span>{label}</span><span class="pull-right-container"><small class="label pull-right bg-green"></small></span></a>',
                 ],
                 [
                     'label' => Yii::t('backend', 'Tags'),

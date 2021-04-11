@@ -25,7 +25,7 @@ use common\models\PlaceCategory;
 
     <?php // echo $form->field($model, 'type') ?>
 
-    <?= $form->field($model, 'name') ?>
+    <?= $form->field($model, 'title') ?>
 
     <?php // echo $form->field($model, 'description') ?>
 
@@ -43,8 +43,8 @@ use common\models\PlaceCategory;
     <?php // echo $form->field($model, 'opinions_id') ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
-        <?= Html::resetButton('Reset', ['class' => 'btn btn-outline-secondary']) ?>
+        <?= Html::submitButton(Yii::t('backend', 'Search'), ['class' => 'btn btn-primary']) ?>
+        <?= Html::resetButton(Yii::t('backend', 'Reset'), ['class' => 'btn btn-outline-secondary']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

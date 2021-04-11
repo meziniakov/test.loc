@@ -3,7 +3,7 @@
 					<?php $img = $place->getImage(); ?>
 					<!-- Single Listing -->
 					<div class="col-lg-6 col-md-12 col-sm-12">
-						<div class="list-slide-box" data-name=<?= $place->name ?>>
+						<div class="list-slide-box" data-name=<?= $place->title ?>>
 							<div class="modern-list ml-2">
 								<div class="list-badge now-open">Открыто</div>
 								<div class="grid-category-thumb">
@@ -21,7 +21,7 @@
 											<i class="ti-star"></i>
 											<!-- <a href="#" class="tl-review">(24 Reviews)</a> -->
 										</div>
-										<h4 class="lst-title"><?= Html::a($place->name, ['place/view', 'slug' => ($place->slug) ? $place->slug : $place->id]) ?><span class="veryfied-author"></span></h4>
+										<h4 class="lst-title"><?= Html::a($place->title, ['place/view', 'slug' => ($place->slug) ? $place->slug : $place->id]) ?><span class="veryfied-author"></span></h4>
 									</div>
 								</div>
 								<div class="modern-list-content">

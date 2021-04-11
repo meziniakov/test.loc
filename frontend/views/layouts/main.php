@@ -43,11 +43,11 @@ AppAsset::register($this);
 
 <?php
 $menuItems = [
-    [
-        'label' => Yii::t('frontend', 'Users'),
-        'url' => ['/account/default/users'],
-        'visible' => !Yii::$app->user->isGuest,
-    ],
+    // [
+    //     'label' => Yii::t('frontend', 'Users'),
+    //     'url' => ['/account/default/users'],
+    //     'visible' => !Yii::$app->user->isGuest,
+    // ],
 ];
 if (Yii::$app->user->isGuest) {
     $menuItems[] = ['label' => Yii::t('frontend', 'Login'), 'url' => ['/account/sign-in/login']];
@@ -95,7 +95,6 @@ if (Yii::$app->user->isGuest) {
         <div class="" id="navbarText" style="width: 30%">
         <ul class="attributes attributes-desk ad-two">
             <!-- <li class="log-icon lg-ic"><a href="#" data-toggle="modal" data-target="#login" class="rt-log"><i class="ti-import"></i></a></li> -->
-            <li class="submit-attri theme-log"><a href="add-listing.html">Добавить объект</a></li>
         </ul>
         </div>
     </div>
@@ -191,75 +190,6 @@ if (Yii::$app->user->isGuest) {
 <?php echo SignupFormWidget::widget([]); ?>
 </div>
 <?php $this->endBody() ?>
-<!-- <script>
-    document.addEventListener("DOMContentLoaded", function(event) {
-        var bs = BreakpointSwitcher.create({
-            '768px': function(enter) {
-                if (enter) {
-                    window.navPriority('[data-nav="priority-1"]', {
-                        containerSelector: null,
-                        dropdownLabel: 'Еще',
-                        containerWidthOffset: 40,
-                    });
-
-                    window.navPriority('[data-nav="priority-2"]')
-                } else {
-                    window.navPriority('[data-nav="priority-1"]', 'destroy');
-                    window.navPriority('[data-nav="priority-2"]', 'destroy');
-                }
-            }
-        });
-
-        // var triggerEvent = function(element, eventName) {
-        //     var event; // The custom event that will be created
-        //     if (document.createEvent) {
-        //         event = document.createEvent("HTMLEvents");
-        //         event.initEvent(eventName, true, true);
-        //     } else {
-        //         event = document.createEventObject();
-        //         event.eventType = eventName;
-        //     }
-
-        //     event.eventName = eventName;
-
-        //     if (document.createEvent) {
-        //         element.dispatchEvent(event);
-        //     } else {
-        //         element.fireEvent("on" + event.eventType, event);
-        //     }
-        // }
-
-        interact('.sw-resizable')
-            .resizable({
-                preserveAspectRatio: false,
-                edges: {
-                    left: false,
-                    right: true,
-                    bottom: false,
-                    top: false
-                }
-            })
-            .on('resizemove', function(event) {
-                var target = event.target,
-                    x = (parseFloat(target.getAttribute('data-x')) || 0),
-                    y = (parseFloat(target.getAttribute('data-y')) || 0);
-
-                if (event.rect.width > 140 && event.rect.width < 560) {
-                    // update the element's style
-                    target.parentNode.style.width = event.rect.width + 'px';
-
-                    target.style.webkitTransform = target.style.transform =
-                        'translate(' + x + 'px,' + y + 'px)';
-
-                    target.setAttribute('data-x', x);
-                    target.setAttribute('data-y', y);
-
-                    triggerEvent(window, "resize");
-                }
-            });
-
-    });
-</script> -->
 </body>
 
 </html>

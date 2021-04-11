@@ -14,22 +14,21 @@ use nickdenry\grid\toggle\components\RoundSwitchColumn;
 /* @var $searchModel backend\models\PlaceSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Places';
+$this->title = Yii::t('backend', 'Places');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="place-index">
-    <p>
-        <?= Html::a('Добавить', ['create'], ['class' => 'btn btn-success']) ?>
-        <?= Html::a('Удалить выбранное', [''], ['id' => 'MyButton', 'class' => 'btn btn-danger']) ?>
-    </p>
+<?= $this->render('_menu', ['categories' => $categories]) ?>
     <?php Pjax::begin(); ?>
-    <?php //echo $this->render('_search', ['model' => $searchModel]); 
-    ?>
+    <?php // $this->render('_search', ['model' => $searchModel]);?>
 
     <?= GridView::widget([
         'id' => 'grid',
         'dataProvider' => $dataProvider,
+        // 'layout' => "\n\n",
         'filterModel' => $searchModel,
+        'options' => ['class' => 'table-responsive'],
+        'tableOptions' => ['class' => 'table table-striped'],
         'columns' => [
             [
                 'class' => 'yii\grid\CheckboxColumn',
@@ -41,16 +40,16 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
             [
-                'attribute' => 'name',
+                'attribute' => 'title',
                 'value' => function (Place $data) {
-                    return Html::a(Html::encode($data->name), Url::to(['update', 'id' => $data->id]));
+                    return Html::a(Html::encode($data->title), Url::to(['update', 'id' => $data->id]));
                 },
                 'format' => 'raw',
             ],
             // 'description:ntext',
             [
                 'class' => RoundSwitchColumn::class,
-                'attribute' => 'status',
+                'attribute' => 'is_home',
                 'action' => 'switch',
                 // 'headerOptions' => ['width' => 150],
             ],
@@ -84,23 +83,39 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]); ?>
 
-<?php 
-    $this->registerJs('
-    $(document).ready(function(){
-    $(\'#MyButton\').click(function(){
-        var id = $(\'#grid\').yiiGridView(\'getSelectedRows\');
-          $.ajax({
-            type: \'POST\',
-            url : \'/place/multiple-delete\',
-            data : {id: id},
-            success : function() {
-              $(this).closest(\'tr\').remove(); //удаление строки
-            }
+    <?php 
+        $this->registerJs('
+        $(document).ready(function(){
+        $(\'#ToDeleted\').click(function(){
+            var id = $(\'#grid\').yiiGridView(\'getSelectedRows\');
+            $.ajax({
+                type: \'POST\',
+                url : \'/place/multiple-delete\',
+                data : {id: id},
+                success : function() {
+                $(this).closest(\'tr\').remove(); //удаление строки
+                }
+            });
         });
-    });
-    });', \yii\web\View::POS_READY);
+        
+        });', \yii\web\View::POS_READY);
+    ?>
 
-?>
-    <?php Pjax::end(); ?>
-
+        <?php 
+        $this->registerJs('
+        $(document).ready(function(){
+        $(\'#ChangeStatus\').click(function(){
+            var id = $(\'#grid\').yiiGridView(\'getSelectedRows\');
+            $.ajax({
+                type: \'POST\',
+                url : \'/place/multiple-change-status\',
+                data : {id: id},
+                success : function() {
+                $(this).closest(\'tr\').remove(); //удаление строки
+                }
+            });
+        });
+        });', \yii\web\View::POS_READY);
+    ?>
+        <?php Pjax::end(); ?>
 </div>

@@ -9,13 +9,13 @@ use common\models\PlaceCategory;
 /* @var $searchModel backend\models\search\PlaceCategorySearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('backend', 'Article categories');
+$this->title = Yii::t('backend', 'Place categories');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="article-category-index">
 
     <p>
-        <?= Html::a(Yii::t('backend', 'Create article category'), ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('backend', 'Create place category'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([

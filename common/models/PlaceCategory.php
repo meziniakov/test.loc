@@ -66,7 +66,7 @@ class PlaceCategory extends ActiveRecord
             [['parent_id', 'status', 'created_at', 'updated_at'], 'integer'],
             [['title', 'slug', 'icon'], 'string', 'max' => 255],
             ['parent_id', 'exist', 'skipOnError' => true, 'targetClass' => self::class, 'targetAttribute' => ['parent_id' => 'id']],
-            ['status', 'default', 'value' => self::STATUS_DRAFT],
+            ['status', 'default', 'value' => self::STATUS_ACTIVE],
         ];
     }
 

@@ -7,7 +7,6 @@ setTimeout(function () {
 
 ymaps.ready(init);
 
-
 function init() {
 	var myMap = new ymaps.Map("map-main", {
 		center: [55.76, 37.64],
@@ -25,6 +24,7 @@ function init() {
 	}
 	for (let $i = 0; $i < addres.length; $i++) {
 		var category = addres[$i]['category'] ? addres[$i]['category'] : '';
+		var categorySlug = addres[$i]['categorySlug'] ? addres[$i]['categorySlug'] : '';
 
 		if (addres[$i]['lng']) {
 console.log([addres[$i]['lng'], addres[$i]['lat']])
@@ -35,9 +35,9 @@ console.log([addres[$i]['lng'], addres[$i]['lat']])
 				balloonContentBody: '<div class="map-popup-wrap">' +
 					'<div class="map-popup"></div><div class="property-listing property-2">' +
 					'<div class="listing-img-wrapper"><div class="list-single-img">' +
-					'<a href="' + addres[$i]['id'] + '"><img src="' + addres[$i]['mainImg'] + '" class="img-fluid mx-auto" alt="" /></a></div>' +
+					'<a href="/place/' + categorySlug + '/' + addres[$i]['slug'] + '"><img src="' + addres[$i]['mainImg'] + '" class="img-fluid mx-auto" alt="" /></a></div>' +
 					'<span class="property-type">' + category + '</span></div><div class="listing-detail-wrapper pb-0">' +
-					'<div class="listing-short-detail"><h4 class="listing-name"><a href="/company/' + addres[$i]['id'] + '">' + addres[$i]['name'] + '</a>' +
+					'<div class="listing-short-detail"><h4 class="listing-name"><a href="/place/' + categorySlug  + '/' + addres[$i]['slug'] + '">' + addres[$i]['title'] + '</a>' +
 					'<i class="list-status ti-check"></i></h4></div></div></div></div></div></div>'
 			})
 			myMap.geoObjects.add(placemark);
@@ -53,15 +53,18 @@ console.log([addres[$i]['lng'], addres[$i]['lat']])
 						balloonContentBody: '<div class="map-popup-wrap">' +
 							'<div class="map-popup"></div><div class="property-listing property-2">' +
 							'<div class="listing-img-wrapper"><div class="list-single-img">' +
-							'<a href="' + addres[$i]['id'] + '"><img src="' + addres[$i]['mainImg'] + '" class="img-fluid mx-auto" alt="" /></a></div>' +
+							'<a href="/place/' + categorySlug + '/' + addres[$i]['slug'] + '"><img src="' + addres[$i]['mainImg'] + '" class="img-fluid mx-auto" alt="" /></a></div>' +
 							'<span class="property-type">' + category + '</span></div><div class="listing-detail-wrapper pb-0">' +
-							'<div class="listing-short-detail"><h4 class="listing-name"><a href="/company/' + addres[$i]['id'] + '">' + addres[$i]['name'] + '</a>' +
+							'<div class="listing-short-detail"><h4 class="listing-name"><a href="/place/' + categorySlug + '/' + addres[$i]['slug'] + '">' + addres[$i]['title'] + '</a>' +
 							'<i class="list-status ti-check"></i></h4></div></div></div></div></div></div>'
 					})
+					// myMap.destroy(),
+					
 					myMap.geoObjects.add(myPlacemark);
-					myMap.setBounds(myMap.geoObjects.getBounds(), {checkZoomRange: true}).then(function () {
-						if (myMap.getZoom() > 15) myMap.setZoom(15); // Если значение zoom превышает 15, то устанавливаем 15.
-					});
+					myMap.setBounds(myMap.geoObjects.getBounds(), {checkZoomRange: true})
+						.then(function () {
+							if (myMap.getZoom() > 15) myMap.setZoom(15); // Если значение zoom превышает 15, то устанавливаем 15.
+						});
 				},
 				function (request) {
 					console.log("ERROR", request);

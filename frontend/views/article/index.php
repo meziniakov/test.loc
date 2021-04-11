@@ -18,3 +18,4 @@ $this->title = Yii::t('frontend', 'Articles');
             ]) ?>
         </div>
     </div>
+</section>

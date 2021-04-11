@@ -148,14 +148,17 @@ $this->registerJsFile(
 					'pager' => [
 						'class' => \kop\y2sp\ScrollPager::class,
 						'triggerTemplate' => '<div class="text-center">
-			<button type="button" class="btn btn-theme btn-rounded btn-m">{text}</button>
-		 </div>',
+								<button type="button" class="btn btn-theme btn-rounded btn-m">{text}</button>
+								</div>',
 						'triggerText' => 'Показать ещё...',
 						'spinnerTemplate' => '<div class="text-center">
-			<div class="spinner-grow text-danger" role="status"><span class="sr-only">Loading...</span></div>
-			<div class="spinner-grow text-danger" role="status"><span class="sr-only">Loading...</span></div>
-			<div class="spinner-grow text-danger" role="status"><span class="sr-only">Loading...</span></div>
-			</div>',
+								<div class="spinner-grow text-danger" role="status"><span class="sr-only">Loading...</span></div>
+								<div class="spinner-grow text-danger" role="status"><span class="sr-only">Loading...</span></div>
+								<div class="spinner-grow text-danger" role="status"><span class="sr-only">Loading...</span></div>
+								</div>',
+						'eventOnLoad' => "function() {
+							$('.list-view').append('<div class=\"spinner\"></div>');
+							}",
 					],
 				]); ?>
 			</div>

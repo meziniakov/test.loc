@@ -4,7 +4,6 @@
 use yii\bootstrap\Html;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
-use yii\widgets\ActiveForm;
 
 $this->title = Yii::$app->keyStorage->get('frontend.index.title');
 ?>
@@ -55,13 +54,9 @@ $this->title = Yii::$app->keyStorage->get('frontend.index.title');
 		</div>
 		<div class="help-video">
 			<a href="#" class="wt-video"><span class="pulse"></span>Смотреть видео</a>
-			<!-- <a href="#" class="sb-directory">Add Listing</a> -->
 		</div>
 	</div>
 </div>
-<!-- ============================ Hero Banner End ================================== -->
-
-<!-- ============================ Listings Start ================================== -->
 <section>
 	<div class="container-fluid">
 		<div class="row">
@@ -74,15 +69,12 @@ $this->title = Yii::$app->keyStorage->get('frontend.index.title');
 		</div>
 		<div class="row">
 			<div class="owl-carousel owl-theme" id="lists-slide">
-				<?php //$images = $listing->getImages()
-				?>
 				<?php foreach ($listing as $place) : ?>
 					<?php $img = $place->getImage(); ?>
-					<!-- Single List -->
 					<div class="list-slide-box">
 						<div class="modern-list ml-2">
 							<div class="grid-category-thumb">
-								<a href="<?= Url::to(['place/view', 'slug' => ($place->slug) ? $place->slug : $place->id]) ?>" class="overlay-cate"><?= Html::img($img->getUrl('358x229'), ['class' => 'img-responsive', 'alt' => $place->slug]) ?></a>
+								<a href="<?= Url::to(['place/view', 'category' => $place->category['slug'], 'slug' => $place->slug]) ?>" class="overlay-cate"><?= Html::img($img->getUrl('358x229'), ['class' => 'img-responsive', 'alt' => $place->slug]) ?></a>
 								<!-- <div class="listing-price-info"> 
 											<span class="pricetag">$25 - $65</span>
 										</div> -->
@@ -95,7 +87,7 @@ $this->title = Yii::$app->keyStorage->get('frontend.index.title');
 										<i class="ti-star"></i>
 										<!-- <a href="#" class="tl-review">(24 Reviews)</a> -->
 									</div>
-									<h4 class="lst-title"><?= Html::a($place->name, ['place/view', 'slug' => ($place->slug) ? $place->slug : $place->id]) ?><span class="veryfied-author"></span></h4>
+									<h4 class="lst-title"><?= Html::a($place->title, ['place/view', 'category' => $place->category['slug'], 'slug' => $place->slug]) ?><span class="veryfied-author"></span></h4>
 								</div>
 							</div>
 							<div class="modern-list-content">
@@ -111,24 +103,20 @@ $this->title = Yii::$app->keyStorage->get('frontend.index.title');
 		</div>
 	</div>
 </section>
-<!-- ============================ Listings End ================================== -->
-
-<!-- ============================ Categories Start ================================== -->
 <section class="image-cover" style="background:url(<?= Yii::getAlias('@storageUrl') ?>/img/1200x850.png) no-repeat;" data-overlay="8">
 	<div class="container">
 
 		<div class="row">
 			<div class="col-lg-12 col-md-12">
 				<div class="sec-heading center light">
-					<h2>Выберите по категории</h2>
-					<!-- <p>Find new & featured category for you.</p> -->
+					<h2>Категории мест</h2>
+					<p>Выбирайте места по категориям.</p>
 				</div>
 			</div>
 		</div>
 
 		<div class="row">
 			<?php foreach ($categories as $category) : ?>
-				<!-- Single Category -->
 				<div class="col-lg-3 col-md-6 col-sm-12">
 					<div class="list-cats-boxr">
 						<?php if (isset($category->slug)) : ?>
@@ -143,243 +131,13 @@ $this->title = Yii::$app->keyStorage->get('frontend.index.title');
 									</div>
 									<div class="category-detail category-desc-text">
 										<h4><?= $category->title ?></h4>
-										<p>122 Listings</p>
+										<!-- <p>122 места</p> -->
 									</div>
 								</div>
 								</a>
 					</div>
 				</div>
 			<?php endforeach; ?>
-			<!-- Single Category -->
-			<div class="col-lg-3 col-md-6 col-sm-12">
-				<div class="list-cats-boxr">
-					<a href="grid-with-sidebar.html" class="category-box">
-						<div class="category-desc">
-							<div class="category-icon">
-								<i class="lni-construction-hammer theme-cl"></i>
-								<i class="abs-icon lni-construction-hammer"></i>
-							</div>
-
-							<div class="category-detail category-desc-text">
-								<h4>Automotives</h4>
-								<p>155 Listings</p>
-							</div>
-						</div>
-					</a>
-				</div>
-			</div>
-
-			<!-- Single Category -->
-			<div class="col-lg-3 col-md-6 col-sm-12">
-				<div class="list-cats-boxr">
-					<a href="grid-with-sidebar.html" class="category-box">
-						<div class="category-desc">
-							<div class="category-icon">
-								<i class="ti-briefcase theme-cl"></i>
-								<i class="ti-briefcase abs-icon"></i>
-							</div>
-
-							<div class="category-detail category-desc-text">
-								<h4>Business</h4>
-								<p>300 Listings</p>
-							</div>
-						</div>
-					</a>
-				</div>
-			</div>
-
-			<!-- Single Category -->
-			<div class="col-lg-3 col-md-6 col-sm-12">
-				<div class="list-cats-boxr">
-					<a href="grid-with-sidebar.html" class="category-box">
-						<div class="category-desc">
-							<div class="category-icon">
-								<i class="ti-ruler-pencil theme-cl"></i>
-								<i class="ti-ruler-pencil abs-icon"></i>
-							</div>
-
-							<div class="category-detail category-desc-text">
-								<h4>Education</h4>
-								<p>80 Listings</p>
-							</div>
-						</div>
-					</a>
-				</div>
-			</div>
-
-			<!-- Single Category -->
-			<div class="col-lg-3 col-md-6 col-sm-12">
-				<div class="list-cats-boxr">
-					<a href="grid-with-sidebar.html" class="category-box">
-						<div class="category-desc">
-							<div class="category-icon">
-								<i class="ti-heart-broken theme-cl"></i>
-								<i class="ti-heart-broken abs-icon"></i>
-							</div>
-
-							<div class="category-detail category-desc-text">
-								<h4>Healthcare</h4>
-								<p>120 Listings</p>
-							</div>
-						</div>
-					</a>
-				</div>
-			</div>
-
-			<!-- Single Category -->
-			<div class="col-lg-3 col-md-6 col-sm-12">
-				<div class="list-cats-boxr">
-					<a href="grid-with-sidebar.html" class="category-box">
-						<div class="category-desc">
-							<div class="category-icon">
-								<i class="lni-burger theme-cl"></i>
-								<i class="lni-burger abs-icon"></i>
-							</div>
-
-							<div class="category-detail category-desc-text">
-								<h4>Eat & Foods</h4>
-								<p>78 Listings</p>
-							</div>
-						</div>
-					</a>
-				</div>
-			</div>
-
-			<!-- Single Category -->
-			<div class="col-lg-3 col-md-6 col-sm-12">
-				<div class="list-cats-boxr">
-					<a href="grid-with-sidebar.html" class="category-box">
-						<div class="category-desc">
-							<div class="category-icon">
-								<i class="ti-world theme-cl"></i>
-								<i class="ti-world abs-icon"></i>
-							</div>
-
-							<div class="category-detail category-desc-text">
-								<h4>Transportation</h4>
-								<p>90 Listings</p>
-							</div>
-						</div>
-					</a>
-				</div>
-			</div>
-
-			<!-- Single Category -->
-			<div class="col-lg-3 col-md-6 col-sm-12">
-				<div class="list-cats-boxr">
-					<a href="grid-with-sidebar.html" class="category-box">
-						<div class="category-desc">
-							<div class="category-icon">
-								<i class="ti-desktop theme-cl"></i>
-								<i class="ti-desktop abs-icon"></i>
-							</div>
-
-							<div class="category-detail category-desc-text">
-								<h4> IT & Software</h4>
-								<p>210 Listings</p>
-							</div>
-						</div>
-					</a>
-				</div>
-			</div>
-
 		</div>
-
 	</div>
 </section>
-<!-- ============================ Categories End ================================== -->
-
-<!-- ============================ Destination Start ================================== -->
-<section>
-	<div class="container">
-
-		<div class="row">
-			<div class="col-lg-12 col-md-12">
-				<div class="sec-heading center">
-					<h2>Подборки</h2>
-					<p>Лучшие места от нашей редакции.</p>
-				</div>
-			</div>
-		</div>
-
-		<div class="row">
-
-			<div class="col-lg-8 col-md-8">
-				<a href="list-layout-with-sidebar.html" class="img-wrap">
-					<div class="img-wrap-content visible">
-						<h4>Los Angeles</h4>
-						<span>24 Listins</span>
-					</div>
-					<div class="img-wrap-background" style="background-image: url(<?= Yii::getAlias('@storageUrl') ?>/img/1200x850.png);"></div>
-				</a>
-			</div>
-
-			<div class="col-lg-4 col-md-4">
-				<a href="list-layout-with-sidebar.html" class="img-wrap">
-					<div class="img-wrap-content visible">
-						<h4>San Francisco</h4>
-						<span>104 Listins</span>
-					</div>
-					<div class="img-wrap-background" style="background-image: url(<?= Yii::getAlias('@storageUrl') ?>/img/1200x850.png);"></div>
-				</a>
-			</div>
-
-		</div>
-
-		<div class="row">
-
-			<div class="col-lg-4 col-md-4">
-				<a href="list-layout-with-sidebar.html" class="img-wrap">
-					<div class="img-wrap-content visible">
-						<h4>Philadelphia</h4>
-						<span>74 Listins</span>
-					</div>
-					<div class="img-wrap-background" style="background-image: url(<?= Yii::getAlias('@storageUrl') ?>/img/1200x850.png);"></div>
-				</a>
-			</div>
-
-			<div class="col-lg-4 col-md-4">
-				<a href="list-layout-with-sidebar.html" class="img-wrap">
-					<div class="img-wrap-content visible">
-						<h4>New York</h4>
-						<span>312 Listins</span>
-					</div>
-					<div class="img-wrap-background" style="background-image: url(<?= Yii::getAlias('@storageUrl') ?>/img/1200x850.png);"></div>
-				</a>
-			</div>
-
-			<div class="col-lg-4 col-md-4">
-				<a href="list-layout-with-sidebar.html" class="img-wrap">
-					<div class="img-wrap-content visible">
-						<h4>San Diego</h4>
-						<span>710 Listins</span>
-					</div>
-					<div class="img-wrap-background" style="background-image: url(<?= Yii::getAlias('@storageUrl') ?>/img/1200x850.png);"></div>
-				</a>
-			</div>
-
-		</div>
-
-	</div>
-</section>
-<!-- ============================ Destination End ================================== -->
-
-<!-- ============================ Call To Action Start ================================== -->
-<!-- <section class="theme-bg call-to-act">
-	<div class="container">
-		<div class="row align-items-center">
-
-			<div class="col-lg-9 col-md-8">
-				<div class="clt-caption">
-					<h3>Ready To Start Work With Us?</h3>
-					<p>Simple pricing plans. Unlimited web maintenance service</p>
-				</div>
-			</div>
-			<div class="col-lg-3 col-md-4">
-				<a href="#" class="btn btn-md btn-light clt-act">Join Us Today<i class="lni-shift-right ml-2"></i></a>
-			</div>
-
-		</div>
-	</div>
-</section> -->
-<!-- ============================ Call To Action End ================================== -->

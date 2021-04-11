@@ -3,16 +3,20 @@
 namespace common\models;
 
 use Yii;
-use creocoder\taggable\TaggableBehavior;
+use yii\db\ActiveRecord;
+use yii\data\ActiveDataProvider;
 use yii\bootstrap\Html;
+use yii\helpers\Url;
+use yii\helpers\Json;
+use yii\behaviors\TimestampBehavior;
+use yii\behaviors\BlameableBehavior;
+use yii\behaviors\SluggableBehavior;
+use creocoder\taggable\TaggableBehavior;
+use lhs\Yii2SaveRelationsBehavior\SaveRelationsBehavior;
 use common\models\Tag;
 use common\models\query\PlaceQuery;
-use yii\helpers\Url;
-use yii\behaviors\TimestampBehavior;
-use yii\db\ActiveRecord;
-use yii\behaviors\BlameableBehavior;
-use yii\data\ActiveDataProvider;
-use yii\helpers\Json;
+
+
 
 /**
  * This is the model class for table "Place".
@@ -34,12 +38,21 @@ class Place extends ActiveRecord
     const STATUS_DRAFT = 0;
     const STATUS_ACTIVE = 1;
 
-    const PAGE_SIZE = 6;
+    const STATUS_ALL = 10;
+    const STATUS_PARSED = 1;
+    const STATUS_EDITED = 2;
+    const STATUS_PUBLISHED = 3;
+    const STATUS_UPDATED = 4;
+    const STATUS_TRASHED = 0;
+
+    const PAGE_SIZE = 10;
 
     public $cnt;
     public $imageFile;
     public $imageFiles;
+    public $image;
     public $images;
+    public $gallery;
 
     public function behaviors()
     {
@@ -51,6 +64,12 @@ class Place extends ActiveRecord
                 'createdByAttribute' => 'author_id',
 
             ],
+            [
+                'class' => SluggableBehavior::class,
+                'attribute' => 'title',
+                'ensureUnique' => true,
+                'immutable' => true,
+            ],
             'taggable' => [
                 'class' => TaggableBehavior::class,
                 'tagValuesAsArray' => false,
@@ -60,9 +79,26 @@ class Place extends ActiveRecord
             ],
             'image' => [
                 'class' => 'alex290\yii2images\behaviors\ImageBehave',
-            ]
+            ],
+            'saveRelations' => [
+                'class'     => SaveRelationsBehavior::class,
+                'relations' => [
+                    'company',
+                    'users',
+                    // 'image' => ['cascadeDelete' => true],
+                    'tags'  => [
+                        'extraColumns' => function ($model) {
+                            /** @var $model Tag */
+                            return [
+                                'order' => $model->order
+                            ];
+                        }
+                    ]
+                ],
+            ],
         ];
     }
+
     /**
      * {@inheritdoc}
      */
@@ -77,24 +113,29 @@ class Place extends ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'description'], 'required'],
-            [['description', 'city', 'address'], 'string'],
+            [['title', 'text'], 'required'],
+            [['text', 'address'], 'string'],
             [['lat', 'lng'], 'number'],
-            // ['published_at', 'default', 'value' => date('Y-m-d H:i:s')],
+            ['published_at', 'default',
+                'value' => function () {
+                    return date(DATE_ATOM);
+                }
+            ],
+            ['published_at', 'filter', 'filter' => 'strtotime'],
             ['date_parsed', 'safe'],
             ['tmp_uniq', 'safe'],
-            // ['published_at', 'filter', 'filter' => 'strtotime'],
-            [['status', 'is_home', 'category_id', 'city_id', 'author_id', 'updater_id', 'created_at', 'updated_at', 'phone'], 'integer'],
-            [['url', 'type', 'name', 'slug', 'keywords'], 'string', 'max' => 255],
-            ['status', 'default', 'value' => self::STATUS_ACTIVE],
+            [['status', 'is_home', 'category_id', 'city_id', 'author_id', 'updater_id', 'created_at', 'updated_at'], 'integer'],
+            [['url', 'description', 'title', 'website', 'street', 'street_comment'], 'string', 'max' => 255],
+            ['status', 'default', 'value' => self::STATUS_PARSED],
             ['author_id', 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['author_id' => 'id']],
             ['category_id', 'exist', 'skipOnError' => true, 'targetClass' => PlaceCategory::class, 'targetAttribute' => ['category_id' => 'id']],
             ['city_id', 'exist', 'skipOnError' => true, 'targetClass' => City::class, 'targetAttribute' => ['city_id' => 'id']],
             ['updater_id', 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['updater_id' => 'id']],
-            ['tagValues', 'safe'],
+            [['tagValues', 'slug'], 'safe'],
+            [['image', 'images', 'gallery'], 'safe'],
             [['imageFile'], 'file', 'extensions' => 'png, jpg, jpeg'],
-            [['imageFiles'], 'file', 'extensions' => 'png, jpg, jpeg', 'maxFiles' => 15],
-            [['images'], 'file', 'extensions' => 'png, jpg, jpeg', 'maxFiles' => 15],
+            [['imageFiles'], 'file', 'extensions' => 'png, jpg, jpeg', 'maxFiles' => 25],
+            // [['images'], 'file', 'extensions' => 'png, jpg, jpeg', 'maxFiles' => 25],
         ];
     }
 
@@ -105,11 +146,11 @@ class Place extends ActiveRecord
     {
         return [
             'id' => Yii::t('backend', 'ID'),
-            'type' => Yii::t('backend', 'Type'),
-            'slug' => Yii::t('backend', 'Aliace'),
-            'name' => Yii::t('backend', 'Name'),
+            'title' => Yii::t('backend', 'Title'),
+            'slug' => Yii::t('backend', 'URL'),
             'description' => Yii::t('backend', 'Description'),
-            'city' => Yii::t('backend', 'City'),
+            'text' => Yii::t('backend', 'Text'),
+            'city_id' => Yii::t('backend', 'City'),
             'address' => Yii::t('backend', 'Address'),
             'phone' => Yii::t('backend', 'Phones'),
             'category_id' => Yii::t('backend', 'Place category'),
@@ -148,7 +189,7 @@ class Place extends ActiveRecord
             ],
             'sort' => [
                 'defaultOrder' => [
-                    'name' => SORT_ASC,
+                    'title' => SORT_ASC,
                     'created_at' => SORT_DESC
                 ]
             ],
@@ -162,10 +203,11 @@ class Place extends ActiveRecord
                 $img = $row->getImage();
                 $addressInJson[] = [
                     'addres' => trim($row['address']),
-                    'name' => $row['name'],
-                    'id' => $row['id'],
+                    'title' => $row['title'],
+                    'slug' => $row['slug'],
                     'mainImg' => $img->getUrl('358x229'),
                     'category' => $row['category']['title'],
+                    'categorySlug' => $row['category']['slug'],
                     'lng' => $row['lng'],
                     'lat' => $row['lat'],
                 ];
@@ -173,9 +215,10 @@ class Place extends ActiveRecord
         } else {
             $addressInJson[] = [
                 'addres' => trim($models['address']),
-                'name' => $models['name'],
-                'id' => $models['id'],
+                'title' => $models['title'],
+                'slug' => $models['slug'],
                 'category' => $models['category']['title'],
+                'categorySlug' => $models['category']['slug'],
                 'lng' => $models['lng'],
                 'lat' => $models['lat'],
             ];
@@ -250,12 +293,15 @@ class Place extends ActiveRecord
             return false;
         }
     }
-    public function uploadImage($pathinfo)
+    public function uploadImage($pathinfo, $object)
     {
         if ($this->validate()) {
             $path = Yii::getAlias('@storage') . '/img/' . $pathinfo['filename'] . '.' . $pathinfo['extension'];
-            // $this->imageFile->saveAs($path, false);
-            $this->attachImage($path, true);
+            $this->attachImage($path, true, $pathinfo['filename']);
+            $image = \alex290\yii2images\models\Image::findOne(['name' => $pathinfo['filename']]);
+            $image->alt = $object->name;
+            $image->title = $object->name;
+            $image->save(false);
             @unlink($path);
             return true;
         } else {
@@ -278,15 +324,16 @@ class Place extends ActiveRecord
         }
     }
 
-    public function uploadImages($imageFiles)
+    public function uploadImages($imageFiles, $object)
     {
         if ($this->validate()) {
-            // var_dump($imageFiles);die;
             foreach ($imageFiles as $file) {
                 $path = Yii::getAlias('@storage') . '/img/' . $file['filename'] . '.' . $file['extension'];
-                // var_dump($file);die;
-                // $file->saveAs($path, false);
-                $this->attachImage($path, false);
+                $this->attachImage($path, false, $file['filename']);
+                $image = \alex290\yii2images\models\Image::findOne(['name' => $file['filename']]);
+                $image->alt = $object->name;
+                $image->title = $object->name;
+                $image->save(false);    
                 @unlink($path);
             }
             return true;
@@ -315,7 +362,17 @@ class Place extends ActiveRecord
             'item' => $this->modelName . $this->itemId,
             'dirtyAlias' =>  $this->urlAlias . $urlSize . '.' . $this->getExtension()
         ]);
-
         return $url;
+    }
+
+
+    public function afterSave($insert, $changedAttributes)
+    {
+        if ($insert) {
+            Yii::$app->session->setFlash('success', 'Запись добавлена');
+        } else {
+            Yii::$app->session->setFlash('success', 'Запись обновлена');
+        }
+        parent::afterSave($insert, $changedAttributes);
     }
 }

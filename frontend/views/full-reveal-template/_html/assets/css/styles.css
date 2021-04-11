@@ -252,7 +252,7 @@ h5,
 h6 {
 	color:#2D3954;
 	font-weight:600;
-	text-transform: capitalize;
+	text-transform: none;
 	font-family: 'Poppins', sans-serif;
 }
 
@@ -3536,7 +3536,7 @@ li.login-attri .account-drop a {
     max-width:100%;
 }
 .hero-search h1 {
-    text-transform: capitalize;
+    text-transform: none;
     color: #2b4db9 !important;
 	font-size:35px;
 	margin-bottom: 2rem;
@@ -4069,7 +4069,7 @@ span.bn-count {
     padding: 1rem 2rem;
     border-radius: 3px;
     cursor: pointer;
-    text-transform: capitalize;
+    text-transform: none;
     color: #ffffff;
 }
 .simple-search-wrap .pk-input-group:after {
@@ -4196,7 +4196,7 @@ h1.big-header-capt {
 	text-transform:uppercase;
 }
 h1.big-header-capt.capti {
-	text-transform:capitalize;
+	text-transform:none;
 }
 .italian-search .input-with-icon .form-control,
 .italian-search .input-with-shadow .form-control,
@@ -5957,7 +5957,7 @@ a.btn.width-170 {
     padding: 5px 15px;
     border-radius: 50px;
     font-size: 14px;
-    text-transform:capitalize;
+    text-transform:none;
 	-webkit-box-shadow:0px 0px 0px 5px rgba(255,255,255,0.2);
 	box-shadow:0px 0px 0px 5px rgba(255,255,255,0.2);
 }
@@ -6324,13 +6324,13 @@ span.real-price {
 .hotel-review h6 span {
     display: block;
     margin-bottom: 0px;
-    text-transform: capitalize;
+    text-transform: none;
     font-size: 12px;
     line-height: 1;
 }
 .hotel-name {
     font-size:16px;
-    text-transform: capitalize;
+    text-transform: none;
     margin-bottom: 2px;
 }
 
@@ -6494,13 +6494,13 @@ span.real-price {
 .restaurent-review h6 span {
     display: block;
     margin-bottom: 0px;
-    text-transform: capitalize;
+    text-transform: none;
     font-size: 12px;
     line-height: 1;
 }
 .restaurent-name {
     font-size:16px;
-    text-transform: capitalize;
+    text-transform: none;
     margin-bottom: 2px;
 }
 
@@ -9591,7 +9591,7 @@ h3.pa-name {
     display: block;
     overflow: hidden;
     letter-spacing: 0;
-    text-transform: capitalize;
+    text-transform: none;
     font-size: 14px;
     line-height: 24px;
 }

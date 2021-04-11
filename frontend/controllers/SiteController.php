@@ -22,6 +22,19 @@ class SiteController extends Controller
 {
     public $city;
 
+    public function behaviors()
+    {
+      return [
+        [
+          'class' => 'yii\filters\HttpCache',
+          'lastModified' => function ($action, $params) {
+            $q = new \yii\db\Query();
+            return $q->from(['article'])->max('updated_at');
+          },
+        ],
+      ];
+    }  
+
     // public function init()
     // {
     //     parent::init();

@@ -3,7 +3,7 @@
 namespace common\models\query;
 
 use creocoder\taggable\TaggableQueryBehavior;
-use common\models\PlaceCategory;
+use common\models\Place;
 /**
  * This is the ActiveQuery class for [[\frontend\models\Places]].
  *
@@ -17,9 +17,21 @@ class PlaceQuery extends \yii\db\ActiveQuery
             TaggableQueryBehavior::class,
         ];
     }
-    public function active()
+    public function parsed()
     {
-        return $this->andWhere(['status' => PlaceCategory::STATUS_ACTIVE]);
+        return $this->andWhere(['status' => Place::STATUS_PARSED]);
+    }
+    public function deleted()
+    {
+        return $this->andWhere(['status' => Place::STATUS_DELETED]);
+    }
+    public function edited()
+    {
+        return $this->andWhere(['status' => Place::STATUS_EDITED]);
+    }
+    public function published()
+    {
+        return $this->andWhere(['status' => Place::STATUS_PUBLISHED]);
     }
 
     /**

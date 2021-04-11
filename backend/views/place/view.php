@@ -7,7 +7,7 @@ use yii\widgets\DetailView;
 /* @var $model common\models\Place */
 
 $this->title = $model->name;
-$this->params['breadcrumbs'][] = ['label' => 'Places', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('backend', 'Places'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
@@ -20,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::a('Delete', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
+                'confirm' => Yii::t('backend', 'Are you sure you want to delete this item?'),
                 'method' => 'post',
             ],
         ]) ?>
@@ -41,5 +41,4 @@ $this->params['breadcrumbs'][] = $this->title;
             'opinions_id',
         ],
     ]) ?>
-
 </div>

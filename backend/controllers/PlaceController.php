@@ -13,6 +13,7 @@ use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
 use yii\web\UploadedFile;
 use nickdenry\grid\toggle\actions\ToggleAction;
+use yii\data\ActiveDataProvider;
 
 /**
  * PlaceController implements the CRUD actions for Place model.
@@ -44,6 +45,24 @@ class PlaceController extends Controller
         ];
     }
 
+    public $all = 10;
+    public $parsed = 1;
+    public $edited = 2;
+    public $published = 3;
+    public $updated = 4;
+    public $trashed = 0;
+
+    public function init()
+    {
+        parent::init();
+        $this->all = Place::find()->count();
+        $this->trashed = Place::find()->where(['=', 'status', Place::STATUS_TRASHED])->count();
+        $this->parsed = Place::find()->where(['=', 'status', Place::STATUS_PARSED])->count();
+        $this->edited = Place::find()->where(['=', 'status', Place::STATUS_EDITED])->count();
+        $this->published = Place::find()->where(['=', 'status', Place::STATUS_PUBLISHED])->count();
+        $this->updated = Place::find()->where(['=', 'status', Place::STATUS_UPDATED])->count();
+        }
+
     /**
      * Lists all Place models.
      * @return mixed
@@ -57,13 +76,120 @@ class PlaceController extends Controller
         $city = City::find()->all();
         // $img = $dataProvider->getImage();
 
-
         return $this->render('index', [
             'searchModel' => $searchModel,
             'img' => $img,
             'dataProvider' => $dataProvider,
             'categories' => $categories,
             'city' => $city
+        ]);
+    }
+
+    /**
+     * Lists all Place models.
+     * @return mixed
+     */
+    // public function actionIndex()
+    // {
+    //     $searchModel = new PlaceSearch();
+
+    //     return $this->render('status', [
+    //         'searchModel' => $searchModel,
+    //         'categories' => PlaceCategory::findAll(['status' => 1]),
+    //         'data' => new ActiveDataProvider([
+    //             // 'query' => Place::find()->with('category', 'city'),
+    //             'query' => $searchModel->search(Place::find()->with('category', 'city')-),
+    //             'totalCount' => $this->all,
+    //                 ])
+    //     ]);
+    // }
+    /**
+     * Lists all Place models.
+     * @return mixed
+     */
+    public function actionParsed()
+    {
+        $searchModel = new PlaceSearch();
+
+        return $this->render('status', [
+            'searchModel' => $searchModel,
+            'categories' => PlaceCategory::findAll(['status' => 1]),
+            'data' => new ActiveDataProvider([
+                'query' => Place::find()->with('category', 'city')->where(['=', 'status', Place::STATUS_PARSED]),
+                'totalCount' => $this->parsed,
+                    ])
+        ]);
+    }
+
+    /**
+     * Lists all Place models.
+     * @return mixed
+     */
+    public function actionEdited()
+    {
+        $searchModel = new PlaceSearch();
+
+        return $this->render('status', [
+            'searchModel' => $searchModel,
+            'categories' => PlaceCategory::findAll(['status' => 1]),
+            'data' => new ActiveDataProvider([
+                'query' => Place::find()->with('category', 'city')->where(['=', 'status', Place::STATUS_EDITED]),
+                'totalCount' => $this->edited
+                    ])
+        ]);
+    }
+
+    /**
+     * Lists all Place models.
+     * @return mixed
+     */
+    public function actionPublished()
+    {
+        $searchModel = new PlaceSearch();
+
+        return $this->render('status', [
+            'searchModel' => $searchModel,
+            'categories' => PlaceCategory::findAll(['status' => 1]),
+            'data' => new ActiveDataProvider([
+                'query' => Place::find()->with('category', 'city')->where(['=', 'status', Place::STATUS_PUBLISHED]),
+                'totalCount' => $this->published
+                    ])
+        ]);
+    }
+
+    /**
+     * Lists all Place models.
+     * @return mixed
+     */
+    public function actionUpdated()
+    {
+        $searchModel = new PlaceSearch();
+
+        return $this->render('status', [
+            'searchModel' => $searchModel,
+            'categories' => PlaceCategory::findAll(['status' => 1]),
+            'data' => new ActiveDataProvider([
+                'query' => Place::find()->with('category', 'city')->where(['=', 'status', Place::STATUS_UPDATED]),
+                'totalCount' => $this->updated
+                    ])
+        ]);
+    }
+
+    /**
+     * Lists all Place models.
+     * @return mixed
+     */
+    public function actionTrashed()
+    {
+        $searchModel = new PlaceSearch();
+
+        return $this->render('status', [
+            'searchModel' => $searchModel,
+            'categories' => PlaceCategory::findAll(['status' => 1]),
+            'data' => new ActiveDataProvider([
+                'query' => Place::find()->with('category', 'city')->where(['=', 'status', Place::STATUS_TRASHED]),
+                'totalCount' => $this->trashed
+                    ])
         ]);
     }
 
@@ -150,19 +276,53 @@ class PlaceController extends Controller
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
+        Yii::$app->session->setFlash('success', 'Успешно удалено');
 
         return $this->redirect(['index']);
+    }
+
+    public function actionDeletemoreimg($id){
+
+        $place = Place::findOne($id);
+
+        $imageId = Yii::$app->request->get('imageId');
+        $images = $place->getImages();
+        foreach ($images as $image) {
+            if ($image->id == $imageId) {
+                $place->removeImage($image);
+            }
+        }
+    
+        return $this->redirect(["/place/update", "id" => $id]);
     }
 
     public function actionMultipleDelete()
     {
         if (Yii::$app->request->post('id')) {
-            foreach (Yii::$app->request->post('id') as $id)
-            {
-                Place::deleteAll(['id' => $id]);
-            }
-            return $this->redirect(Yii::$app->request->referrer);
+            Place::updateAll(['status' => 0], ['id' => Yii::$app->request->post('id')]);
         }
+        Yii::$app->session->setFlash('success', 'Успешно удалено');
+
+        return $this->redirect(Yii::$app->request->referrer);
+
+    }
+
+    public function actionMultipleChangeStatus()
+    {
+        if (Yii::$app->request->post('id','status')) {
+            Place::updateAll(['status' => Yii::$app->request->post('status')], ['id' => Yii::$app->request->post('id')]);
+        }
+        Yii::$app->session->setFlash('success', 'Успешно изменено');
+        return $this->redirect(Yii::$app->request->referrer);
+    }
+
+    public function actionMultipleChangeCategory()
+    {
+        if (Yii::$app->request->post('id', 'category_id')) {
+            Place::updateAll(['category_id' => Yii::$app->request->post('category_id')], ['id' => Yii::$app->request->post('id')]);
+        }
+        Yii::$app->session->setFlash('success', 'Успешно изменено');
+        return $this->redirect(Yii::$app->request->referrer);
     }
 
     /**

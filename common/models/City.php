@@ -28,6 +28,7 @@ class City extends \yii\db\ActiveRecord
     {
         return [
             [['name', 'url'], 'required'],
+            [['name', 'url'], 'unique'],
             [['name', 'url'], 'string', 'max' => 255],
         ];
     }
