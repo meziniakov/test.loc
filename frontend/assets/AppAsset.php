@@ -13,10 +13,10 @@ class AppAsset extends AssetBundle
     public $baseUrl = '@web';
     public $css = [
         'reveal/css/nav.css',
+        'reveal/css/plugins.css',
         'reveal/css/styles.css',
         'static/css/style.css',
         'reveal/css/colors.css',
-        'reveal/css/plugins.css',
         // 'https://skywalkapps.github.io/nav-priority/stylesheets/nav-priority.css',
     ];
     public $js = [

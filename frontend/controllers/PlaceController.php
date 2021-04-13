@@ -127,12 +127,13 @@ class PlaceController extends Controller
     $category_id = Yii::$app->request->get('category_id');
     $tag_id = Yii::$app->request->get('tag_id');
 
-    $query = Place::find()->active();
+    $query = Place::find()->parsed();
     $query->andFilterWhere([
       'category_id' => $category_id,
       'tag_id' => $tag_id,
     ]);
-    $query->andFilterWhere(['like', 'title', $q]);
+    $query->andFilterWhere(['like', 'title', $q])
+          ->andFilterWhere(['like', 'text', $q]);
 
     $dataProvider = Place::getDataProvider($query);
 

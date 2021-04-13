@@ -18,7 +18,7 @@ $this->title = Yii::$app->keyStorage->get('frontend.index.title');
 					<div class="col-lg-4 col-md-4 col-sm-12 small-padd">
 						<div class="form-group">
 							<div class="input-with-icon">
-								<form method="get" action="<?= Url::to(['place/search']) ?>">
+								<form method="get" action="<?= Url::to(['place/index']) ?>">
 									<?= Html::input('text', 'q', '', ['class' => 'form-control b-r', 'placeholder' => 'Искать...']) ?>
 									<i class="theme-cl ti-search"></i>
 							</div>
@@ -74,7 +74,7 @@ $this->title = Yii::$app->keyStorage->get('frontend.index.title');
 					<div class="list-slide-box">
 						<div class="modern-list ml-2">
 							<div class="grid-category-thumb">
-								<a href="<?= Url::to(['place/view', 'category' => $place->category['slug'], 'slug' => $place->slug]) ?>" class="overlay-cate"><?= Html::img($img->getUrl('358x229'), ['class' => 'img-responsive', 'alt' => $place->slug]) ?></a>
+								<a href="<?= Url::to(['place/view', 'category' => $place->category['slug'], 'city' => $place->city->url, 'slug' => $place->slug]) ?>" class="overlay-cate"><?= Html::img($img->getUrl('358x229'), ['class' => 'img-responsive', 'alt' => $place->slug]) ?></a>
 								<!-- <div class="listing-price-info"> 
 											<span class="pricetag">$25 - $65</span>
 										</div> -->
@@ -87,7 +87,7 @@ $this->title = Yii::$app->keyStorage->get('frontend.index.title');
 										<i class="ti-star"></i>
 										<!-- <a href="#" class="tl-review">(24 Reviews)</a> -->
 									</div>
-									<h4 class="lst-title"><?= Html::a($place->title, ['place/view', 'category' => $place->category['slug'], 'slug' => $place->slug]) ?><span class="veryfied-author"></span></h4>
+									<h4 class="lst-title"><?= Html::a($place->title, ['place/view', 'category' => $place->category['slug'], 'city' => $place->city->url, 'slug' => $place->slug]) ?><span class="veryfied-author"></span></h4>
 								</div>
 							</div>
 							<div class="modern-list-content">

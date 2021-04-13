@@ -9,7 +9,7 @@ use yii\helpers\HtmlPurifier;
 							<div class="modern-list ml-2">
 								<div class="list-badge now-open">Открыто</div>
 								<div class="grid-category-thumb">
-									<a href="<?= Url::to(['place/view', 'category' => $model->category->slug, 'slug' => $model->slug]) ?>" class="overlay-cate"><?= Html::img($img->getUrl('358x229'), ['class' => 'img-responsive', 'alt' => $img->alt]) ?></a>
+									<a href="<?= Url::to(['place/view', 'category' => $model->category->slug, 'city' => $model->city->url, 'slug' => $model->slug]) ?>" class="overlay-cate"><?= Html::img($img->getUrl('358x229'), ['class' => 'img-responsive', 'alt' => $img->alt]) ?></a>
 									<!-- <div class="listing-price-info"> 
 												<span class="pricetag">$25 - $65</span>
 											</div> -->
@@ -22,7 +22,7 @@ use yii\helpers\HtmlPurifier;
 											<i class="ti-star"></i>
 											<!-- <a href="#" class="tl-review">(24 Reviews)</a> -->
 										</div>
-										<h4 class="lst-title"><?= Html::a($model->title, ['place/view', 'category' => $model->category->slug, 'slug' => $model->slug]) ?><span class="veryfied-author"></span></h4>
+										<h4 class="lst-title"><?= Html::a($model->title, ['place/view', 'category' => $model->category->slug, 'city' => $model->city->url,'slug' => $model->slug]) ?><span class="veryfied-author"></span></h4>
 									</div>
 								</div>
 								<div class="modern-list-content">
