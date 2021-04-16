@@ -79,7 +79,7 @@ $menuItems = [
 
 <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-white mb-0">
     <div class="container">
-    <?= Html::a(Html::img(), ['/']) ?><img src="<?= Yii::getAlias('@storageUrl') ?>/theme/logo.svg" alt="" /></a>
+    <?= Html::a(Html::img(Yii::getAlias('@storageUrl') .'/theme/logo.svg', ['alt' => 'Логотип Surf-City.ru']), ['/']) ?>
         <a href="#" data-toggle="modal" data-target="#login" class="rt-log navbar-toggler"><i class="ti-import"></i></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -117,7 +117,7 @@ $menuItems = [
 
                 <div class="col-lg-4 col-md-6">
                     <div class="footer-widget">
-                        <img src="<?= Yii::getAlias('@storageUrl') ?>/theme/g-logo-light.svg" class="img-fluid f-logo" alt="" />
+                    <?= Html::a(Html::img(Yii::getAlias('@storageUrl') .'/theme/g-logo-light.svg', ['alt' => 'Логотип Surf-City.ru', 'class' => 'img-fluid f-logo']), ['/']) ?>
                         <ul class="footer-bottom-social">
                             <li><a href="#"><i class="ti-facebook"></i></a></li>
                             <li><a href="#"><i class="ti-twitter"></i></a></li>
