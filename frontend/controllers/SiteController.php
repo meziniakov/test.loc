@@ -81,7 +81,7 @@ class SiteController extends Controller
     public function actionIndex()
     {
         if ($city = City::find()->where('url = :url', [':url' => Yii::$app->params['city']])->one()) {
-            $listing = Place::find()->where(['is_home' => 1])->andWhere(['city_id' => $city->id])->with('category')->all();
+            $listing = Place::find()->where(['is_home' => 1])->andWhere(['city_id' => $city->id])->with('category', 'city')->all();
         } elseif (Yii::$app->params['city'] == 'global') {
             $listing = Place::find()->where(['is_home' => 1])->with('category')->all();
         } else {
@@ -92,33 +92,34 @@ class SiteController extends Controller
             'listing' => $listing,
             'tags' => Tag::find()->all(),
             'categories' => PlaceCategory::find()->active()->all(),
+            'cities' => City::find()->all(),
         ]);
     }
 
-    public function actionFaq()
-    {
-        return $this->render('faq', [
-        ]);
-    }
+    // public function actionFaq()
+    // {
+    //     return $this->render('faq', [
+    //     ]);
+    // }
 
     /**
      * Displays contact page.
      *
      * @return mixed
      */
-    public function actionContact()
-    {
-        $model = new ContactForm();
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            if ($model->sendEmail(Yii::$app->params['adminEmail'])) {
-                Yii::$app->session->setFlash('success', Yii::t('frontend', 'Thank you for contacting us. We will respond to you as soon as possible.'));
-            } else {
-                Yii::$app->session->setFlash('error', Yii::t('frontend', 'There was an error sending your message.'));
-            }
+    // public function actionContact()
+    // {
+    //     $model = new ContactForm();
+    //     if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+    //         if ($model->sendEmail(Yii::$app->params['adminEmail'])) {
+    //             Yii::$app->session->setFlash('success', Yii::t('frontend', 'Thank you for contacting us. We will respond to you as soon as possible.'));
+    //         } else {
+    //             Yii::$app->session->setFlash('error', Yii::t('frontend', 'There was an error sending your message.'));
+    //         }
 
-            return $this->refresh();
-        } else {
-            return $this->render('contact', ['model' => $model]);
-        }
-    }
+    //         return $this->refresh();
+    //     } else {
+    //         return $this->render('contact', ['model' => $model]);
+    //     }
+    // }
 }

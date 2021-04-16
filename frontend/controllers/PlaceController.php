@@ -8,6 +8,7 @@ use yii\web\Controller;
 use yii\web\Response;
 use common\models\Place;
 use common\models\Tag;
+use common\models\City;
 use yii\web\NotFoundHttpException;
 use SimpleXMLElement;
 use Exception;
@@ -64,11 +65,21 @@ class PlaceController extends Controller
 
     $q = Yii::$app->request->get('q');
     $category_id = Yii::$app->request->get('category_id');
+    $city_id = Yii::$app->request->get('city_id');
     $tag_id = Yii::$app->request->get('tag_id');
 
-    $query = Place::find()->parsed()->with('category');
+    // $query = Place::find()->parsed()->with('category');
+
+    if ($city = City::find()->where('url = :url', [':url' => Yii::$app->params['city']])->one()) {
+      $query = Place::find()->parsed()->where(['city_id' => $city->id])->with('category');
+  } elseif (Yii::$app->params['city'] == 'global') {
+      $query = Place::find()->parsed()->with('category');
+  } else {
+      throw new NotFoundHttpException(Yii::t('frontend', 'Page not found.'));
+  }
     $query->andFilterWhere([
       'category_id' => $category_id,
+      'city_id' => $city_id,
       'tag_id' => $tag_id,
     ]);
     $query->andFilterWhere(['like', 'title', $q]);
@@ -116,6 +127,7 @@ class PlaceController extends Controller
         'dataProvider' => $dataProvider,
         'addressInJson' => Place::getJsonForMap($models),
         'categories' => PlaceCategory::find()->active()->asArray()->all(),
+        'cities' => City::find()->all(),
         'tags' => Tag::find()->asArray()->all()
       ]
     );
@@ -125,11 +137,13 @@ class PlaceController extends Controller
   {
     $q = Yii::$app->request->get('q');
     $category_id = Yii::$app->request->get('category_id');
+    $city_id = Yii::$app->request->get('city_id');
     $tag_id = Yii::$app->request->get('tag_id');
 
     $query = Place::find()->parsed();
     $query->andFilterWhere([
       'category_id' => $category_id,
+      'city_id' => $city_id,
       'tag_id' => $tag_id,
     ]);
     $query->andFilterWhere(['like', 'title', $q])
@@ -145,6 +159,7 @@ class PlaceController extends Controller
         'dataProvider' => $dataProvider,
         'addressInJson' => Place::getJsonForMap($models),
         'categories' => PlaceCategory::find()->active()->all(),
+        'cities' => City::find()->all(),
         'tags' => Tag::find()->all()
       ]
     );

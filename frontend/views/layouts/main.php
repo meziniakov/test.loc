@@ -50,36 +50,36 @@ $menuItems = [
     //     'visible' => !Yii::$app->user->isGuest,
     // ],
 ];
-if (Yii::$app->user->isGuest) {
-    $menuItems[] = ['label' => Yii::t('frontend', 'Login'), 'url' => ['/account/sign-in/login']];
-} else {
-    $menuItems[] = [
-        'label' => Yii::$app->user->identity->username,
-        'url' => '#',
-        // 'template' => '<a href="{url}" data-toggle="dropdown">{label}</a>',
-        // 'options' => ['class' => 'nav-item dropdown'],
-        // 'lastItemCssClass' => ['class' => 'navbar-nav-more dropdown'],
-        'items' => [
-            ['label' => Yii::t('frontend', 'Settings'), 'url' => ['/account/default/settings']],
-            [
-                'label' => Yii::t('frontend', 'Backend'),
-                'url' => env('BACKEND_URL'),
-                'linkOptions' => ['target' => '_blank'],
-                'visible' => Yii::$app->user->can('administrator'),
-            ],
-            [
-                'label' => Yii::t('frontend', 'Logout'),
-                'url' => ['/account/sign-in/logout'],
-                'linkOptions' => ['data-method' => 'post'],
-            ],
-        ],
-    ];
-}
+// if (Yii::$app->user->isGuest) {
+//     $menuItems[] = ['label' => Yii::t('frontend', 'Login'), 'url' => ['/account/sign-in/login']];
+// } else {
+//     $menuItems[] = [
+//         'label' => Yii::$app->user->identity->username,
+//         'url' => '#',
+//         // 'template' => '<a href="{url}" data-toggle="dropdown">{label}</a>',
+//         'options' => ['class' => 'nav-item dropdown'],
+//         // 'lastItemCssClass' => ['class' => 'navbar-nav-more dropdown'],
+//         'items' => [
+//             ['label' => Yii::t('frontend', 'Settings'), 'url' => ['/account/default/settings']],
+//             [
+//                 'label' => Yii::t('frontend', 'Backend'),
+//                 'url' => env('BACKEND_URL'),
+//                 'linkOptions' => ['target' => '_blank'],
+//                 'visible' => Yii::$app->user->can('administrator'),
+//             ],
+//             [
+//                 'label' => Yii::t('frontend', 'Logout'),
+//                 'url' => ['/account/sign-in/logout'],
+//                 'linkOptions' => ['data-method' => 'post'],
+//             ],
+//         ],
+//     ];
+// }
 ?>
 
 <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-white mb-0">
     <div class="container">
-        <a href="#" class=""><img src="<?= Yii::getAlias('@storageUrl') ?>/theme/logo.svg" alt="" /></a>
+    <?= Html::a(Html::img(), ['/']) ?><img src="<?= Yii::getAlias('@storageUrl') ?>/theme/logo.svg" alt="" /></a>
         <a href="#" data-toggle="modal" data-target="#login" class="rt-log navbar-toggler"><i class="ti-import"></i></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -122,7 +122,6 @@ if (Yii::$app->user->isGuest) {
                             <li><a href="#"><i class="ti-facebook"></i></a></li>
                             <li><a href="#"><i class="ti-twitter"></i></a></li>
                             <li><a href="#"><i class="ti-instagram"></i></a></li>
-                            <li><a href="#"><i class="ti-linkedin"></i></a></li>
                         </ul>
                     </div>
                 </div>
@@ -152,10 +151,9 @@ if (Yii::$app->user->isGuest) {
 
                 <div class="col-lg-2 col-md-4">
                     <div class="footer-widget">
-                        <h4 class="widget-title">Пользователь</h4>
+                        <h4 class="widget-title">Навигация</h4>
                         <ul class="footer-menu">
-                            <li class="log-icon lg-ic"><a href="#" data-toggle="modal" data-target="#signup" class="rt-log">Регистрация</a></li>
-                            <li class="log-icon lg-ic"><a href="#" data-toggle="modal" data-target="#login" class="rt-log">Вход</a></li>
+                            <li><?= Html::a('Места', ['place/index']) ?></li>
                             <li><?= Html::a('Статьи', ['article/index']) ?></li>
                         </ul>
                     </div>
@@ -165,8 +163,6 @@ if (Yii::$app->user->isGuest) {
                     <div class="footer-widget">
                         <h4 class="widget-title">Поддержка</h4>
                         <ul class="footer-menu">
-                            <li><?= Html::a('Вопросы и ответы', ['site/faq']) ?></li>
-                            <li><?= Html::a('Контакты', ['site/contact']) ?></li>
                             <li><?= Html::a('Политика конфиденциальности', ['page/view', 'slug' => 'privacy_policy']) ?></li>
                         </ul>
                     </div>
@@ -180,7 +176,7 @@ if (Yii::$app->user->isGuest) {
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-lg-12 col-md-12 text-center">
-                    <p class="mb-0">© 2019 SurfCity. All Rights Reserved</p>
+                    <p class="mb-0">© 2019 Surf-City. All Rights Reserved</p>
                 </div>
             </div>
         </div>

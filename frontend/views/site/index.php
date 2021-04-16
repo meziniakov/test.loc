@@ -9,9 +9,9 @@ $this->title = Yii::$app->keyStorage->get('frontend.index.title');
 ?>
 
 <div class="image-cover hero-banner" style="background:url(reveal/img/33.jpg) no-repeat;" data-overlay="6">
-<div class="container">
+	<div class="container">
 
-		<h1 class="big-header-capt">Лучшие места в городе <?= isset($city->name) ? $city->name : ""?></h1>
+		<h1 class="big-header-capt">Лучшие места в городе <?= isset($city->name) ? $city->name : "" ?></h1>
 		<div class="full-search-2 italian-search hero-search-radius box-style">
 			<div class="hero-search-content">
 				<div class="row">
@@ -28,7 +28,7 @@ $this->title = Yii::$app->keyStorage->get('frontend.index.title');
 					<div class="col-lg-3 col-md-3 col-sm-6 small-padd">
 						<div class="form-group">
 							<div class="input-with-icon">
-								<?= Html::dropDownList('category_id', null, ArrayHelper::map($categories, 'id', 'title'), ['id' => 'choose-city', 'class' => 'form-control', 'prompt' => '&nbsp;']) ?>
+								<?= Html::dropDownList('city_id', null, ArrayHelper::map($cities, 'id', 'name'), ['id' => 'choose-city', 'class' => 'form-control', 'prompt' => '']) ?>
 								<i class="theme-cl ti-briefcase"></i>
 							</div>
 						</div>
@@ -37,11 +37,20 @@ $this->title = Yii::$app->keyStorage->get('frontend.index.title');
 					<div class="col-lg-3 col-md-3 col-sm-6 small-padd">
 						<div class="form-group">
 							<div class="input-with-icon">
-								<?= Html::dropDownList('tag_id', null, ArrayHelper::map($tags, 'slug', 'name'), ['id' => 'list-category', 'class' => 'form-control', 'prompt' => '']) ?>
+								<?= Html::dropDownList('category_id', null, ArrayHelper::map($categories, 'id', 'title'), ['id' => 'list-category', 'class' => 'form-control', 'prompt' => '']) ?>
 								<i class="theme-cl ti-briefcase"></i>
 							</div>
 						</div>
 					</div>
+
+					<!-- <div class="col-lg-3 col-md-3 col-sm-6 small-padd">
+						<div class="form-group">
+							<div class="input-with-icon">
+								<?// Html::dropDownList('tag_id', null, ArrayHelper::map($tags, 'slug', 'name'), ['id' => 'list-category', 'class' => 'form-control', 'prompt' => '']) ?>
+								<i class="theme-cl ti-briefcase"></i>
+							</div>
+						</div>
+					</div> -->
 
 					<div class="col-lg-2 col-md-2 col-sm-12 small-padd">
 						<div class="form-group">
@@ -63,7 +72,7 @@ $this->title = Yii::$app->keyStorage->get('frontend.index.title');
 			<div class="col-lg-12 col-md-12">
 				<div class="sec-heading center">
 					<h2>Популярные места</h2>
-					<p>Выберите подходящие места для Вас.</p>
+					<p>Выберите подходящие места.</p>
 				</div>
 			</div>
 		</div>
@@ -73,11 +82,15 @@ $this->title = Yii::$app->keyStorage->get('frontend.index.title');
 					<?php $img = $place->getImage(); ?>
 					<div class="list-slide-box">
 						<div class="modern-list ml-2">
+							<?php if (isset($model->schedule)) : ?>
+								<div class="list-badge now-open">Открыто</div>
+							<?php endif ?>
 							<div class="grid-category-thumb">
-								<a href="<?= Url::to(['place/view', 'category' => $place->category['slug'], 'city' => $place->city->url, 'slug' => $place->slug]) ?>" class="overlay-cate"><?= Html::img($img->getUrl('358x229'), ['class' => 'img-responsive', 'alt' => $place->slug]) ?></a>
-								<!-- <div class="listing-price-info"> 
-											<span class="pricetag">$25 - $65</span>
-										</div> -->
+								<?php if (isset($place->city)) : ?>
+									<a href="<?= Url::to(['place/view', 'city' => $place->city->url, 'category' => $place->category['slug'], 'slug' => $place->slug]) ?>" class="overlay-cate"><?= Html::img($img->getUrl('358x229'), ['class' => 'img-responsive', 'alt' => $place->slug]) ?></a>
+								<?php else : ?>
+									<a href="<?= Url::to(['place/view', 'category' => $place->category['slug'], 'slug' => $place->slug]) ?>" class="overlay-cate"><?= Html::img($img->getUrl('358x229'), ['class' => 'img-responsive', 'alt' => $place->slug]) ?></a>
+								<?php endif ?>
 								<div class="property_meta">
 									<div class="list-rates">
 										<i class="ti-star filled"></i>
@@ -85,15 +98,17 @@ $this->title = Yii::$app->keyStorage->get('frontend.index.title');
 										<i class="ti-star filled"></i>
 										<i class="ti-star filled"></i>
 										<i class="ti-star"></i>
-										<!-- <a href="#" class="tl-review">(24 Reviews)</a> -->
 									</div>
-									<h4 class="lst-title"><?= Html::a($place->title, ['place/view', 'category' => $place->category['slug'], 'city' => $place->city->url, 'slug' => $place->slug]) ?><span class="veryfied-author"></span></h4>
+									<?php if (isset($place->city)) : ?>
+										<h4 class="lst-title"><?= Html::a($place->title, ['place/view', 'category' => $place->category['slug'], 'city' => $place->city->url, 'slug' => $place->slug]) ?><span class="veryfied-author"></span></h4>
+									<?php else : ?>
+										<h4 class="lst-title"><?= Html::a($place->title, ['place/view', 'category' => $place->category['slug'], 'slug' => $place->slug]) ?><span class="veryfied-author"></span></h4>
+									<?php endif ?>
 								</div>
 							</div>
 							<div class="modern-list-content">
 								<div class="listing-cat">
-								<?= Html::a('<i class=' . $place->category['icon'] . ' bg-a"></i>' . $place->category['title'], ['place/category', 'slug' => $place->category['slug']], ['class' => 'cat-icon cl-1']) ?>
-									<!-- <span class="more-cat">+3</span> -->
+									<?= Html::a('<i class=' . $place->category['icon'] . ' bg-a"></i>' . $place->category['title'], ['place/category', 'slug' => $place->category['slug']], ['class' => 'cat-icon cl-1']) ?>
 								</div>
 							</div>
 						</div>
