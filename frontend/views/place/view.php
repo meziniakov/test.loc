@@ -374,15 +374,14 @@ $this->registerJsFile(
 										<?php else : ?>
 											<span class="listing-hours-status l-open ml-2">Закрыто</span>
 										<?php endif ?>
-										<!-- <span class="current-time"><? $date->format('D');?></span> -->
-										<!-- <span class="time-zone ml-2">Россия</span> -->
 									</h4>
 								</div>
 								<div class="tr-single-body">
 									<ul class="listing-hour-day">
+									<?php $daysweek = [0 => 'Понедельник', 1 => 'Вторник', 2 => 'Среда', 3 => 'Четверг', 4 => 'Пятница', 5 => 'Суббота', 6 => 'Воскресенье'];?>
 										<?php foreach (Json::decode($place->schedule) as $dn => $working) : ?>
 											<li>
-												<span class="listing-hour-day"><?= $dn ?></span>
+												<span class="listing-hour-day"><?= $daysweek[$dn] ?></span>
 												<span class="listing-hour-time"><?= date('H:i', $working['from']) ?> - <?= date('H:i', $working['to']) ?></span>
 											</li>
 										<?php endforeach; ?>

@@ -138,7 +138,7 @@ class JsonParserController extends Controller
 
     public function actionTest()
     {
-        $path = Yii::getAlias('@storage') . '/json/test.json';
+        $path = Yii::getAlias('@storage') . '/json/test2.json';
         $json = file_get_contents($path, true);
         $array = Json::decode($json, false);
 
@@ -203,7 +203,7 @@ class JsonParserController extends Controller
     {
         $model = $this->findModel($id);
         //получаем и читаем json файл в массив
-        $path = Yii::getAlias('@storage') . '/json/test.json';
+        $path = Yii::getAlias('@storage') . '/json/test2.json';
         $json = file_get_contents($path, true);
         $array = Json::decode($json, false);
 
@@ -221,8 +221,12 @@ class JsonParserController extends Controller
                 $place->street_comment = $object->address->comment;
                 $place->lat = $object->address->mapPosition->coordinates[0];
                 $place->lng = $object->address->mapPosition->coordinates[1];
-                $place->email = $object->contacts->email;
-                $place->website = $object->contacts->website;
+                if(isset($object->contacts->email)) {
+                    $place->email = $object->contacts->email;
+                }
+                if(isset($object->contacts->website)) {
+                    $place->website = $object->contacts->website;
+                }
                 $place->status = 1;
 
                 // Если в массиве есть поле с phones, перебираем их и забираем данные
@@ -236,7 +240,6 @@ class JsonParserController extends Controller
                 }
                 // Если в массиве есть поле с workingSchedule, перебираем их и забираем данные
                 if (isset($object->workingSchedule)) {
-                    $daysweek = [1 => 'Понедельник', 2 => 'Вторник', 3 => 'Среда', 4 => 'Четверг', 5 => 'Пятница', 6 => 'Суббота', 7 => 'Воскресенье'];
                     $_workingSchedule = [];
                     foreach($object->workingSchedule as $key => $item) {
                         $_workingSchedule[] = $key = [
@@ -244,8 +247,8 @@ class JsonParserController extends Controller
                             'to' => strtotime($item->to),
                         ];
                     }
-                    $workingSchedule = array_combine($daysweek, $_workingSchedule);
-                    $workingScheduleJson = Json::encode($workingSchedule);
+                    // $workingSchedule = array_combine($daysweek, $_workingSchedule);
+                    $workingScheduleJson = Json::encode($_workingSchedule);
                     $place->schedule = $workingScheduleJson;
                 }
                 // Если в массиве есть поле с tags, перебираем их и забираем данные
@@ -301,8 +304,12 @@ class JsonParserController extends Controller
                 // $place->street = $object->data->general->address->street;
                 $place->lat = $object->address->mapPosition->coordinates[0];
                 $place->lng = $object->address->mapPosition->coordinates[1];
-                $place->email = $object->contacts->email;
-                $place->website = $object->contacts->website;
+                if(isset($object->contacts->email)) {
+                    $place->email = $object->contacts->email;
+                }
+                if(isset($object->contacts->website)) {
+                    $place->website = $object->contacts->website;
+                }
                 $place->status = 1;
 
                 if ($placeCategory = PlaceCategory::findOne(['title' => $object->category->name])) {
@@ -344,8 +351,8 @@ class JsonParserController extends Controller
                             'to' => strtotime($item->to),
                         ];
                     }
-                    $workingSchedule = array_combine($daysweek, $_workingSchedule);
-                    $workingScheduleJson = Json::encode($workingSchedule);
+                    // $workingSchedule = array_combine($daysweek, $_workingSchedule);
+                    $workingScheduleJson = Json::encode($_workingSchedule);
                     $place->schedule = $workingScheduleJson;
                 }
                 // Если в массиве есть поле с tags, перебираем их и забираем данные
