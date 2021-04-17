@@ -23,7 +23,7 @@ use common\models\query\PlaceQuery;
  *
  * @property int $id
  * @property string $type
- * @property string $name
+ * @property string $title
  * @property string $description
  * @property string $city
  * @property string $address
