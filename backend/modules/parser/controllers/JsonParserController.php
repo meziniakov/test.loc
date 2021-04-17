@@ -136,9 +136,8 @@ class JsonParserController extends Controller
         throw new NotFoundHttpException(Yii::t('backend', 'The requested page does not exist.'));
     }
 
-    public function actionTest($id)
+    public function actionTest()
     {
-        $model = $this->findModel($id);
         $path = Yii::getAlias('@storage') . '/json/test.json';
         $json = file_get_contents($path, true);
         $array = Json::decode($json, false);
@@ -146,7 +145,7 @@ class JsonParserController extends Controller
         $res = [];
         foreach ($array as $object) {
             $res[] = [
-                'title' => $model->title,
+                'title' => $object->data->general->name,
                 'text' => $object->data->general->description,
                 'city_name' => $object->data->general->locale->name,
                 'city_sys_name' => $object->data->general->locale->sysName,
@@ -196,7 +195,6 @@ class JsonParserController extends Controller
             }
         }
         return $this->render('test', [
-            'model' => $model,
             'result' => $res
         ]);
     }
@@ -388,22 +386,5 @@ class JsonParserController extends Controller
             'model' => $model,
             'place' => $place
         ]);
-    }
-
-    public function actionRelation()
-    {
-        // echo 'r';die;
-        $place = new Place();
-        $place->title = 'Testing Relations';
-        $place->description = 'Описание тестового объекта';
-
-        $category = new PlaceCategory();
-        $category->title = 'Test Category 2';
-        $category->save();
-        $place->category_id = $category->id;
-        $place->save();
-        var_dump($place->category->title);
-        var_dump($category->id);
-        die;
     }
 }

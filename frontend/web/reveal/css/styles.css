@@ -270,8 +270,7 @@ h1 {
   font-size: 36px; }
 
 h2 {
-    margin: 70px 0 10px;
-    font-size: 34px;
+    font-size: 26px;
     line-height: 40px;}
 
 h3 {
@@ -3223,8 +3222,6 @@ nav.navbar-light {
     box-shadow:none;
 }
 
-
-
 .header.header-fixed nav.headnavbar{
 	box-shadow: 0 5px 30px rgba(0, 22, 84, 0.1);
 	-webkit-box-shadow: 0 5px 30px rgba(0, 22, 84, 0.1);
@@ -4317,9 +4314,8 @@ button.btn.adv-btn {
 #singleMap {
 	width:100%;
 	position:relative;
-	height:300px;
+	height:250px;
 	float:left;
-	margin-bottom:30px;
 }
 .box-widget #singleMap {
 	margin-bottom:10px;
@@ -8088,7 +8084,7 @@ tr.pricing-list-item.pattern.ui-sortable-handle {
     display: block;
     width: 100%;
     background: #ffffff;
-    padding:30px 40px 40px;
+    padding:20px 20px 20px;
     border-radius: 4px;
     margin-bottom:30px;
 }
@@ -11795,8 +11791,8 @@ footer.skin-dark-footer ul.footer-bottom-social li a:hover, footer.skin-dark-foo
 		font-size: 50px;
 	}
 	h1, .h1 {
-		font-size:4.142em;
-		line-height: 1.31818182em;
+		font-size:2.142em;
+		line-height: 1em;
 	}
 	.breadcrumbs {
 		margin-top: 92px;
@@ -11947,6 +11943,7 @@ footer.skin-dark-footer ul.footer-bottom-social li a:hover, footer.skin-dark-foo
 	}
 	.half-map .fs-left-map-box {
 		float: none;
+        height: 400px;
 	}
 	.fr-grid-info ul li {
 		font-size: 12px;

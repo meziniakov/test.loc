@@ -39,6 +39,13 @@ use common\models\Place;
             'id',
             'title'
         ), ['prompt' => '']) ?>
+
+        <?= $form->field($model, 'city_id')->dropDownList(ArrayHelper::map(
+            $cities,
+            'id',
+            'name'
+        ), ['prompt' => '']) ?>
+
         <?= $form->field($model, 'tagValues')->widget(SelectizeTextInput::class, [
             'loadUrl' => ['tag/list'],
             'options' => ['class' => 'form-control'],

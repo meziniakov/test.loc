@@ -106,7 +106,11 @@ $trashedUrl = Url::to(['/' . $controller . '/trashed']);
   foreach ($categories as $category) {
     $array[] = ['label' => $category->title, 'url' => [''], 'id' => $category->id, 'linkOptions' => ['id' => $category->slug]];
   }
-  // var_dump($array[0]['label']);die;
+  $_cities = [];
+  foreach ($cities as $city) {
+    $_cities[] = ['label' => $city->name, 'url' => [''], 'id' => $city->id, 'linkOptions' => ['id' => $city->url]];
+  }
+  // var_dump($_cities);die;
   ?>
   <?php echo ButtonDropdown::widget([
     'label' => 'Сменить категорию',
@@ -115,18 +119,39 @@ $trashedUrl = Url::to(['/' . $controller . '/trashed']);
     ],
     'containerOptions' => ['class' => '']
   ]);
+  echo ButtonDropdown::widget([
+    'label' => 'Установить город',
+    'dropdown' => [
+      'items' => $_cities,
+    ],
+    'containerOptions' => ['class' => '']
+  ]);
   ?>
 </div>
 <?php
-  // var_dump($res); die;
   foreach ($array as $item) {
-    // var_dump($item['id']); die;
   $this->registerJs('$(document).ready(function(){$(\'#' . $item['linkOptions']['id'] . '\').click(function(){
         var id = $(\'#grid\').yiiGridView(\'getSelectedRows\');
           $.ajax({
             type: \'POST\',
             url : \'/place/multiple-change-category\',
             data : {id: id, category_id: '. $item['id'] .'},
+            success : function() {
+              $(this).closest(\'tr\').remove(); //удаление строки
+            },
+          });
+        });
+      });
+      ', \yii\web\View::POS_READY);
+    }
+
+  foreach ($_cities as $item) {
+  $this->registerJs('$(document).ready(function(){$(\'#' . $item['linkOptions']['id'] . '\').click(function(){
+        var id = $(\'#grid\').yiiGridView(\'getSelectedRows\');
+          $.ajax({
+            type: \'POST\',
+            url : \'/place/multiple-change-city\',
+            data : {id: id, city_id: '. $item['id'] .'},
             success : function() {
               $(this).closest(\'tr\').remove(); //удаление строки
             },

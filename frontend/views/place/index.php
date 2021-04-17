@@ -53,6 +53,7 @@ $this->registerJsFile(
 								<div class="spinner-grow text-danger" role="status"><span class="sr-only">Loading...</span></div>
 								<div class="spinner-grow text-danger" role="status"><span class="sr-only">Loading...</span></div>
 								</div>',
+						'noneLeftText' => 'Записей больше нет',
 						'eventOnLoad' => "function() {
 							$('.list-view').append('<div class=\"spinner\"></div>');
 							}",

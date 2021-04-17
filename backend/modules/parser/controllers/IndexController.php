@@ -133,12 +133,12 @@ class IndexController extends Controller
 
   public function actionResave()
   {
-    $null = Place::find()->where(['slug' => ''])->all();
+    $null = Place::find()->where(['slug' => null])->all();
     $i = 0;
     foreach($null as $item) {
       if(!empty($item->text)) {
         $item->save();
-        var_dump($item->title);
+        // var_dump($item->title);
         // var_dump(empty($item->text));
         // var_dump($item->getErrors());die;
         $i++;

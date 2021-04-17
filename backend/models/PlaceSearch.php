@@ -67,7 +67,7 @@ class PlaceSearch extends Place
         ]);
 
         $query->andFilterWhere(['like', 'title', $this->title])
-            ->andFilterWhere(['like', 'text', $this->description]);
+            ->andFilterWhere(['like', 'text', $this->text]);
 
         return $dataProvider;
     }

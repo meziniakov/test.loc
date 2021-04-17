@@ -18,7 +18,7 @@ $this->title = Yii::t('backend', 'Places');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="place-index">
-<?= $this->render('_menu', ['categories' => $categories]) ?>
+<?= $this->render('_menu', ['categories' => $categories, 'cities' => $cities]) ?>
     <?php Pjax::begin(); ?>
     <?php // $this->render('_search', ['model' => $searchModel]);?>
 

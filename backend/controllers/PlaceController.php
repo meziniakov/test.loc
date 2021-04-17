@@ -73,7 +73,8 @@ class PlaceController extends Controller
         $searchModel = new PlaceSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $categories = PlaceCategory::find()->active()->all();
-        $city = City::find()->all();
+        $cities = City::find()->all();
+        // var_dump($categories);die;
         // $img = $dataProvider->getImage();
 
         return $this->render('index', [
@@ -81,7 +82,7 @@ class PlaceController extends Controller
             'img' => $img,
             'dataProvider' => $dataProvider,
             'categories' => $categories,
-            'city' => $city
+            'cities' => $cities
         ]);
     }
 
@@ -168,6 +169,7 @@ class PlaceController extends Controller
         return $this->render('status', [
             'searchModel' => $searchModel,
             'categories' => PlaceCategory::findAll(['status' => 1]),
+            'cities' => City::find()->all(),
             'data' => new ActiveDataProvider([
                 'query' => Place::find()->with('category', 'city')->where(['=', 'status', Place::STATUS_UPDATED]),
                 'totalCount' => $this->updated
@@ -214,7 +216,6 @@ class PlaceController extends Controller
     public function actionCreate()
     {
         $model = new Place();
-        $categories = PlaceCategory::find()->active()->all();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
@@ -232,7 +233,8 @@ class PlaceController extends Controller
 
         return $this->render('create', [
             'model' => $model,
-            'categories' => $categories,
+            'categories' => PlaceCategory::find()->active()->all(),
+            'cities' => City::find()->all()
         ]);
     }
 
@@ -263,6 +265,7 @@ class PlaceController extends Controller
         return $this->render('update', [
             'model' => $model,
             'categories' => PlaceCategory::find()->active()->all(),
+            'cities' => City::find()->all()
         ]);
     }
 
@@ -320,6 +323,15 @@ class PlaceController extends Controller
     {
         if (Yii::$app->request->post('id', 'category_id')) {
             Place::updateAll(['category_id' => Yii::$app->request->post('category_id')], ['id' => Yii::$app->request->post('id')]);
+        }
+        Yii::$app->session->setFlash('success', 'Успешно изменено');
+        return $this->redirect(Yii::$app->request->referrer);
+    }
+
+    public function actionMultipleChangeCity()
+    {
+        if (Yii::$app->request->post('id', 'city_id')) {
+            Place::updateAll(['city_id' => Yii::$app->request->post('city_id')], ['id' => Yii::$app->request->post('id')]);
         }
         Yii::$app->session->setFlash('success', 'Успешно изменено');
         return $this->redirect(Yii::$app->request->referrer);
