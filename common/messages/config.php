@@ -30,6 +30,7 @@ return [
         '.hgkeep',
         '/common/messages',
         '/vendor',
+        '/phpmyadmin',
     ],
     'only' => [
         '*.php',

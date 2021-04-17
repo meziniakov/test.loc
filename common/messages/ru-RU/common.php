@@ -31,6 +31,7 @@ return [
     'Firstname' => 'Имя',
     'Frequency' => 'Частота',
     'Gender' => 'Пол',
+    'Icon' => '',
     'Inactive' => '',
     'Key' => 'Ключ',
     'Keywords' => 'Ключевые слова',
@@ -56,4 +57,5 @@ return [
     'Username or email' => 'Имя пользователя или email',
     'Value' => 'Значение',
     'Website' => 'Веб-сайт',
+    'Обложка' => '',
 ];
