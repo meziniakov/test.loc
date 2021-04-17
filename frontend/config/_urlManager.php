@@ -40,7 +40,7 @@ return [
         'place/tags' => 'place/tags',
         // 'place/<slug>' => 'place/view',
         'place/<slug>' => 'place/category',
-        '//<city:\w+>.'.Yii::getAlias('@domain').'/place/<category>/<slug>' => 'place/view',
+        '//<city>.'.Yii::getAlias('@domain').'/place/<category>/<slug>' => 'place/view',
 
         // 'place/category/<slug>/page/<page>' => 'place/category',
         'tag/<slug>' => 'place/tag',
