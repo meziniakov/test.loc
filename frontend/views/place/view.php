@@ -54,14 +54,12 @@ $this->registerJsFile(
 										</button>
 										<div class="dropdown-menu animated flipInX">
 											<a href="#" class="cl-facebook"><i class="lni-facebook"></i></a>
-											<a href="#" class="cl-twitter"><i class="lni-twitter"></i></a>
-											<a href="#" class="cl-gplus"><i class="lni-google-plus"></i></a>
 											<a href="#" class="cl-instagram"><i class="lni-instagram"></i></a>
 										</div>
 									</div>
 								</div>
 
-								<div class="pr-single-info">
+								<!-- <div class="pr-single-info">
 									<a href="JavaScript:Void(0);" data-toggle="tooltip" data-original-title="Get Print"><i class="ti-printer"></i></a>
 								</div>
 								<div class="pr-single-info">
@@ -69,7 +67,7 @@ $this->registerJsFile(
 								</div>
 								<div class="pr-single-info">
 									<a href="JavaScript:Void(0);" class="like-bitt add-to-favorite" data-toggle="tooltip" data-original-title="Add To Favorites"><i class="lni-heart-filled"></i></a>
-								</div>
+								</div> -->
 							</div>
 						</div>
 					</div>
@@ -184,14 +182,13 @@ $this->registerJsFile(
 					</div> -->
 
 					<!-- Reviews Comments -->
-					<div class="list-single-main-item fl-wrap">
+					<!-- <div class="list-single-main-item fl-wrap">
 						<div class="list-single-main-item-title fl-wrap">
 							<h3>Отзывы</h3>
 						</div>
 						<div class="reviews-comments-wrap">
 							<div class="reviews-comments-item">
 								<div class="review-comments-avatar">
-									<!-- <img src="" class="img-fluid" alt=""> -->
 								</div>
 								<div class="reviews-comments-item-text">
 									<h4><a href="#">Ник Хлебный</a><span class="reviews-comments-item-date"><i class="ti-calendar theme-cl"></i>27 Окт 2020</span></h4>
@@ -329,7 +326,7 @@ $this->registerJsFile(
 								</form>
 							</div>
 						</div>
-					</div>
+					</div> -->
 				</div>
 
 				<!-- property Sidebar -->
@@ -390,7 +387,7 @@ $this->registerJsFile(
 							</div>
 						<?php endif ?>
 
-						<div class="tr-single-box">
+						<!-- <div class="tr-single-box">
 							<div class="tr-single-header">
 								<h4><i class="ti-bar-chart"></i> Статистика</h4>
 							</div>
@@ -477,7 +474,7 @@ $this->registerJsFile(
 								</ul>
 							</div>
 
-						</div>
+						</div> -->
 
 						<div class="tr-single-box">
 							<div class="tr-single-header">

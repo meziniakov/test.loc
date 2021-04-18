@@ -19,7 +19,7 @@ return [
         // '//blog.test.loc/' => 'article/index',
         // '//<city>.test.loc/' => 'site/index',
         // '//<city:\w+>.<domain:\w+>.<ru:\w+>/' => 'site/contact',
-        'sitemap' => 'sitemap/index',
+        'sitemap.xml' => 'sitemap/index',
         'contact' => 'site/contact',
         'ajax-login' => 'site/ajax-login',
         'faq' => 'site/faq',

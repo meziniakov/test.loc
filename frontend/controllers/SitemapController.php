@@ -18,13 +18,20 @@ class SitemapController extends Controller
     if(!$xml_sitemap = Yii::$app->cache->get('sitemap')) {
       $urls = [];
 
-      $places = Place::findAll(['status' => Place::STATUS_PARSED]);
+      $places = Place::find()->where(['status' => Place::STATUS_PARSED])->with('category', 'city')->all();
       foreach($places as $place) {
+        if(isset($place->city->url)) {
+          $str = Yii::$app->request->serverName . '/place/' . $place->category->slug . '/' . $place->slug;
+          $subdomain = explode('.', $str)[0] = $place->city->url;
+          $subdomain .= '.' .$str;
+        } else {
+          $str = Yii::$app->request->hostInfo . '/place/' . $place->category->slug . '/' . $place->slug;
+        }
         $urls[] = [
-          'loc' => 'place/' . $place->category->slug . '/' . $place->slug, //Yii::$app->request->hostInfo
+          'loc' => isset($subdomain) ? $subdomain : $str,
           'lastmod' => date(DATE_ATOM, strtotime($place->updated_at)),
           'changefreq' => 'daily',
-          'priority' => '1'
+          'priority' => '1',
         ];
       }
 
@@ -38,27 +45,27 @@ class SitemapController extends Controller
         ];
       }
 
-      $article_categories = ArticleCategory::find()->active()->all();
-      foreach($article_categories as $article_category) {
-        // $urls[] = [
-        //   'loc' => $article_category->slug,
-        //   'changefreq' => 'weekly',
-        //   'priority' => '0.5'  
-        // ];
-      }
+      // $article_categories = ArticleCategory::find()->active()->all();
+      // foreach($article_categories as $article_category) {
+      //   // $urls[] = [
+      //   //   'loc' => $article_category->slug,
+      //   //   'changefreq' => 'weekly',
+      //   //   'priority' => '0.5'  
+      //   // ];
+      // }
 
-      $tags = Tag::find()->orderBy('id')->all();
-      foreach($tags as $tag) {
-        // $urls[] = [
-        //   'loc' => $tag->slug,
-        //   'changefreq' => 'weekly',
-        //   'priority' => '0.4'  
-        // ];
-      }
+      // $tags = Tag::find()->orderBy('id')->all();
+      // foreach($tags as $tag) {
+      //   // $urls[] = [
+      //   //   'loc' => $tag->slug,
+      //   //   'changefreq' => 'weekly',
+      //   //   'priority' => '0.4'  
+      //   // ];
+      // }
 
       $xml_sitemap = $this->renderPartial('index', [
-        'host' => Yii::$app->request->hostInfo,
-        'urls' => $urls
+        // 'host' => Yii::$app->request->hostInfo,
+        'urls' => $urls,
       ]);
 
       Yii::$app->cache->set('sitemap', $xml_sitemap, 60*60*12);

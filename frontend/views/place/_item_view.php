@@ -24,9 +24,9 @@ use yii\helpers\HtmlPurifier;
 											<i class="ti-star"></i>
 										</div>
 										<?php if(isset($model->city) && isset($model->category)):?>
-											<h4 class="lst-title"><?= Html::a($model->title, ['place/view', 'category' => $model->category->slug, 'city' => $model->city->url,'slug' => $model->slug]) ?><span class="veryfied-author"></span></h4>
+											<h4 class="lst-title"><?= Html::a($model->title, ['place/view', 'category' => $model->category->slug, 'city' => $model->city->url,'slug' => $model->slug]) ?></h4>
 								<?php else :?>
-									<h4 class="lst-title"><?= Html::a($model->title, ['place/view', 'category' => $model->category->slug, 'slug' => $model->slug]) ?><span class="veryfied-author"></span></h4>
+									<h4 class="lst-title"><?= Html::a($model->title, ['place/view', 'category' => $model->category->slug, 'slug' => $model->slug]) ?></h4>
 									<?php endif ?>
 									</div>
 								</div>

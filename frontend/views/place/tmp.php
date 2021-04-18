@@ -21,7 +21,7 @@
 											<i class="ti-star"></i>
 											<!-- <a href="#" class="tl-review">(24 Reviews)</a> -->
 										</div>
-										<h4 class="lst-title"><?= Html::a($place->title, ['place/view', 'slug' => ($place->slug) ? $place->slug : $place->id]) ?><span class="veryfied-author"></span></h4>
+										<h4 class="lst-title"><?= Html::a($place->title, ['place/view', 'slug' => ($place->slug) ? $place->slug : $place->id]) ?></h4>
 									</div>
 								</div>
 								<div class="modern-list-content">
