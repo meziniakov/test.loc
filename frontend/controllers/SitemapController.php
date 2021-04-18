@@ -64,7 +64,7 @@ class SitemapController extends Controller
       // }
 
       $xml_sitemap = $this->renderPartial('index', [
-        // 'host' => Yii::$app->request->hostInfo,
+        'host' => Yii::$app->request->isSecureConnection ? 'https://' : 'http://',
         'urls' => $urls,
       ]);
 
