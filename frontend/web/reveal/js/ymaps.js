@@ -41,6 +41,10 @@ console.log([addres[$i]['lng'], addres[$i]['lat']])
 					'<i class="list-status ti-check"></i></h4></div></div></div></div></div></div>'
 			})
 			myMap.geoObjects.add(placemark);
+			myMap.setBounds(myMap.geoObjects.getBounds(), {checkZoomRange: true})
+			.then(function () {
+				if (myMap.getZoom() > 15) myMap.setZoom(15); // Если значение zoom превышает 15, то устанавливаем 15.
+			});
 		} else {
 			var myGeocoder = ymaps.geocode(addres[$i]['addres']).then(
 				function (res) {

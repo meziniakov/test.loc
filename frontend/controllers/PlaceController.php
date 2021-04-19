@@ -221,13 +221,16 @@ class PlaceController extends Controller
 
   public function actionCategory($slug)
   {
+    if (City::find()->where('url = :url', [':url' => Yii::$app->params['city']])->one()) {
+      $city = City::find()->where('url = :url', [':url' => Yii::$app->params['city']])->one();
+    }
     // $listing = Place::find()->active()->limit(30)->all();
     $model = PlaceCategory::find()->where(['slug' => $slug])->one();
     if (!$model) {
       throw new NotFoundHttpException(Yii::t('frontend', 'Page not found.'));
     }
 
-    $query = Place::find()->with('tags')->joinWith('category')->where('{{%place_category}}.slug = :slug', [':slug' => $slug]);
+    $query = Place::find()->with('tags')->joinWith(['city', 'category'])->where('{{%place_category}}.slug = :slug', [':slug' => $slug])->andWhere('{{%city}}.url = :url', [':url' => Yii::$app->params['city']]);
 
     $dataProvider = Place::getDataProvider($query);
 
@@ -235,6 +238,7 @@ class PlaceController extends Controller
 
     return $this->render('category', [
       'model' => $model,
+      'city' => $city,
       'dataProvider' => $dataProvider,
       'addressInJson' => Place::getJsonForMap($models),
       'categories' => PlaceCategory::find()->active()->asArray()->all(),

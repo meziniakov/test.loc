@@ -2,16 +2,13 @@
 
 namespace frontend\controllers;
 
-use common\models\Place;
 use Yii;
+use yii\helpers\Url;
 use yii\web\Controller;
-use frontend\models\ContactForm;
 use vova07\fileapi\actions\UploadAction as FileAPIUpload;
-use common\models\LoginForm;
-use yii\web\HttpException;
+use common\models\Place;
 use common\models\Tag;
 use common\models\PlaceCategory;
-use common\models\PlaceSearch;
 use common\models\City;
 use yii\web\NotFoundHttpException;
 
@@ -87,6 +84,32 @@ class SiteController extends Controller
         } else {
             throw new NotFoundHttpException(Yii::t('frontend', 'Page not found.'));
         }
+
+        Yii::$app->view->registerLinkTag(['rel' => 'canonical', 'href' => Url::canonical()], 'canonical');
+        Yii::$app->view->registerMetaTag([
+          'name' => 'description',
+          'content' => 'Surf-city - изучайте Россию вместе с нами.'
+        ], 'description');
+    
+        Yii::$app->seo->putFacebookMetaTags([
+          'og:locale'     => 'ru_RU',
+          'og:url'        => Url::canonical(),
+          'og:type'       => 'article',
+          'og:title'      => 'Surf-City - открывай интересные места России',
+          'og:description' => 'Surf-city - изучайте Россию вместе с нами.',
+          // 'og:image'      => Url::to($place->getImage()->getUrl(), true),
+          // 'og:image:width' => $place->getImage()->getSizes()['width'],
+          // 'og:image:height' => $place->getImage()->getSizes()['height'],
+          'og:site_name' => 'Surf-City - открывай интересные места России',
+          // 'og:updated_time' => Yii::$app->formatter->asDatetime($place->updated_at, "php:Y-m-dTH:i:s+00:00"),
+          // 'og:updated_time' => date(DATE_ATOM, $place->updated_at),
+          // 'fb:app_id' => '',
+          // 'vk:app_id' => '',
+          // 'vk:page_id' => '',
+          // 'vk:image' => '',
+          // 'fb:app_id'=> '1811670458869631',//для статистики по переходам
+        ]);
+    
         return $this->render('index', [
             'city' => $city,
             'listing' => $listing,

@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\helpers\Json;
 use yii\web\View;
 
@@ -15,7 +16,18 @@ $this->registerJsFile(
 		]
 	]
 );
+$this->title = Yii::t('frontend', 'Articles from category {title}', ['title' => $place->title]);
+$this->params['breadcrumbs'][] = [
+    'label' => Yii::t('frontend', 'Места'),
+    'url' => Url::to('/place')
+];
+$this->params['breadcrumbs'][] = [
+    'label' => $place->category->title,
+    'url' => Url::to('/place/'.$place->category->slug)
+];
+$this->params['breadcrumbs'][] = Yii::t('frontend', '{title}', ['title' => $place->title]);
 ?>
+
 <div class="featured-slick">
 	<div class="featured-slick-slide">
 		<?php $images = $place->getImages(); ?>

@@ -8,7 +8,7 @@ use yii\helpers\ArrayHelper;
 $this->title = Yii::$app->keyStorage->get('frontend.index.title');
 ?>
 
-<div class="image-cover hero-banner" style="background:url(reveal/img/33.jpg) no-repeat;" data-overlay="6">
+<div class="image-cover hero-banner" style="background:url(<?= Yii::getAlias('@storageUrl') ?>/img/surf-city_main.jpeg) no-repeat;" data-overlay="6">
 	<div class="container">
 
 		<h1 class="big-header-capt">Лучшие места в городе <?= isset($city->name) ? $city->name : "" ?></h1>
@@ -102,7 +102,7 @@ $this->title = Yii::$app->keyStorage->get('frontend.index.title');
 									<?php if (isset($place->city)) : ?>
 										<h4 class="lst-title"><?= Html::a($place->title, ['place/view', 'category' => $place->category['slug'], 'city' => $place->city->url, 'slug' => $place->slug]) ?><span class="veryfied-author"></span></h4>
 									<?php else : ?>
-										<h4 class="lst-title"><?= Html::a($place->title, ['place/view', 'category' => $place->category['slug'], 'slug' => $place->slug]) ?><span class="veryfied-author"></span></h4>
+										<h4 class="lst-title"><?= Html::a($place->title, ['place/view', 'category' => $place->category['slug'], 'slug' => $place->slug]) ?></h4>
 									<?php endif ?>
 								</div>
 							</div>
@@ -118,7 +118,7 @@ $this->title = Yii::$app->keyStorage->get('frontend.index.title');
 		</div>
 	</div>
 </section>
-<section class="image-cover" style="background:url(<?= Yii::getAlias('@storageUrl') ?>/img/1200x850.png) no-repeat;" data-overlay="8">
+<section class="image-cover" style="background:url(<?= Yii::getAlias('@storageUrl') ?>/img/temnikov.jpeg) no-repeat;" data-overlay="8">
 	<div class="container">
 
 		<div class="row">

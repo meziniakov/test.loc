@@ -8,7 +8,7 @@ use yii\widgets\ListView;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = Yii::t('frontend', 'Articles from category {title}', ['title' => $model->title]);
-$this->params['breadcrumbs'][] = [
+$this->params['breadcrumbs']['<i></i>'] = [
     'label' => Yii::t('frontend', 'Articles'),
     'url' => Url::to('/article')
 ];

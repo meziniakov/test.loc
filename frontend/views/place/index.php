@@ -2,7 +2,7 @@
 
 use yii\widgets\ListView;
 
-$this->title = Yii::t('frontend', 'Places');
+$this->title = Yii::t('frontend', 'Места');
 
 $this->registerJsFile(
 	"/reveal/js/ymaps.js",
@@ -44,16 +44,16 @@ $this->registerJsFile(
 					'summaryOptions' => ['class' => 'shorting-wrap'],		 
 					'pager' => [
 						'class' => \kop\y2sp\ScrollPager::class,
-						'triggerTemplate' => '<div class="text-center">
-								<button type="button" class="btn btn-theme btn-rounded btn-m">{text}</button>
-								</div>',
-						'triggerText' => 'Показать ещё...',
-						'spinnerTemplate' => '<div class="text-center">
+						'triggerTemplate' => '<div class="col-lg-12 text-center">
+						<button type="button" class="btn btn-theme btn-rounded btn-m">{text}</button>
+					 </div>',
+							'triggerText' => '<div class="col-lg-12">Показать ещё...</div>',
+							'noneLeftText' => '<div class="col-lg-12">Записей больше нет</div>',
+							'spinnerTemplate' => '<div class="col-lg-12 text-center">			
 								<div class="spinner-grow text-danger" role="status"><span class="sr-only">Loading...</span></div>
 								<div class="spinner-grow text-danger" role="status"><span class="sr-only">Loading...</span></div>
 								<div class="spinner-grow text-danger" role="status"><span class="sr-only">Loading...</span></div>
 								</div>',
-						'noneLeftText' => 'Записей больше нет',
 						'eventOnLoad' => "function() {
 							$('.list-view').append('<div class=\"spinner\"></div>');
 							}",
