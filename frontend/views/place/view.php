@@ -16,6 +16,31 @@ $this->registerJsFile(
 		]
 	]
 );
+
+$images = $place->getImages();
+$image = $place->getImage();
+$img = Yii::$app->request->hostInfo . $image->getUrl();
+$phone = '+'.$place->phone[0]['phones'];
+
+// var_dump($phone);die;
+
+$js = <<<js
+{
+  "@context" : "http://schema.org",
+  "@type" : "LocalBusiness",
+  "name" : "$place->title",
+  "image" : "$img",
+	"telephone" : "$phone",
+  "email" : "",
+  "address" : {
+    "@type" : "PostalAddress",
+    "streetAddress" : "$place->address"
+  }
+}
+js;
+
+echo yii\helpers\Html::script( $js, ["type" => "application/ld+json"]);
+
 $this->title = Yii::t('frontend', 'Articles from category {title}', ['title' => $place->title]);
 $this->params['breadcrumbs'][] = [
     'label' => Yii::t('frontend', 'Места'),
@@ -27,10 +52,8 @@ $this->params['breadcrumbs'][] = [
 ];
 $this->params['breadcrumbs'][] = Yii::t('frontend', '{title}', ['title' => $place->title]);
 ?>
-
 <div class="featured-slick">
 	<div class="featured-slick-slide">
-		<?php $images = $place->getImages(); ?>
 		<?php foreach ($images as $img) : ?>
 			<div>
 				<a href="<?= $img->getUrl('560x359'); ?>" class="mfp-gallery">
@@ -518,7 +541,7 @@ $this->params['breadcrumbs'][] = Yii::t('frontend', '{title}', ['title' => $plac
 															<i class="lni-phone-handset"></i>
 														</div>
 														<div class="icon-box-text">
-															<?= '+' . $phone['phones'] ?>
+															<?= Html::a('+'.$phone['phones'], 'tel:' .$phone['phones']) ?>
 														</div>
 													</a>
 												</div>
@@ -533,7 +556,7 @@ $this->params['breadcrumbs'][] = Yii::t('frontend', '{title}', ['title' => $plac
 														<i class="lni-envelope"></i>
 													</div>
 													<div class="icon-box-text">
-														<?= $place->email ?>
+														<?= Html::mailto($place->email) ?>
 													</div>
 												</a>
 											</div>

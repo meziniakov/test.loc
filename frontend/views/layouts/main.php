@@ -706,6 +706,7 @@ AppAsset::register($this);
             color: #ffffff
         }
     </style>
+    <?php $this->registerJsFile('/reveal/js/gtm.js') ?>
     <meta charset="<?= Yii::$app->charset ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <link rel="preconnect" href="//api-maps.yandex.ru">
@@ -722,6 +723,8 @@ AppAsset::register($this);
     ])),
 ]) ?>
 <?php $this->beginBody() ?>
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-N6VTPSM"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- <div id="preloader">
         <div class="preloader"><span></span><span></span></div>
     </div> -->
