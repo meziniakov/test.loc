@@ -6,17 +6,17 @@ use yii\helpers\ArrayHelper;
 use yii\widgets\ListView;
 use yii\widgets\ActiveForm;
 
-$this->title = Yii::t('frontend', 'Места в категории {title}', ['title' => $model->title]);
+$this->title = Yii::t('frontend', 'Места в категории {title}', ['title' => $place->category->title]);
 $this->params['breadcrumbs']['<i></i>'] = [
 	'label' => Yii::t('frontend', 'Места'),
 	'url' => Url::to('/place')
 ];
-$this->params['breadcrumbs'][] = Yii::t('frontend', $model->title);
+$this->params['breadcrumbs'][] = Yii::t('frontend', $place->category->title);
 ?>
 
 <div class="container">
 	<div class="row">
-		<h2>Места в категории <?= $model->title ?><?= isset($city) ? ' в городе ' . $city->name : '' ?></h2>
+		<h2>Места в категории <?= $place->category->title ?><?= isset($place->city) ? ' в городе ' . $place->city->name : '' ?></h2>
 	</div>
 	<!--- All List -->
 	<div class="row">
