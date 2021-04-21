@@ -61,14 +61,10 @@ class PlaceController extends Controller
 
   public function actionIndex()
   {
-    // $query = Place::find()->active()->with('category', 'tags');
-
     $q = Yii::$app->request->get('q');
     $category_id = Yii::$app->request->get('category_id');
     $city_id = Yii::$app->request->get('city_id');
     $tag_id = Yii::$app->request->get('tag_id');
-
-    // $query = Place::find()->parsed()->with('category');
 
     if ($city = City::find()->where('url = :url', [':url' => Yii::$app->params['city']])->one()) {
       $query = Place::find()->parsed()->where(['city_id' => $city->id])->with('category');
@@ -167,8 +163,14 @@ class PlaceController extends Controller
 
   public function actionView($slug)
   {
-
+    if ($city = City::find()->where('url = :url', [':url' => Yii::$app->params['city']])->one()) {
+      // $place = Place::find()->parsed()->where(['city_id' => $city->id])->with('category');
+      $place = $this->findModel($slug, $city->id);
+  } elseif (Yii::$app->params['city'] == 'global') {
     $place = $this->findModel($slug);
+  } else {
+      throw new NotFoundHttpException(Yii::t('frontend', 'Page not found.'));
+  }
 
     Yii::$app->view->registerLinkTag(['rel' => 'canonical', 'href' => Url::canonical()], 'canonical');
     Yii::$app->view->registerMetaTag([
@@ -211,9 +213,10 @@ class PlaceController extends Controller
     ]);
   }
 
-  public function findModel($slug)
+  public function findModel($slug, $city_id = null)
   {
-    if (($model = Place::find()->where(['slug' => $slug])->orWhere(['id' => $slug])->with('category', 'tags')->one()) !== null) {
+    if (($model = Place::find()->where(['slug' => $slug])->andWhere(['city_id' => $city_id])->with('category', 'tags')->one()) !== null) {
+      // var_dump($model);die;
       return $model;
     }
     throw new NotFoundHttpException('Страницы не существует');

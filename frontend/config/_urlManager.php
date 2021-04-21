@@ -33,6 +33,7 @@ return [
         'place/tag/<slug>' => 'place/tag',
         'place/<slug>' => 'place/category',
         '//<city>.'.Yii::getAlias('@domain').'/place/<category>/<slug>' => 'place/view',
+        'place/<category>/<slug>' => 'place/view',
         // 'place/category/<slug>/page/<page>' => 'place/category',
         'tag/<slug>' => 'place/tag',
         'tag/<slug>/json' => 'place/json',
