@@ -13,6 +13,7 @@ return [
     'rules' => [
         // '/' => 'site/index',
         'sitemap.xml' => 'sitemap/index',
+        'robots.txt' => 'robots/index',
         'contact' => 'site/contact',
         'ajax-login' => 'site/ajax-login',
         'faq' => 'site/faq',

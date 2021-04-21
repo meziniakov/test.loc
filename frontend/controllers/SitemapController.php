@@ -3,6 +3,8 @@
 namespace frontend\controllers;
 
 use common\models\Article;
+use common\models\City;
+use yii\web\NotFoundHttpException;
 use common\models\ArticleCategory;
 use common\models\Tag;
 use common\models\Place;
@@ -18,17 +20,24 @@ class SitemapController extends Controller
     if(!$xml_sitemap = Yii::$app->cache->get('sitemap')) {
       $urls = [];
 
-      $places = Place::find()->where(['status' => Place::STATUS_PARSED])->with('category', 'city')->all();
+      if ($city = City::find()->where('url = :url', [':url' => Yii::$app->params['city']])->one()) {
+        $places = Place::find()->where(['status' => Place::STATUS_PARSED])->andWhere(['city_id' => $city->id])->with('category', 'city')->all();
+      } elseif (Yii::$app->params['city'] == 'global') {
+        $places = Place::find()->where(['status' => Place::STATUS_PARSED])->with('category')->all();
+      } else {
+        throw new NotFoundHttpException(Yii::t('frontend', 'Page not found.'));
+      }
       foreach($places as $place) {
         if(isset($place->city->url)) {
           $str = Yii::$app->request->serverName . '/place/' . $place->category->slug . '/' . $place->slug;
-          $subdomain = explode('.', $str)[0] = $place->city->url;
-          $subdomain .= '.' .$str;
+          // $subdomain = explode('.', $str)[0] = $place->city->url;
+          // $subdomain .= '.' .$str;
+          // var_dump($str);die;
         } else {
           $str = Yii::$app->request->hostInfo . '/place/' . $place->category->slug . '/' . $place->slug;
         }
         $urls[] = [
-          'loc' => isset($subdomain) ? $subdomain : $str,
+          'loc' => $str, //isset($subdomain) ? $subdomain : 
           'lastmod' => date(DATE_ATOM, strtotime($place->updated_at)),
           'changefreq' => 'daily',
           'priority' => '1',

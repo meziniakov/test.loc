@@ -40,5 +40,5 @@ User-agent: ia_archiver
 Disallow: /
 Crawl-delay: 1
 
-Host: http://surf-city.ru
-sitemap: http://surf-city.ru/sitemap.xml
+Host: <?= $host . PHP_EOL?>
+sitemap: <?= $host . $sitemap?>
