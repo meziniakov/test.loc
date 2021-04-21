@@ -1,10 +1,7 @@
 <?php
 
-use yii\bootstrap\Html;
 use yii\helpers\Url;
-use yii\helpers\ArrayHelper;
 use yii\widgets\ListView;
-use yii\widgets\ActiveForm;
 
 $this->title = Yii::t('frontend', 'Места в категории {title}', ['title' => $place->category->title]);
 $this->params['breadcrumbs']['<i></i>'] = [
@@ -18,7 +15,6 @@ $this->params['breadcrumbs'][] = Yii::t('frontend', $place->category->title);
 	<div class="row">
 		<h2>Места в категории <?= $place->category->title ?><?= isset($place->city) ? ' в городе ' . $place->city->name : '' ?></h2>
 	</div>
-	<!--- All List -->
 	<div class="row">
 		<?= ListView::widget([
 			'dataProvider' => $dataProvider,

@@ -13,7 +13,7 @@ use yii\helpers\HtmlPurifier;
 								<?php if(isset($model->city) && isset($model->category)):?>
 									<a href="<?= Url::to(['place/view', 'category' => $model->category->slug, 'city' => $model->city->url, 'slug' => $model->slug]) ?>" class="overlay-cate"><?= Html::img($img->getUrl('358x229'), ['class' => 'img-responsive', 'alt' => $img->alt]) ?></a>
 								<?php else :?>
-									<a href="<?= Url::to(['place/view', 'slug' => $model->slug]) ?>" class="overlay-cate"><?= Html::img($img->getUrl('358x229'), ['class' => 'img-responsive', 'alt' => $img->alt]) ?></a>
+									<a href="<?= Url::to(['place/view', 'category' => $model->category->slug, 'slug' => $model->slug]) ?>" class="overlay-cate"><?= Html::img($img->getUrl('358x229'), ['class' => 'img-responsive', 'alt' => $img->alt]) ?></a>
 									<?php endif ?>
 									<div class="property_meta">
 										<div class="list-rates">

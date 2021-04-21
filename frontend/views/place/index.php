@@ -33,7 +33,6 @@ $this->registerJsFile(
 
 			</div>
 
-			<!--- All List -->
 			<div class="row">
 				<?= ListView::widget([
 					'dataProvider' => $dataProvider,
