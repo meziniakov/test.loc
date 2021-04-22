@@ -13,15 +13,14 @@ class AppAsset extends AssetBundle
     public $baseUrl = '@web';
     public $css = [
         'reveal/css/nav.css',
-        'reveal/css/plugins.css',
+        ['reveal/css/plugins.css', 'rel' => 'preload', 'as' => 'style', 'onload' => 'this.onload=null;this.rel="stylesheet"'],
         'reveal/css/styles.css',
-        'static/css/style.css',
-        'reveal/css/colors.css',
-        // 'https://skywalkapps.github.io/nav-priority/stylesheets/nav-priority.css',
+        'reveal/css/yellow.css',
+        ['https://fonts.gstatic.com', 'rel' => 'preconnect'],
+        ['https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap', 'rel' => 'stylesheet'],
     ];
     public $js = [
         // 'reveal/js/jquery.min.js',
-        // 'https://skywalkapps.github.io/nav-priority/javascripts/nav-priority.js',
         'reveal/js/coreNavigation.js',
         'reveal/js/circleMagic.min.js',
         'reveal/js/popper.min.js',
@@ -46,7 +45,7 @@ class AppAsset extends AssetBundle
     public $depends = [
         'yii\web\YiiAsset',
         'yii\bootstrap\BootstrapAsset', 
-        'common\assets\OpenSans',
-        'common\assets\FontAwesome',
+        // 'common\assets\OpenSans',
+        // 'common\assets\FontAwesome',
     ];
 }
