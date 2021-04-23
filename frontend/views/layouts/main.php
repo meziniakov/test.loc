@@ -21,6 +21,7 @@ AppAsset::register($this);
 <html lang="<?= Yii::$app->language ?>">
 
 <head>
+    <meta charset="<?= Yii::$app->charset ?>">
     <style>
         * {
             outline: none
@@ -30,7 +31,7 @@ AppAsset::register($this);
             background: #ffffff;
             color: #797d8a;
             font-size: 16px;
-            font-family: 'Muli', sans-serif;
+            font-family: 'Open Sans', sans-serif;
             margin: 0;
             overflow-x: hidden !important;
             font-weight: 400
@@ -707,7 +708,6 @@ AppAsset::register($this);
         }
     </style>
     <?php $this->registerJsFile('/reveal/js/gtm.js') ?>
-    <meta charset="<?= Yii::$app->charset ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <link rel="preconnect" href="//api-maps.yandex.ru">
     <link rel="dns-prefetch" href="//api-maps.yandex.ru">
@@ -723,8 +723,7 @@ AppAsset::register($this);
     ])),
 ]) ?>
 <?php $this->beginBody() ?>
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-N6VTPSM"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-N6VTPSM" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- <div id="preloader">
         <div class="preloader"><span></span><span></span></div>
     </div> -->
@@ -779,7 +778,7 @@ $menuItems = [
             ]);
             ?>
         </div>
-        <div class="navbarText" id="navbarText">
+        <div id="navbarText">
             <ul class="attributes attributes-desk ad-two">
                 <!-- <li class="log-icon lg-ic"><a href="#" data-toggle="modal" data-target="#login" class="rt-log"><i class="ti-import"></i></a></li> -->
             </ul>
@@ -789,9 +788,7 @@ $menuItems = [
 
 <div class="clearfix"></div>
 <div class="container">
-    <div id="noty-layer">
-        <?= Wrapper::widget(); ?>
-    </div>
+    <?= Wrapper::widget(); ?>
 </div>
 <?= Breadcrumbs::widget([
     'encodeLabels' => false,

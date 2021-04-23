@@ -14,11 +14,11 @@ $this->title = Yii::$app->keyStorage->get('frontend.index.title');
 		<h1 class="big-header-capt">Лучшие места в городе <?= isset($city->name) ? $city->name : "" ?></h1>
 		<div class="full-search-2 italian-search hero-search-radius box-style">
 			<div class="hero-search-content">
+				<form method="get" action="<?= Url::to(['place/index']) ?>">
 				<div class="row">
 					<div class="col-lg-4 col-md-4 col-sm-12 small-padd">
 						<div class="form-group">
 							<div class="input-with-icon">
-								<form method="get" action="<?= Url::to(['place/index']) ?>">
 									<?= Html::input('text', 'q', '', ['class' => 'form-control b-r', 'placeholder' => 'Искать...']) ?>
 									<i class="theme-cl ti-search"></i>
 							</div>
@@ -28,7 +28,7 @@ $this->title = Yii::$app->keyStorage->get('frontend.index.title');
 					<div class="col-lg-3 col-md-3 col-sm-6 small-padd">
 						<div class="form-group">
 							<div class="input-with-icon">
-								<?= Html::dropDownList('city_id', null, ArrayHelper::map($cities, 'id', 'name'), ['id' => 'choose-city', 'class' => 'form-control', 'prompt' => '']) ?>
+								<?= Html::dropDownList('city_id', null, ArrayHelper::map($cities, 'id', 'name'), ['id' => 'choose-city', 'class' => 'form-control', 'prompt' => 'Выберите город']) ?>
 								<i class="theme-cl ti-briefcase"></i>
 							</div>
 						</div>
@@ -56,9 +56,9 @@ $this->title = Yii::$app->keyStorage->get('frontend.index.title');
 						<div class="form-group">
 							<?= Html::submitButton('Поиск', ['class' => 'btn search-btn']) ?>
 						</div>
-						</form>
 					</div>
 				</div>
+			</form>
 			</div>
 		</div>
 		<div class="help-video">
@@ -108,7 +108,7 @@ $this->title = Yii::$app->keyStorage->get('frontend.index.title');
 							</div>
 							<div class="modern-list-content">
 								<div class="listing-cat">
-									<?= Html::a('<i class=' . $place->category['icon'] . ' bg-a"></i>' . $place->category['title'], ['place/category', 'slug' => $place->category['slug']], ['class' => 'cat-icon cl-1']) ?>
+									<?= Html::a('<i class="' . $place->category['icon'] . ' bg-a"></i>' . $place->category['title'], ['place/category', 'slug' => $place->category['slug']], ['class' => 'cat-icon cl-1']) ?>
 								</div>
 							</div>
 						</div>
