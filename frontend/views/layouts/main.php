@@ -881,7 +881,6 @@ $menuItems = [
 <a id="back2Top" class="top-scroll" title="Вверх" href="#"><i class="ti-arrow-up"></i></a>
 <?php echo LoginFormWidget::widget([]); ?>
 <?php echo SignupFormWidget::widget([]); ?>
-</div>
 <?php $this->endBody() ?>
 </body>
 
