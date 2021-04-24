@@ -12,9 +12,15 @@ class AppAsset extends AssetBundle
     public $basePath = '@webroot';
     public $baseUrl = '@web';
     public $css = [
-        'reveal/css/nav.css',
+        'reveal/css/nav-min.css',
         ['reveal/css/plugins.css', 'rel' => 'preload', 'as' => 'style', 'onload' => 'this.onload=null;this.rel="stylesheet"'],
+        'reveal/css/bsp.css',
         'reveal/css/styles.css',
+        // 'reveal/css/animation.css',
+        // 'reveal/css/aos.css',
+        // 'reveal/css/fontawesome.css',
+        // 'reveal/css/iconfont.css',
+        'reveal/css/lineicon.css',
         'reveal/css/yellow.css',
         ['https://fonts.gstatic.com', 'rel' => 'preconnect'],
         ['https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap', 'rel' => 'stylesheet'],
