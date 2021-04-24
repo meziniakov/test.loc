@@ -4,53 +4,48 @@
 # Don't show directory listings for URLs which map to a directory.
 #Options -Indexes
 
-<ifModule mod_deflate.c> 
-# Включение GZIP-сжатия для различных типов файлов: TXT, SVG, RSS, javascript
-   AddOutputFilterByType DEFLATE text/html text/xml text/css text/plain
-   AddOutputFilterByType DEFLATE image/svg+xml application/xhtml+xml application/xml
-   AddOutputFilterByType DEFLATE application/rdf+xml application/rss+xml application/atom+xml
-   AddOutputFilterByType DEFLATE text/javascript application/javascript application/x-javascript application/json
-   AddOutputFilterByType DEFLATE application/x-font-ttf application/x-font-truetype application/x-font-opentype application/font-woff
-   BrowserMatch ^Mozilla/4 gzip-only-text/html
-   BrowserMatch ^Mozilla/4\.0[678] no-gzip
-   BrowserMatch \bMSIE !no-gzip !gzip-only-text/html 
-</ifModule>
+<IfModule mod_expires.c>
+ExpiresActive On
+AddType application/vnd.ms-fontobject .eot 
+AddType application/x-font-ttf .ttf
+AddType application/x-font-opentype .otf
+AddType application/x-font-woff .woff
+AddType image/svg+xml .svg
+ExpiresByType application/vnd.ms-fontobject "access 1 year"
+ExpiresByType application/x-font-ttf "access 1 year"
+ExpiresByType application/x-font-opentype "access 1 year"
+ExpiresByType application/x-font-woff "access 1 year"
+ExpiresByType image/svg+xml "access 1 year"
+ExpiresByType text/html "access 1 hour"
+ExpiresByType text/css "access 14 days"
+ExpiresByType text/x-javascript "access 3 weeks"
+ExpiresByType application/javascript "access 1 month"  
+ExpiresByType application/x-javascript "access 1 month"
+ExpiresByType image/gif "access 2 months"
+ExpiresByType image/png "access 2 months"
+ExpiresByType image/jpg "access 2 months"
+ExpiresByType image/jpeg "access 2 months"
+ExpiresByType image/gif "access 2 months"
+ExpiresByType application/pdf "access 1 year"
+ExpiresByType application/x-shockwave-flash "access 1 year"
+ExpiresByType image/x-icon "access 1 year"
+ExpiresDefault "access 2 days"
+</IfModule>
 
-<ifModule mod_expires.c>  
-#включение заголовка Expires, указывающего время устаревания файла
-   ExpiresActive On
-   ExpiresDefault "access plus 3600 seconds" 
-# по умолчанию время устаревания составляет час, но для некоторых типов файлов мы его переопределим
-   ExpiresByType image/x-icon "access plus 2592000 seconds"
-   ExpiresByType image/jpeg "access plus 2592000 seconds"
-   ExpiresByType image/png "access plus 2592000 seconds"
-   ExpiresByType image/gif "access plus 2592000 seconds"
-   ExpiresByType application/x-shockwave-flash "access plus 2592000 seconds"
-   ExpiresByType text/css "access plus 604800 seconds"
-   ExpiresByType text/javascript "access plus 604800 seconds"
-   ExpiresByType image/svg+xml "access plus 2592000 seconds"
-   ExpiresByType application/x-font-ttf "access plus 2592000 seconds"
-   ExpiresByType application/x-font-truetype "access plus 2592000 seconds"
-   ExpiresByType application/x-font-opentype "access plus 2592000 seconds"
-   ExpiresByType application/font-woff "access plus 2592000 seconds"
-   ExpiresByType application/font-woff2 "access plus 2592000 seconds"
-   ExpiresByType application/vnd.ms-fontobject "access plus 2592000 seconds"
-   ExpiresByType application/font-sfnt "access plus 2592000 seconds"
-   ExpiresByType application/javascript "access plus 604800 seconds"
-   ExpiresByType application/x-javascript "access plus 604800 seconds"
-   ExpiresByType text/html "access plus 600 seconds"
-   ExpiresByType application/xhtml+xml "access plus 600 seconds"
-</ifModule>
+<FilesMatch "\.(ico|pdf|flv|jpg|jpeg|png|gif|js|css|swf)$">
+Header set Cache-Control "max-age=2592000, public"
+</FilesMatch>
+# 1 YEAR
+Header set Cache-Control "max-age=29030400, public"
 
-<ifModule mod_headers.c> 
-# Самая главная часть: выдача заголовка, разрешающего кеш определенных типов файлов
-   <filesMatch "\.(ico|jpe?g|png|gif|swf|svg|webp|ttf|otf|woff|woff2|eot|sfnt)$">
-     Header set Cache-Control "max-age=25920000"
-   </filesMatch>
-   <filesMatch "\.(css)$">
-     Header set Cache-Control "max-age=25920000"
-   </filesMatch>
-   <filesMatch "\.(js)$">
-     Header set Cache-Control "max-age=25920000"
-   </filesMatch>
-</ifModule>
+# 1 MONTH
+Header set Cache-Control "max-age=2592000, public"
+
+# 1 WEEK 
+Header set Cache-Control "max-age=604800, public"
+
+# 1 HOUR
+Header set Cache-Control "max-age=3600, public"
+
+# DON'T CACHE ANY FILE
+Header set Cache-Control "max-age=0, private, no-store, no-cache, must-revalidate"
