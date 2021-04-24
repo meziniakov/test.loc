@@ -22,8 +22,6 @@ $image = $place->getImage();
 $img = Yii::$app->request->hostInfo . $image->getUrl();
 $phone = '+'.$place->phone[0]['phones'];
 
-// var_dump($phone);die;
-
 $js = <<<js
 {
   "@context" : "http://schema.org",
@@ -41,7 +39,6 @@ js;
 
 echo yii\helpers\Html::script( $js, ["type" => "application/ld+json"]);
 
-$this->title = Yii::t('frontend', 'Articles from category {title}', ['title' => $place->title]);
 $this->params['breadcrumbs'][] = [
     'label' => Yii::t('frontend', 'Места'),
     'url' => Url::to('/place')
@@ -50,7 +47,7 @@ $this->params['breadcrumbs'][] = [
     'label' => $place->category->title,
     'url' => Url::to('/place/'.$place->category->slug)
 ];
-$this->params['breadcrumbs'][] = Yii::t('frontend', '{title}', ['title' => $place->title]);
+$this->params['breadcrumbs'][] = Yii::t('frontend', $place->title);
 ?>
 <div class="featured-slick">
 	<div class="featured-slick-slide">
