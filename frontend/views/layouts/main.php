@@ -29,6 +29,7 @@ AppAsset::register($this);
     <?php $this->registerCsrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
+    <link rel="preload" as="image" href="<?= Yii::getAlias('@storageUrl') ?>/theme/logo.svg" imagesrcset="<?= Yii::getAlias('@storageUrl') ?>/theme/logo.svg 400w, <?= Yii::getAlias('@storageUrl') ?>/theme/logo.svg 800w, <?= Yii::getAlias('@storageUrl') ?>/theme/logo.svg 1600w" imagesizes="50vw">
     <link rel="preload" as="image" href="<?= Yii::getAlias('@storageUrl') ?>/img/surf-city_main.jpeg" imagesrcset="<?= Yii::getAlias('@storageUrl') ?>/img/surf-city_main.jpeg 400w, <?= Yii::getAlias('@storageUrl') ?>/img/surf-city_main.jpeg 800w, surf-city_main.jpeg 1600w" imagesizes="50vw">
 </head>
 
