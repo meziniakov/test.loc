@@ -5,7 +5,7 @@ use yii\bootstrap\Html;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 
-$this->title = Yii::$app->keyStorage->get('frontend.index.title');
+$this->title = isset($city->name) ? 'Все достопримечательности в городе ' . $city->name : Yii::$app->keyStorage->get('frontend.index.title');
 ?>
 
 <div class="image-cover hero-banner" style="background:url(<?= Yii::getAlias('@storageUrl') ?>/img/surf-city_main.jpeg) no-repeat;" data-overlay="6">

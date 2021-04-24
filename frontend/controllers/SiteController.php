@@ -88,15 +88,15 @@ class SiteController extends Controller
         Yii::$app->view->registerLinkTag(['rel' => 'canonical', 'href' => Url::canonical()], 'canonical');
         Yii::$app->view->registerMetaTag([
           'name' => 'description',
-          'content' => 'Surf-city - изучайте Россию вместе с нами.'
+          'content' => isset($city->name) ? 'Достопримечательности, музеи, цирки, места отдыха и многое другое в городе ' . $city->name : 'Достопримечательности, музеи, цирки, места отдыха и многое другое',
         ], 'description');
     
         Yii::$app->seo->putFacebookMetaTags([
           'og:locale'     => 'ru_RU',
           'og:url'        => Url::canonical(),
           'og:type'       => 'article',
-          'og:title'      => 'Surf-City - открывай интересные места России',
-          'og:description' => 'Surf-city - изучайте Россию вместе с нами.',
+          'og:title'      => isset($city->name) ? 'Все достопримечательности в городе ' . $city->name : Yii::$app->keyStorage->get('frontend.index.title'),
+          'og:title'      => isset($city->name) ? 'Достопримечательности, музеи, цирки, места отдыха и многое другое в городе ' . $city->name : 'Достопримечательности, музеи, цирки, места отдыха и многое другое',
           // 'og:image'      => Url::to($place->getImage()->getUrl(), true),
           // 'og:image:width' => $place->getImage()->getSizes()['width'],
           // 'og:image:height' => $place->getImage()->getSizes()['height'],
