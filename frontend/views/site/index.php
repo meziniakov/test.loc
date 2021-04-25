@@ -5,6 +5,15 @@ use yii\bootstrap\Html;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 
+$this->registerMetaTag([
+	'rel' => 'preload',
+	'as' => 'image',
+	'href' => Yii::getAlias('@storageUrl').'/img/surf-city_main.jpeg',
+	'imagesrcset' => Yii::getAlias('@storageUrl').'/img/surf-city_main.jpeg 400w, ' . Yii::getAlias('@storageUrl').'/img/surf-city_main.jpeg 800w, '.Yii::getAlias('@storageUrl').'/img/surf-city_main.jpeg 1600w" imagesizes="50vw"',
+]);
+
+
+
 $this->title = isset($city->name) ? 'Все достопримечательности в городе ' . $city->name : Yii::$app->keyStorage->get('frontend.index.title');
 ?>
 

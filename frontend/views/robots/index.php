@@ -2,6 +2,10 @@ User-agent: *
 Disallow: /?q=*
 Disallow: /*?q=*
 Disallow: /*page/*
+Disallow: /*page*
+Disallow: /account*
+Disallow: /*captcha*
+
 
 User-Agent: DISCo Pump
 Disallow: /
