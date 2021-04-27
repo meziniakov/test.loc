@@ -12,6 +12,7 @@ return [
     ],
     'rules' => [
         // '/' => 'site/index',
+        'cities' => 'site/cities',
         'sitemap.xml' => 'sitemap/index',
         'robots.txt' => 'robots/index',
         'contact' => 'site/contact',
