@@ -61,8 +61,5 @@ $this->registerJsFile(
 			</div>
 		</div>
 	</div>
-
 </div>
 <div class="clearfix"></div>
-<!-- Map -->
-<script async src="https://api-maps.yandex.ru/2.1/?apikey=23968611-fd0e-4aea-9982-22f92e32a9bf&load=package.standard&lang=ru_RU&onload=init" type="text/javascript"></script>

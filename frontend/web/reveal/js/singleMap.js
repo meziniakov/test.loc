@@ -5,35 +5,30 @@ setTimeout(function () {
 	document.getElementsByTagName('body')[0].appendChild(elem);
 }, 2000);
 
-ymaps.ready(init);
-
-	function init() {
-		var addres = $('#singleMap').data('addres');
-
-		var markerIcon2 = {
-			url: '/reveal/img/marker.png',
-		}
-
-		var myGeocoder = ymaps.geocode(addres[0]['addres']);
-		myGeocoder.then(
-			function(res) {
-				var coords = res.geoObjects.get(0).geometry.getCoordinates();
-				// console.log(coords);
-
-				var myMap = new ymaps.Map("singleMap", {
-					center: coords,
-					zoom: 10,
-					controls: ['geolocationControl']
-				})
-				var myPlacemark = new ymaps.Placemark(coords, {}, {
-					iconLayout: 'default#image',
-					iconImageHref: '/reveal/img/marker.png'
-				})
-
-				myMap.geoObjects.add(myPlacemark);
-			},
-			function(err) {
-			}
-			
-		);
+function init() {
+	var addres = $('#singleMap').data('addres');
+	var markerIcon2 = {
+		url: '/reveal/img/marker.png',
 	}
+
+	var myGeocoder = ymaps.geocode(addres[0]['addres']);
+	myGeocoder.then(
+		function (res) {
+			var coords = res.geoObjects.get(0).geometry.getCoordinates();
+
+			var myMap = new ymaps.Map("singleMap", {
+				center: coords,
+				zoom: 10,
+				controls: ['geolocationControl']
+			})
+			var myPlacemark = new ymaps.Placemark(coords, {}, {
+				iconLayout: 'default#image',
+				iconImageHref: '/reveal/img/marker.png'
+			})
+
+			myMap.geoObjects.add(myPlacemark);
+		},
+		function (err) {
+		}
+	);
+}

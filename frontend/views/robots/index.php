@@ -5,7 +5,7 @@ Disallow: /*page/*
 Disallow: /*page*
 Disallow: /account*
 Disallow: /*captcha*
-
+Disallow: /*?*
 
 User-Agent: DISCo Pump
 Disallow: /

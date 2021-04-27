@@ -12,14 +12,14 @@ $this->params['breadcrumbs'][] = Yii::t('frontend', $place->category->title);
 ?>
 
 <div class="container">
-	<div class="row">
-		<h2>Места в категории <?= $place->category->title ?><?= isset($place->city) ? ' в городе ' . $place->city->name : '' ?></h2>
+	<div class="col-12 p-0">
+			<h2>Места в категории <?= $place->category->title ?><?= isset($place->city) ? ' в городе ' . $place->city->name : '' ?></h2>
 	</div>
-	<div class="row">
+	<div class="col-12 p-0">
 		<?= ListView::widget([
 			'dataProvider' => $dataProvider,
 			//  'options' => ['class' => ['col-md-12 col-sm-12 mt-3']],
-			'itemOptions' => ['class' => ['item col-lg-4 col-md-6 col-sm-12']],
+			'itemOptions' => ['class' => ['item col-lg-4 col-md-6 col-sm-12 p-0']],
 			'itemView' => '_item_view',
 			'summary' => 'Показаны записи <strong>{begin} - {end} </strong> из <strong>{totalCount}</strong>',
 			'summaryOptions' => ['class' => 'shorting-wrap'],
