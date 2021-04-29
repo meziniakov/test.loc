@@ -2,6 +2,7 @@
 
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\Breadcrumbs;
 use frontend\assets\AppAsset;
 use frontend\models\NavItem;
@@ -25,6 +26,7 @@ AppAsset::register($this);
 <head>
     <meta charset="<?= Yii::$app->charset ?>">
     <?php $this->registerJsFile('/reveal/js/gtm.js') ?>
+    <?= $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/svg', 'href' => Yii::getAlias('@storageUrl').'/theme/favicon.svg']);?>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <link rel="preconnect" href="//api-maps.yandex.ru">
     <link rel="dns-prefetch" href="//api-maps.yandex.ru">

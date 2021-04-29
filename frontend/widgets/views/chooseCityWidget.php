@@ -26,7 +26,7 @@ ksort($firstLetter);
 ?>
 
 <span class="mod-close" data-dismiss="modal"><i class="ti-close"></i></span>
-<div class="container">
+<div class="row">
   <div class="col-lg-12">
     <h2>Выберите город</h2>
   </div>
