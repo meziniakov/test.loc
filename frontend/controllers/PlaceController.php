@@ -14,6 +14,7 @@ use SimpleXMLElement;
 use Exception;
 use yii\helpers\Url;
 use yii\data\ActiveDataProvider;
+use yii\helpers\Json;
 
 class PlaceController extends Controller
 {
@@ -210,8 +211,26 @@ class PlaceController extends Controller
     //     'twitter:card'=> 'summary_large_image',
     // ]);
 
+    $image = $place->getImage();
+    $img = Yii::$app->request->hostInfo . $image->getUrl();
+    $phone = '+'.$place->phone[0]['phones'];
+    
+    $schema = Json::encode([
+      "@context" => "http://schema.org",
+      "@type" => "LocalBusiness",
+      "name" => $place->title,
+      "image" => $img,
+      "telephone" => $phone,
+      "email" => "",
+      "address" => [
+        "@type" => "PostalAddress",
+        "streetAddress" => $place->address
+        ]
+      ]);
+      
     return $this->render('view', [
       'place' => $place,
+      'schema' => $schema,
       'addressInJson' => Place::getJsonForMap($place),
     ]);
   }

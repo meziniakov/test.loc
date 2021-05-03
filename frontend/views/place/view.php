@@ -5,7 +5,7 @@ use yii\helpers\Url;
 use yii\helpers\Json;
 use yii\web\View;
 
-$this->title = $place->title;
+$this->title = Html::decode($place->title);
 $this->registerJsFile(
 	"/reveal/js/singleMap.js",
 	$options = [
@@ -17,27 +17,7 @@ $this->registerJsFile(
 	]
 );
 
-$images = $place->getImages();
-$image = $place->getImage();
-$img = Yii::$app->request->hostInfo . $image->getUrl();
-$phone = '+'.$place->phone[0]['phones'];
-
-$js = <<<js
-{
-  "@context" : "http://schema.org",
-  "@type" : "LocalBusiness",
-  "name" : "$place->title",
-  "image" : "$img",
-	"telephone" : "$phone",
-  "email" : "",
-  "address" : {
-    "@type" : "PostalAddress",
-    "streetAddress" : "$place->address"
-  }
-}
-js;
-
-echo yii\helpers\Html::script( $js, ["type" => "application/ld+json"]);
+echo yii\helpers\Html::script($schema, ["type" => "application/ld+json"]);
 
 $this->params['breadcrumbs'][] = [
     'label' => Yii::t('frontend', 'Места'),
@@ -48,6 +28,9 @@ $this->params['breadcrumbs'][] = [
     'url' => Url::to('/place/'.$place->category->slug)
 ];
 $this->params['breadcrumbs'][] = Yii::t('frontend', $place->title);
+
+$images = $place->getImages();
+
 ?>
 <div class="featured-slick">
 	<div class="featured-slick-slide">
