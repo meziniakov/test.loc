@@ -179,7 +179,7 @@ class PlaceController extends Controller
     Yii::$app->view->registerLinkTag(['rel' => 'canonical', 'href' => Url::canonical()], 'canonical');
     Yii::$app->view->registerMetaTag([
       'name' => 'description',
-      'content' => $place->description
+      'content' => $place->title . " $place->address в городе $place->city->name - описание, все фотографии, местоположение на Surf-city.ru. Контакты"
     ], 'description');
 
     Yii::$app->seo->putFacebookMetaTags([
@@ -187,7 +187,7 @@ class PlaceController extends Controller
       'og:url'        => Url::canonical(),
       'og:type'       => 'article',
       'og:title'      => $place->title,
-      'og:description' => $place->description,
+      'og:description' => $place->title . " $place->address в городе $place->city->name - описание, все фотографии, местоположение на Surf-city.ru. Контакты",
       'og:image'      => Url::to($place->getImage()->getUrl(), true),
       'og:image:width' => $place->getImage()->getSizes()['width'],
       'og:image:height' => $place->getImage()->getSizes()['height'],
