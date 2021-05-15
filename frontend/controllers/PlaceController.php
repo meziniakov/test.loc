@@ -248,7 +248,8 @@ class PlaceController extends Controller
 
   public function findModelCategory($slug, $city_id = null)
   {
-    if (($model = Place::find()->joinWith(['category'])->where('{{%place_category}}.slug = :slug', [':slug' => $slug])->andWhere(['city_id' => $city_id])) !== null) {
+    $model = Place::find()->joinWith(['category'])->where('{{%place_category}}.slug = :slug', [':slug' => $slug])->andWhere(['city_id' => $city_id]);
+    if ($model->one() !== null) {
       return $model;
     }
     throw new NotFoundHttpException('Страницы не существует');
