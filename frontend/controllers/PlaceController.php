@@ -170,7 +170,7 @@ class PlaceController extends Controller
   {
     if ($city = City::find()->where('url = :url', [':url' => Yii::$app->params['city']])->one()) {
       $place = $this->findModel($slug, $city->id);
-      $otherPlace = Place::find()->parsed()->where(['!=', 'id', $place->id])->andWhere(['city_id' => $city->id])->limit(5)->all();
+      $otherPlace = Place::find()->parsed()->where(['!=', 'id', $place->id])->andWhere(['category_id' => $place->category_id])->andWhere(['city_id' => $city->id])->limit(5)->all();
     } elseif (Yii::$app->params['city'] == 'global') {
       $place = $this->findModel($slug);
       $otherPlace = Place::find()->parsed()->where(['!=', 'id', $place->id])->with('category')->limit(5)->all();
