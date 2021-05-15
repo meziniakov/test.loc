@@ -501,14 +501,12 @@ $images = $place->getImages();
 									<li>
 										<?php if ($place->address) : ?>
 											<div class="icon-box-icon-block">
-												<a href="#">
 													<div class="icon-box-round">
 														<i class="lni-map-marker"></i>
 													</div>
 													<div style="display:contents">
 														<?= $place->address ?>
 													</div>
-												</a>
 											</div>
 										<?php endif ?>
 									</li>
@@ -516,14 +514,12 @@ $images = $place->getImages();
 										<?php foreach ($place->phone as $phone) : ?>
 											<li>
 												<div class="icon-box-icon-block">
-													<a href="tel:+<?= $phone['phones'] ?>">
 														<div class="icon-box-round">
 															<i class="lni-phone-handset"></i>
 														</div>
 														<div class="icon-box-text">
-															<?= Html::a('+'.$phone['phones'], 'tel:' .$phone['phones']) ?>
+															<?= Html::a('+'.$phone['phones'], 'tel:' .$phone['phones'], ['rel' => 'nofollow']) ?>
 														</div>
-													</a>
 												</div>
 											</li>
 										<?php endforeach; ?>
@@ -531,28 +527,24 @@ $images = $place->getImages();
 									<?php if (isset($place->email)) : ?>
 										<li>
 											<div class="icon-box-icon-block">
-												<a href="#">
 													<div class="icon-box-round">
 														<i class="lni-envelope"></i>
 													</div>
 													<div class="icon-box-text">
-														<?= Html::mailto($place->email) ?>
+													<?= Html::mailto($place->email, $place->email, ['rel' => 'nofollow']) ?>
 													</div>
-												</a>
 											</div>
 										</li>
 									<?php endif; ?>
-									<?php if (isset($place->keywords)) : ?>
+									<?php if (isset($place->website)) : ?>
 										<li>
 											<div class="icon-box-icon-block">
-												<a href="<?= $place->keywords ?>">
 													<div class="icon-box-round">
 														<i class="lni-world"></i>
 													</div>
 													<div class="icon-box-text">
-														<?= $place->keywords ?>
+													<?= Html::a($place->website, $place->website, ['rel' => 'nofollow', 'referrerpolicy' => "unsafe-url", 'target' => "_blank"]) ?>
 													</div>
-												</a>
 											</div>
 										</li>
 									<?php endif; ?>
@@ -586,6 +578,23 @@ $images = $place->getImages();
 								</div>
 							</div>
 						<?php endif ?>
+		<div class="single-widgets widget_thumb_post">
+								<h4 class="title">Смотрите также</h4>
+								<ul>
+								<?php foreach ($otherPlace as $item) : ?>
+									<?php $img = $item->getImage();?>
+									<li>
+										<span class="left">
+											<img src="<?= $img->getUrl('560x359'); ?>" alt="<?= $img->title?>" class="">
+										</span>
+										<span class="right">
+											<a class="feed-title" href="<?= Url::to(['place/view', 'category' => $item->category->slug, 'city' => $item->city->url, 'slug' => $item->slug]) ?>"><?= $item->title?></a> 
+											<!-- <span class="post-date"><i class="ti-calendar"></i>10 Min ago</span> -->
+										</span>
+									</li>
+									<?php endforeach ?>
+								</ul>
+							</div>
 					</div>
 				</div>
 			</div>

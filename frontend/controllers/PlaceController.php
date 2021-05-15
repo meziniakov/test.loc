@@ -170,8 +170,10 @@ class PlaceController extends Controller
   {
     if ($city = City::find()->where('url = :url', [':url' => Yii::$app->params['city']])->one()) {
       $place = $this->findModel($slug, $city->id);
+      $otherPlace = Place::find()->parsed()->where(['city_id' => $city->id])->joinWith(['category'])->where('{{%place_category}}.slug = :slug', [':slug' => $place->category->slug])->limit(5)->all();
     } elseif (Yii::$app->params['city'] == 'global') {
       $place = $this->findModel($slug);
+      $otherPlace = Place::find()->parsed()->with('category')->limit(5)->all();
     } else {
       throw new NotFoundHttpException(Yii::t('frontend', 'Page not found.'));
     }
@@ -179,7 +181,7 @@ class PlaceController extends Controller
     Yii::$app->view->registerLinkTag(['rel' => 'canonical', 'href' => Url::canonical()], 'canonical');
     Yii::$app->view->registerMetaTag([
       'name' => 'description',
-      'content' => $place->title . " $place->address в городе $place->city->name - описание, все фотографии, местоположение на Surf-city.ru. Контакты"
+      'content' => $place->city ? $place->title . " $place->address в городе {$place->city->name} - описание, все фотографии, местоположение на Surf-city.ru. Контакты" : $place->title . " $place->address - описание, все фотографии, местоположение на Surf-city.ru. Контакты",
     ], 'description');
 
     Yii::$app->seo->putFacebookMetaTags([
@@ -187,7 +189,7 @@ class PlaceController extends Controller
       'og:url'        => Url::canonical(),
       'og:type'       => 'article',
       'og:title'      => $place->title,
-      'og:description' => $place->title . " $place->address в городе $place->city->name - описание, все фотографии, местоположение на Surf-city.ru. Контакты",
+      'og:description' => $place->city ? $place->title . " $place->address в городе {$place->city->name} - описание, все фотографии, местоположение на Surf-city.ru. Контакты" : $place->title . " $place->address - описание, все фотографии, местоположение на Surf-city.ru. Контакты",
       'og:image'      => Url::to($place->getImage()->getUrl(), true),
       'og:image:width' => $place->getImage()->getSizes()['width'],
       'og:image:height' => $place->getImage()->getSizes()['height'],
@@ -230,6 +232,7 @@ class PlaceController extends Controller
       
     return $this->render('view', [
       'place' => $place,
+      'otherPlace' => $otherPlace,
       'schema' => $schema,
       'addressInJson' => Place::getJsonForMap($place),
     ]);
