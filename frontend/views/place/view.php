@@ -588,7 +588,7 @@ $images = $place->getImages();
 											<img src="<?= $img->getUrl('560x359'); ?>" alt="<?= $img->title?>" class="">
 										</span>
 										<span class="right">
-											<a class="feed-title" href="<?= Url::to(['place/view', 'category' => $item->category->slug, 'city' => $item->city->url, 'slug' => $item->slug]) ?>"><?= $item->title?></a> 
+											<a class="feed-title" href="<?= Url::to(['place/view', 'category' => $item->category->slug, 'city' => ($item->city) ? $item->city->url : null, 'slug' => $item->slug]) ?>"><?= $item->title?></a> 
 											<!-- <span class="post-date"><i class="ti-calendar"></i>10 Min ago</span> -->
 										</span>
 									</li>

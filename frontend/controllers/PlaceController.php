@@ -170,10 +170,10 @@ class PlaceController extends Controller
   {
     if ($city = City::find()->where('url = :url', [':url' => Yii::$app->params['city']])->one()) {
       $place = $this->findModel($slug, $city->id);
-      $otherPlace = Place::find()->parsed()->where(['city_id' => $city->id])->joinWith(['category'])->where('{{%place_category}}.slug = :slug', [':slug' => $place->category->slug])->limit(5)->all();
+      $otherPlace = Place::find()->parsed()->where(['!=', 'id', $place->id])->andWhere(['city_id' => $city->id])->limit(5)->all();
     } elseif (Yii::$app->params['city'] == 'global') {
       $place = $this->findModel($slug);
-      $otherPlace = Place::find()->parsed()->with('category')->limit(5)->all();
+      $otherPlace = Place::find()->parsed()->where(['!=', 'id', $place->id])->with('category')->limit(5)->all();
     } else {
       throw new NotFoundHttpException(Yii::t('frontend', 'Page not found.'));
     }
@@ -280,24 +280,12 @@ class PlaceController extends Controller
     ]);
   }
 
-  // public function actionCategory($slug)
-  // {
-  //   $place = $this->findModel($slug);
-
-  //   return $this->render('view', [
-  //     'place' => $place,
-  //     'addressInJson' => Place::getJsonForMap($place),
-  //   ]);
-
-  // }
-
   public function actionTag($slug)
   {
     $model = Tag::find()->where(['slug' => $slug])->one();
     if (!$model) {
       throw new NotFoundHttpException(Yii::t('frontend', 'Page not found.'));
     }
-
     // $listing = Place::find()->with('category')->joinWith('tags')->where('{{%tag}}.slug = :slug', [':slug' => $slug])->all();
     $query = Place::find()->with('category')->joinWith('tags')->where('{{%tag}}.slug = :slug', [':slug' => $slug]);
     $dataProvider = Place::getDataProvider($query);
