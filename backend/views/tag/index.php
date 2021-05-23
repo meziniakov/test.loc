@@ -1,6 +1,8 @@
 <?php
 
+use common\models\Tag;
 use yii\bootstrap\Html;
+use yii\helpers\Url;
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
@@ -21,16 +23,20 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             //['class' => 'yii\grid\SerialColumn'],
-
-            //'id',
-            'name',
+            [
+                'attribute' => 'name',
+                'value' => function (Tag $model) {
+                    return Html::a(Html::encode($model->name), Url::to(['update', 'id' => $model->id]));
+                },
+                'format' => 'raw',
+            ],
             'frequency',
             'slug',
             'comment',
 
             [
                 'class' => 'yii\grid\ActionColumn',
-                'template' => '{update} {delete}',
+                'template' => '{delete}',
             ],
         ],
     ]) ?>

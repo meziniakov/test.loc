@@ -8,6 +8,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use backend\models\search\PageSearch;
 use common\models\Page;
+use nickdenry\grid\toggle\actions\ToggleAction;
 
 /**
  * Class PageController.
@@ -22,6 +23,16 @@ class PageController extends Controller
                 'actions' => [
                     'delete' => ['POST'],
                 ],
+            ],
+        ];
+    }
+
+    public function actions()
+    {
+        return [
+            'switch' => [
+                'class' => ToggleAction::class,
+                'modelClass' => 'common\models\Page',
             ],
         ];
     }

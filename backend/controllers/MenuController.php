@@ -9,6 +9,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use backend\models\search\MenuSearch;
 use common\models\Menu;
+use nickdenry\grid\toggle\actions\ToggleAction;
 
 /**
  * Class MenuController.
@@ -29,6 +30,17 @@ class MenuController extends Controller
             ],
         ];
     }
+
+    public function actions()
+    {
+        return [
+            'switch' => [
+                'class' => ToggleAction::class,
+                'modelClass' => 'common\models\Menu',
+            ],
+        ];
+    }
+
 
     /**
      * Lists all Menu models.

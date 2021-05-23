@@ -1,8 +1,10 @@
 <?php
 
 use yii\bootstrap\Html;
+use yii\helpers\Url;
 use yii\grid\GridView;
 use common\models\Page;
+use nickdenry\grid\toggle\components\RoundSwitchColumn;
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\search\PageSearch */
@@ -21,31 +23,38 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-            //['class' => 'yii\grid\SerialColumn'],
-
-            'id',
-            'title',
+            [
+                'class' => 'yii\grid\CheckboxColumn',
+                'checkboxOptions' => function () {
+                    return [
+                        'onchange' => 'var keys = $("#grid").yiiGridView("getSelectedRows");
+                                    $(this).parent().parent().toggleClass("danger");'
+                    ];
+                }
+            ],
+            [
+                'attribute' => 'title',
+                'value' => function (Page $model) {
+                    return Html::a(Html::encode($model->title), Url::to(['update', 'id' => $model->id]));
+                },
+                'format' => 'raw',
+            ],
             // 'slug',
             // 'description',
             // 'keywords',
             // 'body',
             [
+                'class' => RoundSwitchColumn::class,
                 'attribute' => 'status',
-                'format' => 'html',
-                'value' => function ($model) {
-                    return $model->status ? '<span class="glyphicon glyphicon-ok text-success"></span>' : '<span class="glyphicon glyphicon-remove text-danger"></span>';
-                },
-                'filter' => [
-                    Page::STATUS_DRAFT => Yii::t('backend', 'Not active'),
-                    Page::STATUS_ACTIVE => Yii::t('backend', 'Active'),
-                ],
+                'action' => 'switch',
+                // 'headerOptions' => ['width' => 150],
             ],
             // 'created_at',
             // 'updated_at',
 
             [
                 'class' => 'yii\grid\ActionColumn',
-                'template' => '{update} {delete}',
+                'template' => '{delete}',
             ],
         ],
     ]) ?>
