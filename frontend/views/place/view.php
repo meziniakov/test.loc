@@ -578,6 +578,7 @@ $images = $place->getImages();
 								</div>
 							</div>
 						<?php endif ?>
+						<?php if (!empty($otherPlace)) : ?>
 		<div class="single-widgets widget_thumb_post">
 								<h4 class="title">Смотрите также</h4>
 								<ul>
@@ -595,6 +596,7 @@ $images = $place->getImages();
 									<?php endforeach ?>
 								</ul>
 							</div>
+							<?php endif?>
 					</div>
 				</div>
 			</div>
