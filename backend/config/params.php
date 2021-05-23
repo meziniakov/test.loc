@@ -81,7 +81,7 @@ return [
           'class' => new JsExpression('InlineCode'),
           'shortcut' => 'CMD+SHIFT+C'
       ],
-      'сarousel' => [
+      'carousel' => [
           'repository' => '@backend/web/static/carousel/bundle.js',
           'class' => new JsExpression('Carousel'),
           'inlineToolbar' => true,
