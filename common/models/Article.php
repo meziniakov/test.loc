@@ -42,6 +42,9 @@ class Article extends ActiveRecord
     const STATUS_ACTIVE = 1;
 
     public $imageFile;
+    public $_city_id;
+    public $_category_id;
+    public $_limit;
 
     /**
      * @inheritdoc
@@ -82,7 +85,7 @@ class Article extends ActiveRecord
     public function rules()
     {
         return [
-            [['title', 'preview', 'body', 'category_id'], 'required'],
+            [['title', 'category_id'], 'required'],
             [['preview', 'body'], 'string'],
             ['published_at', 'default',
                 'value' => function () {
@@ -96,7 +99,7 @@ class Article extends ActiveRecord
             ['author_id', 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['author_id' => 'id']],
             ['category_id', 'exist', 'skipOnError' => true, 'targetClass' => ArticleCategory::class, 'targetAttribute' => ['category_id' => 'id']],
             ['updater_id', 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['updater_id' => 'id']],
-            [['tagValues', 'json'], 'safe'],
+            [['tagValues', 'json', '_city_id', '_category_id', '_limit'], 'safe'],
             [['imageFile'], 'file', 'extensions' => 'png, jpg, jpeg'],
         ];
     }
@@ -113,6 +116,7 @@ class Article extends ActiveRecord
             'keywords' => Yii::t('common', 'Keywords'),
             'preview' => Yii::t('common', 'Preview'),
             'body' => Yii::t('common', 'Text'),
+            '_category_id' => 'Категории мест',
             'json' => 'Json',
             'status' => Yii::t('common', 'Status'),
             'category_id' => Yii::t('common', 'Category'),

@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\helpers\HtmlPurifier;
 use common\assets\Highlight;
 use metalguardian\fotorama\Fotorama;
@@ -10,8 +11,18 @@ use metalguardian\fotorama\Fotorama;
 
 Highlight::register($this);
 
-$this->title = $model->title;
+$this->params['breadcrumbs'][] = [
+	'label' => Yii::t('frontend', 'Articles'),
+	'url' => Url::to('/article')
+];
+$this->params['breadcrumbs'][] = [
+	'label' => $model->category->title,
+	'url' => Url::to('/place/'.$model->category->slug)
+];
+$this->params['breadcrumbs'][] = Yii::t('frontend', $model->title);
+$this->title = Yii::t('frontend', $model->title);
 ?>
+
 <article class="wallpaper">
 	<header class="article-header">
 		<div class="article-header__meta">
@@ -39,7 +50,7 @@ $this->title = $model->title;
 						echo '<p class="heading">' . $blocks['data']['text'] . '</p>' . PHP_EOL;
 						break;
 					case 'image':
-						echo (isset($blocks['data']['file']['url'])) ? Html::img($blocks['data']['file']['url'], ['alt' => $blocks['data']['caption'], 'class' => 'image-tool__image-picture']) : "";
+						(isset($blocks['data']['file']['url'])) ? Html::img($blocks['data']['file']['url'], ['alt' => $blocks['data']['caption'], 'class' => 'img-responsive image-tool__image-picture']) : "";
 						break;
 					case 'delimiter':
 						echo '<div class="delimiter"></div>' . PHP_EOL;
@@ -57,7 +68,7 @@ $this->title = $model->title;
 						echo ($blocks['data']['style'] == 'ordered') ? "</ol>" : "</ul>";
 						break;
 
-					case 'сarousel':
+					case 'carousel':
 						$fotorama = Fotorama::begin(
 							[
 								'options' => [
@@ -71,10 +82,10 @@ $this->title = $model->title;
 									'lines' => 20,
 								],
 								'tagName' => 'span',
-								'useHtmlData' => false,
+								'useHtmlData' => true,
 								'htmlOptions' => [
-									'class' => 'custom-class',
-									'id' => 'custom-id',
+									// 'class' => 'custom-class',
+									// 'id' => 'custom-id',
 								],
 							]
 						);
@@ -82,7 +93,7 @@ $this->title = $model->title;
 							echo (isset($image['url'])) ? Html::img($image['url'], [
 								'alt' => $image['caption'],
 								'data-caption' => $image['caption'],
-								'class' => 'image-tool__image-picture'
+								'class' => 'image-tool__image-picture img-responsive'
 							]) : "";
 						}
 						Fotorama::end();
@@ -103,16 +114,6 @@ $this->title = $model->title;
 				</ul>
 			</div>
 		<?php endif ?>
-		<div class="post-share">
-			<!-- <h4 class="pbm-title">Соц. сети</h4> -->
-			<ul class="list">
-				<li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
-				<li><a href="#"><i class="fab fa-twitter"></i></a></li>
-				<li><a href="#"><i class="fab fa-linkedin-in"></i></a></li>
-				<li><a href="#"><i class="fab fa-vk"></i></a></li>
-				<li><a href="#"><i class="fab fa-tumblr"></i></a></li>
-			</ul>
-		</div>
 	</footer>
 
 

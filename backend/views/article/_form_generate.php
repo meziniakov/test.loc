@@ -48,25 +48,31 @@ $this->registerJsFile(
 <div class="article-form">
 
     <?php $form = ActiveForm::begin() ?>
+
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? Yii::t('backend', 'Create') : Yii::t('backend', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>
+
 
     <div class="col-sm-6">
         <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
         <?= $form->field($model, 'slug')->textInput(['maxlength' => true]) ?>
         <?= $form->field($model, 'status')->checkbox(['label' => Yii::t('backend', 'Activate')]) ?>
-        <?= $form->field($model, 'category_id')->dropDownList(
-            ArrayHelper::map(
-                $categories,
-                'id',
-                'title'
-            ),
-            ['prompt' => '']
-        ) ?>
+        <?= $form->field($model, '_city_id')->dropDownList(ArrayHelper::map(
+            $cities,
+            'id',
+            'name'
+        ), ['prompt' => '']) ?>
+
+        <?= $form->field($model, '_category_id')->dropDownList(ArrayHelper::map(
+            $place_categories,
+            'id',
+            'title'
+        ), ['prompt' => '']) ?>
+
+        <?= $form->field($model, '_limit')->textInput(['maxlength' => true])->label('Количество мест') ?>
         <?= $form->field($model, 'description')->textInput(['maxlength' => true]) ?>
         <?= $form->field($model, 'keywords')->textInput(['maxlength' => true]) ?>
-
     </div>
 
     <div class="col-sm-6">
@@ -76,7 +82,6 @@ $this->registerJsFile(
         <button class="btn btn-default" type="button" data-clear="">
             <span class="glyphicon glyphicon-remove"></span>
         </button>
-
         <?= $form->field($model, 'tagValues')->widget(SelectizeTextInput::class, [
             'loadUrl' => ['tag/list'],
             'options' => ['class' => 'form-control'],
@@ -88,6 +93,16 @@ $this->registerJsFile(
                 'create' => true,
             ],
         ]) ?>
+
+        <?= $form->field($model, 'category_id')->dropDownList(
+            ArrayHelper::map(
+                $categories,
+                'id',
+                'title'
+            ),
+            ['prompt' => '']
+        ) ?>
+
         <?= $form->field($model, 'published_at')->widget(FlatpickrWidget::class, [
             'locale' => strtolower(substr(Yii::$app->language, 0, 2)),
             'plugins' => [
@@ -112,17 +127,6 @@ $this->registerJsFile(
     </div>
 
     <div class="col-sm-12">
-        <?php echo $form->field($model, 'json')->widget(EditorJsWidget::class, [
-            'selectorForm' => $form->id,
-            'endpoints' => [
-                'uploadImageByFile' => Url::to(['/article/upload-file']),
-                'uploadImageByUrl' => Url::to(['/article/fetch-url']),
-                // 'byFile' => Url::to(['/article/fetch-url']),
-            ],
-            // 'plugins' => Yii::$app->params['editorjs-widget/plugins'],
-            // 'assetClass' => '/assets/'
-        ])->label('Редактор');
-        ?>
         <div class="form-group">
             <?= Html::submitButton($model->isNewRecord ? Yii::t('backend', 'Create') : Yii::t('backend', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
         </div>

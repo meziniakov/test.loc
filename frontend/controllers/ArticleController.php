@@ -79,6 +79,9 @@ class ArticleController extends Controller
             'name' => 'keywords',
             'content' => $model->keywords,
         ]);
+            // echo "<pre>";
+            // var_dump(Json::decode($model->json, true));
+            // die;
 
         return $this->render('view', [
             'model' => $model,
