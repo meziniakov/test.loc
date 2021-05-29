@@ -36,7 +36,7 @@ $images = $place->getImages();
 	<div class="featured-slick-slide">
 		<?php foreach ($images as $img) : ?>
 			<div>
-				<a href="<?= $img->getUrl('560x359'); ?>" class="mfp-gallery">
+				<a href="<?= $img->getUrl(); ?>" class="mfp-gallery">
 					<img src="<?= $img->getUrl('560x359'); ?>" class="img-fluid mx-auto" title="<?= $img->title ?>" alt="<?= $img->alt ?>" />
 				</a>
 			</div>
@@ -563,7 +563,7 @@ $images = $place->getImages();
 										<?php foreach ($place->tagLinksArray as $tag) : ?>
 											<li>
 												<div class="icon-box-icon-block">
-													<a href="<?php// $tag->name?>">
+													<a href="<?// $tag->name?>">
 														<div class="icon-box-round">
 															<i class="lni-car-alt"></i>
 														</div>
