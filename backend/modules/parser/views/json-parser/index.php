@@ -47,10 +47,31 @@ $this->params['breadcrumbs'][] = $this->title;
             //'website',
             //'email:email',
             //'phones',
-
-            ['class' => 'yii\grid\ActionColumn'],
-        ],
-    ]); ?>
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'header' => 'Actions',
+                'headerOptions' => ['style' => 'color:#337ab7'],
+                'template' => '{start}{update}{delete}',
+                'buttons' => [
+                  'start' => function ($url, $model) {
+                      return Html::a('<span class="glyphicon glyphicon-fire"></span>', $url, [
+                                  'title' => Yii::t('app', 'lead-view'),
+                      ]);
+                  },
+                  'update' => function ($url, $model) {
+                      return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url, [
+                                  'title' => Yii::t('app', 'lead-update'),
+                      ]);
+                  },
+                  'delete' => function ($url, $model) {
+                      return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, [
+                                  'title' => Yii::t('app', 'lead-delete'),
+                      ]);
+                  }
+                ]
+            ],
+    ]]); 
+?>
 
 
 </div>

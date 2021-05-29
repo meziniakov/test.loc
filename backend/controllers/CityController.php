@@ -21,7 +21,7 @@ class CityController extends Controller
     {
         return [
             'verbs' => [
-                'class' => VerbFilter::className(),
+                'class' => VerbFilter::class,
                 'actions' => [
                     'delete' => ['POST'],
                 ],
@@ -37,7 +37,14 @@ class CityController extends Controller
     {
         $dataProvider = new ActiveDataProvider([
             'query' => City::find(),
-        ]);
+            'pagination' => [
+                'pageSize' => 100,
+            ],
+            'sort' => [
+                'defaultOrder' => [
+                    'name' => SORT_ASC, 
+                ]
+            ],        ]);
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
