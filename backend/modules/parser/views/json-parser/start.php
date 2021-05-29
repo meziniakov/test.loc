@@ -30,38 +30,4 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
     ]) ?>
 
-
-    <? DetailView::widget([
-        'model' => $place,
-        'attributes' => [
-            'id',
-            'src_id',
-            'title',
-            'text:ntext',
-            'city_id',
-            'city_sys_name',
-            'city_src_id',
-            'street',
-            'street_comment',
-            'address',
-            'lat',
-            'lng',
-            'type',
-            'keywords',
-            'category_name',
-            'category_sys_name',
-            'image_url:url',
-            'image_alt',
-            'gallery_url:url',
-            'gallery_alt',
-            'tag_name',
-            'tag_sys_name',
-            'working_schedule:ntext',
-            'website',
-            'email:email',
-            'phones',
-        ],
-        'options' => ['class' => 'table table-striped table-bordered detail-view']
-    ]) ?>
-
 </div>
