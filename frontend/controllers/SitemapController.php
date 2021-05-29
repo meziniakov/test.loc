@@ -33,7 +33,7 @@ class SitemapController extends Controller
         $str = '/place/' . $place->category->slug . '/' . $place->slug;
         $urls[] = [
           'loc' => $str, //isset($subdomain) ? $subdomain : 
-          'lastmod' => date(DATE_ATOM, strtotime($place->updated_at)),
+          'lastmod' => date(DATE_ATOM, $place->updated_at),
           'changefreq' => 'daily',
           'priority' => '1',
         ];
