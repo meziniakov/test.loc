@@ -55,8 +55,8 @@ class JsonParser extends \yii\db\ActiveRecord
             [['name'], 'required'],
             [['name', 'src_id', 'description', 'city_name', 'city_sys_name', 'city_src_id', 'street', 'street_comment', 'full_address', 'category_name', 'category_sys_name', 'image_url', 'image_alt', 'gallery_url', 'gallery_alt', 'tag_name', 'tag_sys_name', 'working_schedule', 'website', 'email', 'phones', 'phones_comment'], 'string', 'max' => 20],
             [['lat', 'lng'], 'string', 'max' => 50],
-            [['jsonFile'], 'file', 'extensions' => 'png, jpg, jpeg, json'],
-            [['gallery'], 'safe']
+            // [['jsonFile'], 'file', 'extensions' => 'json'],
+            [['gallery', 'jsonFile'], 'safe']
         ];
     }
 
@@ -99,9 +99,9 @@ class JsonParser extends \yii\db\ActiveRecord
         if ($this->validate()) {
             $path = Yii::getAlias('@storage') . '/json/' . $this->jsonFile->baseName . '.' . $this->jsonFile->extension;
             $this->jsonFile->saveAs($path, false);
-            // var_dump($path);die;
+            // var_dump($path); die;
             // @unlink($path);
-            return true;
+            return $path;
         } else {
             return false;
         }
