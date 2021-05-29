@@ -43,7 +43,7 @@ class SitemapController extends Controller
       foreach($articles as $article) {
         $urls[] = [
           'loc' => '/article/' . $article->slug,
-          'lastmod' => date(DATE_ATOM, strtotime($article->updated_at)),
+          'lastmod' => date(DATE_ATOM, $article->updated_at),
           'changefreq' => 'daily',
           'priority' => '1'
         ];
