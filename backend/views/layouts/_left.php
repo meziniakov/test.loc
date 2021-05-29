@@ -26,9 +26,15 @@ use backend\widgets\Menu;
                     'icon' => '<i class="fa fa-tags"></i>',
                 ],
                 [
-                    'label' => Yii::t('backend', 'Parser'),
-                    'url' => ['/parser/index'],
+                    'label' => Yii::t('backend', 'Парсеры'),
+                    'url' => '#',
                     'icon' => '<i class="fa fa-search"></i>',
+                    'options' => ['class' => 'treeview'],
+                    'items' => [
+                        ['label' => Yii::t('backend', 'Json'), 'url' => ['/parser/json-parser'], 'icon' => '<i class="fa fa-angle-double-right"></i>'],
+                        ['label' => Yii::t('backend', 'Xml'), 'url' => ['/parser/index'], 'icon' => '<i class="fa fa-angle-double-right"></i>'],
+                    ],
+
                 ],
                 [
                     'label' => Yii::t('backend', 'Cities'),
@@ -44,7 +50,18 @@ use backend\widgets\Menu;
                         ['label' => Yii::t('backend', 'Place'), 'url' => ['/place/index'], 'icon' => '<i class="fa fa-angle-double-right"></i>'],
                         ['label' => Yii::t('backend', 'Place categories'), 'url' => ['/place-category/index'], 'icon' => '<i class="fa fa-angle-double-right"></i>'],
                     ],
-                ],                [
+                ],
+                [
+                    'label' => Yii::t('backend', 'Events'),
+                    'url' => '#',
+                    'icon' => '<i class="fa fa-map-marker"></i>',
+                    'options' => ['class' => 'treeview'],
+                    'items' => [
+                        ['label' => Yii::t('backend', 'Events'), 'url' => ['/event/index'], 'icon' => '<i class="fa fa-angle-double-right"></i>'],
+                        ['label' => Yii::t('backend', 'Event categories'), 'url' => ['/event-category/index'], 'icon' => '<i class="fa fa-angle-double-right"></i>'],
+                    ],
+                ],
+                [
                     'label' => Yii::t('backend', 'Content'),
                     'url' => '#',
                     'icon' => '<i class="fa fa-edit"></i>',
