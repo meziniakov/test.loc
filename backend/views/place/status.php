@@ -14,9 +14,9 @@ $this->title = Yii::t('backend', 'Places');
 
 $controller = Yii::$app->controller->id;
 ?>
-<?php echo $this->render('_search', ['model' => $searchModel]);?>
+<?php $this->render('_search', ['model' => $searchModel]);?>
 
-<?= $this->render('_menu',['categories' => $categories]) ?>
+<?= $this->render('_menu',['categories' => $categories, 'cities' => $cities]) ?>
 
 <?php Pjax::begin()?>
 <?= GridView::widget([

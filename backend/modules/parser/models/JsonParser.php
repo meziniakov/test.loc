@@ -37,6 +37,7 @@ use yii\helpers\Json;
  */
 class JsonParser extends \yii\db\ActiveRecord
 {
+    public $jsonFile;
     /**
      * {@inheritdoc}
      */
@@ -54,7 +55,8 @@ class JsonParser extends \yii\db\ActiveRecord
             [['name'], 'required'],
             [['name', 'src_id', 'description', 'city_name', 'city_sys_name', 'city_src_id', 'street', 'street_comment', 'full_address', 'category_name', 'category_sys_name', 'image_url', 'image_alt', 'gallery_url', 'gallery_alt', 'tag_name', 'tag_sys_name', 'working_schedule', 'website', 'email', 'phones', 'phones_comment'], 'string', 'max' => 20],
             [['lat', 'lng'], 'string', 'max' => 50],
-            [['gallery', ], 'safe']
+            [['jsonFile'], 'file', 'extensions' => 'png, jpg, jpeg, json'],
+            [['gallery'], 'safe']
         ];
     }
 
@@ -90,6 +92,19 @@ class JsonParser extends \yii\db\ActiveRecord
             'phones' => Yii::t('backend', 'Phones'),
             'phones_comment' => Yii::t('backend', 'Phones Comment'),
         ];
+    }
+
+    public function uploadJsonFile()
+    {
+        if ($this->validate()) {
+            $path = Yii::getAlias('@storage') . '/json/' . $this->jsonFile->baseName . '.' . $this->jsonFile->extension;
+            $this->jsonFile->saveAs($path, false);
+            // var_dump($path);die;
+            // @unlink($path);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public function Parsing()

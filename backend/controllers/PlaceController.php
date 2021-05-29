@@ -115,6 +115,7 @@ class PlaceController extends Controller
         return $this->render('status', [
             'searchModel' => $searchModel,
             'categories' => PlaceCategory::findAll(['status' => 1]),
+            'cities' => City::find()->all(),
             'data' => new ActiveDataProvider([
                 'query' => Place::find()->with('category', 'city')->where(['=', 'status', Place::STATUS_PARSED]),
                 'totalCount' => $this->parsed,
@@ -132,6 +133,7 @@ class PlaceController extends Controller
 
         return $this->render('status', [
             'searchModel' => $searchModel,
+            'cities' => City::find()->all(),
             'categories' => PlaceCategory::findAll(['status' => 1]),
             'data' => new ActiveDataProvider([
                 'query' => Place::find()->with('category', 'city')->where(['=', 'status', Place::STATUS_EDITED]),
@@ -150,6 +152,7 @@ class PlaceController extends Controller
 
         return $this->render('status', [
             'searchModel' => $searchModel,
+            'cities' => City::find()->all(),
             'categories' => PlaceCategory::findAll(['status' => 1]),
             'data' => new ActiveDataProvider([
                 'query' => Place::find()->with('category', 'city')->where(['=', 'status', Place::STATUS_PUBLISHED]),
@@ -177,16 +180,13 @@ class PlaceController extends Controller
         ]);
     }
 
-    /**
-     * Lists all Place models.
-     * @return mixed
-     */
     public function actionTrashed()
     {
         $searchModel = new PlaceSearch();
 
         return $this->render('status', [
             'searchModel' => $searchModel,
+            'cities' => City::find()->all(),
             'categories' => PlaceCategory::findAll(['status' => 1]),
             'data' => new ActiveDataProvider([
                 'query' => Place::find()->with('category', 'city')->where(['=', 'status', Place::STATUS_TRASHED]),
@@ -195,12 +195,6 @@ class PlaceController extends Controller
         ]);
     }
 
-    /**
-     * Displays a single Place model.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
     public function actionView($id)
     {
         return $this->render('view', [
@@ -208,11 +202,6 @@ class PlaceController extends Controller
         ]);
     }
 
-    /**
-     * Creates a new Place model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
     public function actionCreate()
     {
         $model = new Place();
@@ -223,7 +212,6 @@ class PlaceController extends Controller
                 $model->uploadMainImage();
             }
             $model->imageFiles = UploadedFile::getInstances($model, 'imageFiles');
-            // var_dump($model->imageFiles);die;
             $model->uploadGallery();
             
             Yii::$app->session->setFlash('success', "Успешно создано");
@@ -238,13 +226,6 @@ class PlaceController extends Controller
         ]);
     }
 
-    /**
-     * Updates an existing Place model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
@@ -269,13 +250,6 @@ class PlaceController extends Controller
         ]);
     }
 
-    /**
-     * Deletes an existing Place model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
@@ -337,13 +311,6 @@ class PlaceController extends Controller
         return $this->redirect(Yii::$app->request->referrer);
     }
 
-    /**
-     * Finds the Place model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return Place the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
     protected function findModel($id)
     {
         if (($model = Place::findOne($id)) !== null) {

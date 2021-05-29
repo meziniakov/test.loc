@@ -6,7 +6,7 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model backend\modules\parser\models\JsonParser */
 
-$this->title = $place->title;
+// $this->title = $place->title;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('backend', 'Json Parsers'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
@@ -26,7 +26,12 @@ $this->params['breadcrumbs'][] = $this->title;
         ]) ?>
     </p>
 
-    <?= DetailView::widget([
+    <?= $this->render('_form', [
+        'model' => $model,
+    ]) ?>
+
+
+    <? DetailView::widget([
         'model' => $place,
         'attributes' => [
             'id',

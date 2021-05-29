@@ -11,6 +11,7 @@ use yii\widgets\ActiveForm;
 <div class="json-parser-form">
 
     <?php $form = ActiveForm::begin(); ?>
+    <?= $form->field($model, 'jsonFile')->fileInput() ?>
 
     <?= $form->field($model, 'src_id')->textInput() ?>
 
