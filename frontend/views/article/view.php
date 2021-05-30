@@ -90,7 +90,7 @@ $this->title = Yii::t('frontend', $model->title);
 							]
 						);
 						foreach ($blocks['data'] as $image) {
-							echo (isset($image['url'])) ? Html::img($image['url'], [
+							echo (isset($image['url'])) ? Html::img(Html::decode($image['url']), [
 								'alt' => $image['caption'],
 								'data-caption' => $image['caption'],
 								'class' => 'image-tool__image-picture img-responsive'
