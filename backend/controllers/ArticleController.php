@@ -79,6 +79,7 @@ class ArticleController extends Controller
 
         return $this->render('index', [
             'searchModel' => $searchModel,
+            'cities' => City::find()->all(),
             'dataProvider' => $dataProvider,
         ]);
     }
@@ -218,6 +219,7 @@ class ArticleController extends Controller
             // var_dump($model);die;
             return $this->render('update', [
                 'model' => $model,
+                'cities' => City::find()->all(),
                 'categories' => ArticleCategory::find()->active()->all(),
             ]);
         }

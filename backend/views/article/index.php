@@ -6,6 +6,7 @@ use yii\grid\GridView;
 use yii\helpers\ArrayHelper;
 use common\models\Article;
 use common\models\ArticleCategory;
+use common\models\City;
 use nickdenry\grid\toggle\components\RoundSwitchColumn;
 
 /* @var $this yii\web\View */
@@ -60,6 +61,13 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $model->category ? $model->category->title : null;
                 },
                 'filter' => ArrayHelper::map(ArticleCategory::find()->all(), 'id', 'title'),
+            ],
+            [
+                'attribute' => 'city_id',
+                'value' => function ($model) {
+                    return $model->city ? $model->city->name : null;
+                },
+                'filter' => ArrayHelper::map(City::find()->all(), 'id', 'name'),
             ],
             // [
             //     'attribute' => 'author_id',

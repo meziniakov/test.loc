@@ -12,6 +12,7 @@ $this->params['breadcrumbs'][] = Yii::t('backend', 'Update');
     <?= $this->render('_form', [
         'model' => $model,
         'categories' => $categories,
+        'cities' => $cities
     ]) ?>
 
 </div>

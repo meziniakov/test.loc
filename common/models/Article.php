@@ -9,7 +9,9 @@ use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\helpers\Html;
 use common\models\query\ArticleQuery;
+use common\models\City;
 use creocoder\taggable\TaggableBehavior;
+use yii\data\ActiveDataProvider;
 
 /**
  * This is the model class for table "{{%article}}".
@@ -40,6 +42,15 @@ class Article extends ActiveRecord
 {
     const STATUS_DRAFT = 0;
     const STATUS_ACTIVE = 1;
+
+    const STATUS_ALL = 10;
+    const STATUS_PARSED = 1;
+    const STATUS_EDITED = 2;
+    const STATUS_PUBLISHED = 3;
+    const STATUS_UPDATED = 4;
+    const STATUS_TRASHED = 0;
+
+    const PAGE_SIZE = 10;
 
     public $imageFile;
     public $_city_id;
@@ -93,10 +104,11 @@ class Article extends ActiveRecord
                 }
             ],
             ['published_at', 'filter', 'filter' => 'strtotime'],
-            [['status', 'category_id', 'author_id', 'updater_id', 'created_at', 'updated_at'], 'integer'],
+            [['status', 'category_id', 'city_id', 'author_id', 'updater_id', 'created_at', 'updated_at'], 'integer'],
             [['title', 'slug', 'description', 'keywords'], 'string', 'max' => 255],
             ['status', 'default', 'value' => self::STATUS_DRAFT],
             ['author_id', 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['author_id' => 'id']],
+            ['city_id', 'exist', 'skipOnError' => true, 'targetClass' => City::class, 'targetAttribute' => ['city_id' => 'id']],
             ['category_id', 'exist', 'skipOnError' => true, 'targetClass' => ArticleCategory::class, 'targetAttribute' => ['category_id' => 'id']],
             ['updater_id', 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['updater_id' => 'id']],
             [['tagValues', 'json', '_city_id', '_category_id', '_limit'], 'safe'],
@@ -119,6 +131,7 @@ class Article extends ActiveRecord
             '_category_id' => 'Категории мест',
             'json' => 'Json',
             'status' => Yii::t('common', 'Status'),
+            'city_id' => Yii::t('backend', 'City'),
             'category_id' => Yii::t('common', 'Category'),
             'author_id' => Yii::t('common', 'Author'),
             'updater_id' => Yii::t('common', 'Updater'),
@@ -146,6 +159,32 @@ class Article extends ActiveRecord
     public function getAuthor()
     {
         return $this->hasOne(User::class, ['id' => 'author_id']);
+    }
+
+    public function getCity()
+    {
+        return $this->hasOne(City::class, ['id' => 'city_id']);
+    }
+
+    public static function getDataProvider($query)
+    {
+        $countQuery = clone $query;
+
+        return new ActiveDataProvider([
+            'query' => $query,
+            'totalCount' => (int)$countQuery->count(),
+            'pagination' => [
+                'pageSize' => self::PAGE_SIZE,
+                'pageSizeParam' => false,
+                'forcePageParam' => false
+            ],
+            'sort' => [
+                'defaultOrder' => [
+                    'title' => SORT_ASC,
+                    'created_at' => SORT_DESC
+                ]
+            ],
+        ]);
     }
 
     /**

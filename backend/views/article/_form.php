@@ -56,6 +56,11 @@ $this->registerJsFile(
         <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
         <?= $form->field($model, 'slug')->textInput(['maxlength' => true]) ?>
         <?= $form->field($model, 'status')->checkbox(['label' => Yii::t('backend', 'Activate')]) ?>
+        <?= $form->field($model, 'city_id')->dropDownList(ArrayHelper::map(
+            $cities,
+            'id',
+            'name'
+        ), ['prompt' => '']) ?>
         <?= $form->field($model, 'category_id')->dropDownList(
             ArrayHelper::map(
                 $categories,

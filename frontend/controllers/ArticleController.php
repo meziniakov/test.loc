@@ -7,6 +7,7 @@ use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use common\models\Article;
+use common\models\City;
 use common\models\ArticleCategory;
 use common\models\Tag;
 use yii\helpers\Json;
@@ -38,7 +39,31 @@ class ArticleController extends Controller
      */
     public function actionIndex()
     {
-        $query = Article::find()->published()->with('category', 'tags');
+        $q = Yii::$app->request->get('q');
+        $category_id = Yii::$app->request->get('category_id');
+        $city_id = Yii::$app->request->get('city_id');
+        $tag_id = Yii::$app->request->get('tag_id');
+    
+        if ($city = City::find()->where('url = :url', [':url' => Yii::$app->params['city']])->one()) {
+            $query = Article::find()->published()->where(['city_id' => $city->id])->with('category');
+          } elseif (Yii::$app->params['city'] == 'global') {
+            $query = Article::find()->published()->with('category');
+          } else {
+            throw new NotFoundHttpException(Yii::t('frontend', 'Page not found.'));
+          }
+          $query->andFilterWhere([
+            'category_id' => $category_id,
+            'city_id' => $city_id,
+            'tag_id' => $tag_id,
+          ]);
+          $query->andFilterWhere(['like', 'title', $q]);
+      
+          $dataProvider = Article::getDataProvider($query);
+      
+          $models = $dataProvider->getModels();
+
+
+        // $query = Article::find()->published()->with('category', 'tags');
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
