@@ -122,16 +122,13 @@ class PlaceController extends Controller
     //     'twitter:card'=> 'summary_large_image',
     // ]);
 
-    return $this->render(
-      'index',
-      [
+    return $this->render('index', [
         'dataProvider' => $dataProvider,
         'addressInJson' => Place::getJsonForMap($models),
         'categories' => PlaceCategory::find()->active()->asArray()->all(),
         'cities' => City::find()->all(),
         'tags' => Tag::find()->asArray()->all()
-      ]
-    );
+      ]);
   }
 
   public function actionSearch()

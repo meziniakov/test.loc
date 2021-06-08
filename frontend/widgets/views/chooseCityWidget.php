@@ -35,7 +35,7 @@ ksort($firstLetter);
     <div class="text-gold-500 font-semibold text-lg"><?= $letter;?></div>
     <ul class="mb-4 list-none p-0 mt-0">
       <?php foreach($cities as $city):?>
-      <li class="py-2"><a href="https://<?= $city['url']?>.surf-city.ru/" target="_self" class="cursor-pointer no-underline focus:shadow-focus border-0 border-b border-solid text-blue-500 border-blue-500 visited:text-blue-500 hover:text-black-500 hover:border-black-300"><?= $city['name']?></a></li>
+      <li class="py-2"><a href="https://<?= $city['url']?>.trip2place.com/" target="_self" class="cursor-pointer no-underline focus:shadow-focus border-0 border-b border-solid text-blue-500 border-blue-500 visited:text-blue-500 hover:text-black-500 hover:border-black-300"><?= $city['name']?></a></li>
       <?php endforeach?>
     </ul>
   </div>
