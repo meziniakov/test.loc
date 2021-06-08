@@ -16,6 +16,14 @@ use common\models\City;
 /* @var $this \yii\web\View */
 /* @var $content string */
 
+if (in_array("surf-city", explode(".", Yii::$app->request->serverName))) {
+    if (count(explode(".", Yii::$app->request->serverName)) > 2) {
+        echo '<meta http-equiv="refresh" content="0;URL='."https://" . explode(".", Yii::$app->request->serverName)[0] . ".trip2place.com" . Yii::$app->request->url.'">';
+    } else {
+        echo '<meta http-equiv="refresh" content="0;URL='."https://" . "trip2place.com" . Yii::$app->request->url.'">';
+    }
+}
+
 AppAsset::register($this);
 ?>
 <?php $this->beginPage() ?>
