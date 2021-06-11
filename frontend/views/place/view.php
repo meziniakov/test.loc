@@ -5,7 +5,7 @@ use yii\helpers\Url;
 use yii\helpers\Json;
 use yii\web\View;
 
-$this->title = Html::decode($place->title);
+$this->title = Html::decode($place->title) . ' — фото, описание на trip2place.com';
 $this->registerJsFile(
 	"/reveal/js/singleMap.js",
 	$options = [

@@ -24,7 +24,7 @@ use common\models\Place;
 
 
     <div class="col-sm-6">
-        <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'title')->textInput(['maxlength' => true])->hint('Желательно 60-70 символов') ?>
         <?= $form->field($model, 'slug')->textInput(['maxlength' => true]) ?>
         <?= $form->field($model, 'status')->dropDownList([
             Place::STATUS_PARSED => 'Спарсено',
@@ -58,7 +58,7 @@ use common\models\Place;
             ],
         ]) ?>
 
-        <?= $form->field($model, 'published_at')->widget(FlatpickrWidget::class, [
+        <?php $form->field($model, 'published_at')->widget(FlatpickrWidget::class, [
             'locale' => strtolower(substr(Yii::$app->language, 0, 2)),
             'plugins' => [
                 'confirmDate' => [
@@ -107,6 +107,8 @@ use common\models\Place;
                 'file_picker_callback' => TinyMCECallback::getFilePickerCallback(['file-manager/frame']),
             ],
         ]) ?>
+        <?= $form->field($model, 'imageFiles[]')->fileInput(['multiple' => true])->label('Галерея фото') ?>
+        <hr>
     </div>
 
     <div class="col-sm-12">

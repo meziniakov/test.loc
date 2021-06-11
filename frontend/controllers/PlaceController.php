@@ -116,8 +116,8 @@ class PlaceController extends Controller
     //     'twitter:site'        => Url::canonical(),
     //     'twitter:title'       => $place->title,
     //     'twitter:description' => $place->description,
-    //     'twitter:site'     => '@surf-city',
-    //     'twitter:creator'     => '@surf-city',
+    //     'twitter:site'     => '@trip2place',
+    //     'twitter:creator'     => '@trip2place',
     //     'twitter:image:src'      => Url::to($place->getImage()->getUrl(), true),
     //     'twitter:card'=> 'summary_large_image',
     // ]);
@@ -204,8 +204,8 @@ class PlaceController extends Controller
     //     'twitter:site'        => Url::canonical(),
     //     'twitter:title'       => $place->title,
     //     'twitter:description' => $place->description,
-    //     'twitter:site'     => '@surf-city',
-    //     'twitter:creator'     => '@surf-city',
+    //     'twitter:site'     => '@trip2place',
+    //     'twitter:creator'     => '@trip2place',
     //     'twitter:image:src'      => Url::to($place->getImage()->getUrl(), true),
     //     'twitter:card'=> 'summary_large_image',
     // ]);

@@ -212,6 +212,9 @@ class PlaceController extends Controller
                 $model->uploadMainImage();
             }
             $model->imageFiles = UploadedFile::getInstances($model, 'imageFiles');
+            if ($model->imageFiles){
+                var_dump($model->imageFiles);die;
+            }
             $model->uploadGallery();
             
             Yii::$app->session->setFlash('success', "Успешно создано");
@@ -233,10 +236,13 @@ class PlaceController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
             if ($model->imageFile){
-                $model->uploadMainImage();
+                $model->frameImage();
+                // $model->uploadMainImage();
             }
             $model->imageFiles = UploadedFile::getInstances($model, 'imageFiles');
-            $model->uploadGallery();
+            if ($model->imageFiles){
+                $model->uploadGallery();
+            }
             
             Yii::$app->session->setFlash('success', "успешно обновлено");
             

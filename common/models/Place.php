@@ -15,6 +15,7 @@ use creocoder\taggable\TaggableBehavior;
 use lhs\Yii2SaveRelationsBehavior\SaveRelationsBehavior;
 use common\models\Tag;
 use common\models\query\PlaceQuery;
+use yii\imagine\Image;
 
 
 
@@ -49,7 +50,7 @@ class Place extends ActiveRecord
 
     public $cnt;
     public $imageFile;
-    public $imageFiles;
+    public $imageFiles = [];
     public $image;
     public $images;
     public $gallery;
@@ -126,6 +127,7 @@ class Place extends ActiveRecord
             ['tmp_uniq', 'safe'],
             [['status', 'is_home', 'category_id', 'city_id', 'author_id', 'updater_id', 'created_at', 'updated_at'], 'integer'],
             [['url', 'description', 'title', 'website', 'street', 'street_comment'], 'string', 'max' => 255],
+            [['title'], 'string', 'max' => 80],
             ['status', 'default', 'value' => self::STATUS_PARSED],
             ['author_id', 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['author_id' => 'id']],
             ['category_id', 'exist', 'skipOnError' => true, 'targetClass' => PlaceCategory::class, 'targetAttribute' => ['category_id' => 'id']],
@@ -148,6 +150,8 @@ class Place extends ActiveRecord
             'id' => Yii::t('backend', 'ID'),
             'title' => Yii::t('backend', 'Title'),
             'slug' => Yii::t('backend', 'URL'),
+            'lat' => Yii::t('backend', 'Широта'),
+            'lng' => Yii::t('backend', 'Долгота'),
             'description' => Yii::t('backend', 'Description'),
             'text' => Yii::t('backend', 'Text'),
             'city_id' => Yii::t('backend', 'City'),
@@ -287,6 +291,27 @@ class Place extends ActiveRecord
             $path = Yii::getAlias('@storage') . '/img/' . $this->imageFile->baseName . '.' . $this->imageFile->extension;
             $this->imageFile->saveAs($path, false);
             $this->attachImage($path, true);
+            @unlink($path);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function frameImage()
+    {
+        if ($this->validate()) {
+            $path = Yii::getAlias('@storage') . '/img/' . $this->imageFile->baseName . '.' . $this->imageFile->extension;
+            $this->imageFile->saveAs($path, false);
+            // Image::frame($path, 25, 'e7e7e7', 100)->save($path, ['quality' => 80]);die;
+            // 20 - размер рамки для добавления вокруг изображения
+            // '000' - цвет рамки
+            // 100 - альфа-значение кадра
+            if (Image::frame($path, 25, '#e7e7e7', 100)->save($path, ['quality' => 80])) {
+                echo "Ok";
+                $this->attachImage($path, true);
+            }
+            // die;
             @unlink($path);
             return true;
         } else {
