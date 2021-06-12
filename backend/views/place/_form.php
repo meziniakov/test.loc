@@ -19,6 +19,7 @@ use common\models\Place;
     <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
 
     <div class="form-group">
+        <?= Html::a(Yii::t('backend', 'Назад'), ['index'], ['class' => 'btn btn-default']) ?>
         <?= Html::submitButton(Yii::t('backend', 'Save'), ['class' => 'btn btn-success']) ?>
     </div>
 
@@ -58,7 +59,7 @@ use common\models\Place;
             ],
         ]) ?>
 
-        <?php $form->field($model, 'published_at')->widget(FlatpickrWidget::class, [
+        <?= $form->field($model, 'published_at')->widget(FlatpickrWidget::class, [
             'locale' => strtolower(substr(Yii::$app->language, 0, 2)),
             'plugins' => [
                 'confirmDate' => [
@@ -89,8 +90,10 @@ use common\models\Place;
             <span class="glyphicon glyphicon-remove"></span>
         </button>
         <?= $form->field($model, 'website')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'address')->textInput(['maxlength' => true]) ?>
         <?= $form->field($model, 'lat')->textInput(['maxlength' => true]) ?>
         <?= $form->field($model, 'lng')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'youtube_url')->textInput(['maxlength' => true])->hint('пример https://www.youtube.com/watch?v=wnjFKBzyq8k') ?>
     </div>
 
     <div class="col-sm-12">

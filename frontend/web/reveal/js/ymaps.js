@@ -23,18 +23,23 @@ function init() {
 	for (let $i = 0; $i < addres.length; $i++) {
 		var category = addres[$i]['category'] ? addres[$i]['category'] : '';
 		var categorySlug = addres[$i]['categorySlug'] ? addres[$i]['categorySlug'] : '';
+		var slug = addres[$i]['slug'] ? addres[$i]['slug'] : '';
+		var title = addres[$i]['title'] ? addres[$i]['title'] : '';
+		var mainImg = addres[$i]['mainImg'] ? addres[$i]['mainImg'] : '';
+		var lat = addres[$i]['lat']
+		var lng = addres[$i]['lng']
 
-		if (addres[$i]['lng']) {
-			var placemark = new ymaps.Placemark([addres[$i]['lng'], addres[$i]['lat']], {
+		if (lng) {
+			var placemark = new ymaps.Placemark([lat, lng], {
 				iconLayout: 'default#image',
 				iconImageHref: '/reveal/img/marker.png',
 				iconImageHref: markerIcon,
 				balloonContentBody: '<div class="map-popup-wrap">' +
 					'<div class="map-popup"></div><div class="property-listing property-2">' +
 					'<div class="listing-img-wrapper"><div class="list-single-img">' +
-					'<a href="/place/' + categorySlug + '/' + addres[$i]['slug'] + '"><img src="' + addres[$i]['mainImg'] + '" class="img-fluid mx-auto" alt="" /></a></div>' +
+					'<a href="/place/' + categorySlug + '/' + slug + '"><img src="' + mainImg + '" class="img-fluid mx-auto" alt="" /></a></div>' +
 					'<span class="property-type">' + category + '</span></div><div class="listing-detail-wrapper pb-0">' +
-					'<div class="listing-short-detail"><h4 class="listing-name"><a href="/place/' + categorySlug + '/' + addres[$i]['slug'] + '">' + addres[$i]['title'] + '</a>' +
+					'<div class="listing-short-detail"><h4 class="listing-name"><a href="/place/' + categorySlug + '/' + slug + '">' + title + '</a>' +
 					'<i class="list-status ti-check"></i></h4></div></div></div></div></div></div>'
 			})
 			myMap.geoObjects.add(placemark);
@@ -54,9 +59,9 @@ function init() {
 						balloonContentBody: '<div class="map-popup-wrap">' +
 							'<div class="map-popup"></div><div class="property-listing property-2">' +
 							'<div class="listing-img-wrapper"><div class="list-single-img">' +
-							'<a href="/place/' + categorySlug + '/' + addres[$i]['slug'] + '"><img src="' + addres[$i]['mainImg'] + '" class="img-fluid mx-auto" alt="" /></a></div>' +
+							'<a href="/place/' + categorySlug + '/' + slug + '"><img src="' + mainImg + '" class="img-fluid mx-auto" alt="" /></a></div>' +
 							'<span class="property-type">' + category + '</span></div><div class="listing-detail-wrapper pb-0">' +
-							'<div class="listing-short-detail"><h4 class="listing-name"><a href="/place/' + categorySlug + '/' + addres[$i]['slug'] + '">' + addres[$i]['title'] + '</a>' +
+							'<div class="listing-short-detail"><h4 class="listing-name"><a href="/place/' + categorySlug + '/' + slug + '">' + title + '</a>' +
 							'<i class="list-status ti-check"></i></h4></div></div></div></div></div></div>'
 					})
 					// myMap.destroy(),

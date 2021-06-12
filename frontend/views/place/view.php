@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\helpers\Json;
-use yii\web\View;
+use saschati\youtube\YouTube;
 
 $this->title = Html::decode($place->title) . ' — фото, описание на trip2place.com';
 $this->registerJsFile(
@@ -20,12 +20,12 @@ $this->registerJsFile(
 echo yii\helpers\Html::script($schema, ["type" => "application/ld+json"]);
 
 $this->params['breadcrumbs'][] = [
-    'label' => Yii::t('frontend', 'Места'),
-    'url' => Url::to('/place')
+	'label' => Yii::t('frontend', 'Места'),
+	'url' => Url::to('/place')
 ];
 $this->params['breadcrumbs'][] = [
-    'label' => $place->category->title,
-    'url' => Url::to('/place/'.$place->category->slug)
+	'label' => $place->category->title,
+	'url' => Url::to('/place/' . $place->category->slug)
 ];
 $this->params['breadcrumbs'][] = Yii::t('frontend', $place->title);
 
@@ -36,9 +36,7 @@ $images = $place->getImages();
 	<div class="featured-slick-slide">
 		<?php foreach ($images as $img) : ?>
 			<div>
-				<a href="<?= $img->getUrl(); ?>" class="mfp-gallery">
-					<img src="<?= $img->getUrl('560x359'); ?>" class="img-fluid mx-auto" title="<?= $img->title ?>" alt="<?= $img->alt ?>" />
-				</a>
+				<?= Html::a(Html::img($img->getUrl('560x359'), ['alt' => $img->alt, 'title' => $img->title, 'class' => 'img-fluid mx-auto']), $img->getUrl(), ['class' => 'mfp-gallery']) ?>
 			</div>
 		<?php endforeach; ?>
 	</div>
@@ -90,8 +88,6 @@ $images = $place->getImages();
 			</div>
 		</div>
 	</header>
-
-	<!-- ============================ Property Detail Start ================================== -->
 	<section class="gray">
 		<div class="container">
 			<div class="row">
@@ -105,44 +101,54 @@ $images = $place->getImages();
 						</div>
 					</div>
 
-					<!-- Удобства -->
-					<!-- <div class="block-wrap">
-								
-								<div class="block-header">
-									<h4 class="block-title">Удобства</h4>
-								</div>
-								
-								<div class="block-body">
-									<ul class="avl-features third">
-										<li>Air Conditioning</li>
-										<li>Swimming Pool</li>
-										<li>Central Heating</li>
-										<li>Laundry Room</li>
-										<li>Gym</li>
-										<li>Alarm</li>
-										<li>Window Covering</li>
-										<li>Internet</li>
-										<li>Pets Allow</li>
-										<li>Free WiFi</li>
-										<li>Car Parking</li>
-										<li>Spa & Massage</li>
-									</ul>
-								</div>
-								
-							</div> -->
-					<!-- Карта -->
+					<?php if(!empty($place->youtube_url)):?>
+					<div class="block-wrap">
+						<div class="block-header">
+							<h4 class="block-title">Видео</h4>
+						</div>
+						<div class="block-body">
+							<?php echo YouTube::widget([
+								'video' => $place->youtube_url,
+								'iframeOptions' => [
+									'class' => 'youtube-video'
+								],
+								'divOptions' => [
+									'class' => 'youtube-video-div'
+								],
+								'height' => 390,
+								'width' => '100%',
+								'playerVars' => [
+									'controls' => YouTube::DISABLE,
+									'autoplay' => YouTube::DISABLE,
+									'showinfo' => YouTube::DISABLE,
+									'start' => 0,
+									'end' => 0,
+									'loop ' => YouTube::DISABLE,
+									'modestbranding' => YouTube::DISABLE,
+									'fs' => YouTube::DISABLE,
+									'rel' => YouTube::DISABLE,
+									'disablekb' => YouTube::DISABLE
+								],
+								'events' => [
+									'onReady' => 'function (event){
+                                            event.target.playVideo();
+                                }',
+								]
+							]);
+							?>
+						</div>
+					</div>
+
+					<?php endif?>
 					<?php if ($place->address || $place->lng) : ?>
 						<div class="block-wrap">
-
 							<div class="block-header">
 								<h4 class="block-title">Местоположение</h4>
 							</div>
-
 							<div class="block-body">
 								<div class="map-container">
 									<div id="singleMap" data-addres='<?php echo ($addressInJson) ? $addressInJson : "" ?>'></div>
 								</div>
-
 							</div>
 						</div>
 					<?php endif; ?>
@@ -344,7 +350,6 @@ $images = $place->getImages();
 					</div> -->
 				</div>
 
-				<!-- property Sidebar -->
 				<div class="col-lg-4 col-md-12 col-sm-12">
 
 					<div class="verified-list mb-4">
@@ -375,8 +380,8 @@ $images = $place->getImages();
 						<button class="btn btn-theme full-width">Send Message</button>
 					</div> -->
 						<!-- Listing Hour Detail -->
-						<?php if (isset($place->schedule)) : ?>
-							<?php //var_dump(Json::decode($place->schedule)); die;?>
+						<?php if (!empty($place->schedule)) : ?>
+							?>
 							<div class="tr-single-box">
 								<div class="tr-single-header listing-hours-header open">
 									<h4><i class="lni-timer"></i>Сейчас
@@ -390,7 +395,7 @@ $images = $place->getImages();
 								</div>
 								<div class="tr-single-body">
 									<ul class="listing-hour-day">
-									<?php $daysweek = [0 => 'Понедельник', 1 => 'Вторник', 2 => 'Среда', 3 => 'Четверг', 4 => 'Пятница', 5 => 'Суббота', 6 => 'Воскресенье'];?>
+										<?php $daysweek = [0 => 'Понедельник', 1 => 'Вторник', 2 => 'Среда', 3 => 'Четверг', 4 => 'Пятница', 5 => 'Суббота', 6 => 'Воскресенье']; ?>
 										<?php foreach (Json::decode($place->schedule) as $dn => $working) : ?>
 											<li>
 												<span class="listing-hour-day"><?= $daysweek[$dn] ?></span>
@@ -498,53 +503,65 @@ $images = $place->getImages();
 
 							<div class="tr-single-body">
 								<ul class="extra-service">
-									<li>
-										<?php if ($place->address) : ?>
+									<?php if (!empty($place->lat) && !empty($place->lng)) : ?>
+										<li>
 											<div class="icon-box-icon-block">
-													<div class="icon-box-round">
-														<i class="lni-map-marker"></i>
-													</div>
-													<div style="display:contents">
-														<?= $place->address ?>
-													</div>
+												<div class="icon-box-round">
+													<i class="lni-map-marker"></i>
+												</div>
+												<div style="display:contents">
+													<?= $place->lat .', ' . $place->lng?>
+												</div>
 											</div>
-										<?php endif ?>
-									</li>
-									<?php if (isset($place->phone)) : ?>
+										</li>
+									<?php endif ?>
+									<?php if (!empty($place->address)) : ?>
+										<li>
+											<div class="icon-box-icon-block">
+												<div class="icon-box-round">
+													<i class="lni-map-marker"></i>
+												</div>
+												<div style="display:contents">
+													<?= $place->address ?>
+												</div>
+											</div>
+										</li>
+									<?php endif ?>
+									<?php if (!empty($place->phone)) : ?>
 										<?php foreach ($place->phone as $phone) : ?>
 											<li>
 												<div class="icon-box-icon-block">
-														<div class="icon-box-round">
-															<i class="lni-phone-handset"></i>
-														</div>
-														<div class="icon-box-text">
-															<?= Html::a('+'.$phone['phones'], 'tel:' .$phone['phones'], ['rel' => 'nofollow']) ?>
-														</div>
+													<div class="icon-box-round">
+														<i class="lni-phone-handset"></i>
+													</div>
+													<div class="icon-box-text">
+														<?= Html::a('+' . $phone['phones'], 'tel:' . $phone['phones'], ['rel' => 'nofollow']) ?>
+													</div>
 												</div>
 											</li>
 										<?php endforeach; ?>
 									<?php endif; ?>
-									<?php if (isset($place->email)) : ?>
+									<?php if (!empty($place->email)) : ?>
 										<li>
 											<div class="icon-box-icon-block">
-													<div class="icon-box-round">
-														<i class="lni-envelope"></i>
-													</div>
-													<div class="icon-box-text">
+												<div class="icon-box-round">
+													<i class="lni-envelope"></i>
+												</div>
+												<div class="icon-box-text">
 													<?= Html::mailto($place->email, $place->email, ['rel' => 'nofollow']) ?>
-													</div>
+												</div>
 											</div>
 										</li>
 									<?php endif; ?>
-									<?php if (isset($place->website)) : ?>
+									<?php if (!empty($place->website)) : ?>
 										<li>
 											<div class="icon-box-icon-block">
-													<div class="icon-box-round">
-														<i class="lni-world"></i>
-													</div>
-													<div class="icon-box-text">
+												<div class="icon-box-round">
+													<i class="lni-world"></i>
+												</div>
+												<div class="icon-box-text">
 													<?= Html::a($place->website, $place->website, ['rel' => 'nofollow', 'referrerpolicy' => "unsafe-url", 'target' => "_blank"]) ?>
-													</div>
+												</div>
 											</div>
 										</li>
 									<?php endif; ?>
@@ -552,7 +569,6 @@ $images = $place->getImages();
 							</div>
 
 						</div>
-						<!-- Tags -->
 						<?php if ($place->tagLinksArray) : ?>
 							<div class="tr-single-box">
 								<div class="tr-single-header">
@@ -563,7 +579,8 @@ $images = $place->getImages();
 										<?php foreach ($place->tagLinksArray as $tag) : ?>
 											<li>
 												<div class="icon-box-icon-block">
-													<a href="<?// $tag->name?>">
+													<a href="<? // $tag->name
+																		?>">
 														<div class="icon-box-round">
 															<i class="lni-car-alt"></i>
 														</div>
@@ -579,24 +596,24 @@ $images = $place->getImages();
 							</div>
 						<?php endif ?>
 						<?php if (!empty($otherPlace)) : ?>
-		<div class="single-widgets widget_thumb_post">
+							<div class="single-widgets widget_thumb_post">
 								<h4 class="title">Смотрите также</h4>
 								<ul>
-								<?php foreach ($otherPlace as $item) : ?>
-									<?php $img = $item->getImage();?>
-									<li>
-										<span class="left">
-											<img src="<?= $img->getUrl('560x359'); ?>" alt="<?= $img->title?>" class="">
-										</span>
-										<span class="right">
-											<a class="feed-title" href="<?= Url::to(['place/view', 'category' => $item->category->slug, 'city' => ($item->city) ? $item->city->url : null, 'slug' => $item->slug]) ?>"><?= $item->title?></a> 
-											<!-- <span class="post-date"><i class="ti-calendar"></i>10 Min ago</span> -->
-										</span>
-									</li>
+									<?php foreach ($otherPlace as $item) : ?>
+										<?php $img = $item->getImage(); ?>
+										<li>
+											<span class="left">
+												<?= Html::a(Html::img($img->getUrl('560x359'), ['alt' => $img->title]), ['place/view', 'category' => $item->category->slug, 'city' => ($item->city) ? $item->city->url : null, 'slug' => $item->slug])?>
+											</span>
+											<span class="right">
+												<?= Html::a($item->title,['place/view', 'category' => $item->category->slug, 'city' => ($item->city) ? $item->city->url : null, 'slug' => $item->slug], ['class' => 'feed-title']) ?>
+												<!-- <span class="post-date"><i class="ti-calendar"></i>10 Min ago</span> -->
+											</span>
+										</li>
 									<?php endforeach ?>
 								</ul>
 							</div>
-							<?php endif?>
+						<?php endif ?>
 					</div>
 				</div>
 			</div>

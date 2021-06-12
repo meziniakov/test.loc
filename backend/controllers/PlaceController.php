@@ -219,7 +219,7 @@ class PlaceController extends Controller
             
             Yii::$app->session->setFlash('success', "Успешно создано");
             
-            return $this->redirect(['index']);
+            return $this->refresh();
         }
 
         return $this->render('create', [
@@ -243,12 +243,9 @@ class PlaceController extends Controller
             if ($model->imageFiles){
                 $model->uploadGallery();
             }
-            
             Yii::$app->session->setFlash('success', "успешно обновлено");
-            
-            return $this->redirect(['index']);
+            return $this->refresh();
         }
-
         return $this->render('update', [
             'model' => $model,
             'categories' => PlaceCategory::find()->active()->all(),

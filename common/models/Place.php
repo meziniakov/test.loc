@@ -127,7 +127,7 @@ class Place extends ActiveRecord
             ['tmp_uniq', 'safe'],
             [['status', 'is_home', 'category_id', 'city_id', 'author_id', 'updater_id', 'created_at', 'updated_at'], 'integer'],
             [['url', 'description', 'title', 'website', 'street', 'street_comment'], 'string', 'max' => 255],
-            [['title'], 'string', 'max' => 80],
+            [['title', 'youtube_url'], 'string', 'max' => 80],
             ['status', 'default', 'value' => self::STATUS_PARSED],
             ['author_id', 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['author_id' => 'id']],
             ['category_id', 'exist', 'skipOnError' => true, 'targetClass' => PlaceCategory::class, 'targetAttribute' => ['category_id' => 'id']],
@@ -151,6 +151,7 @@ class Place extends ActiveRecord
             'title' => Yii::t('backend', 'Title'),
             'slug' => Yii::t('backend', 'URL'),
             'lat' => Yii::t('backend', 'Широта'),
+            'youtube_url' => Yii::t('backend', 'YouTube'),
             'lng' => Yii::t('backend', 'Долгота'),
             'description' => Yii::t('backend', 'Description'),
             'text' => Yii::t('backend', 'Text'),
@@ -217,7 +218,7 @@ class Place extends ActiveRecord
                 ];
             }
         } else {
-            $addressInJson[] = [
+            $addressInJson = [
                 'addres' => trim($models['address']),
                 'title' => $models['title'],
                 'slug' => $models['slug'],

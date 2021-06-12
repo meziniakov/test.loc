@@ -169,23 +169,18 @@ class ArticleController extends Controller
                     ]
                 ];
             }
-
             $data = [
                 'blocks' => 
                     $text,
             ];
             $model->json = Json::encode($data);
-
-            // $model->description = $arr;
-            // echo Json::encode($arr);die;
             $model->save();
             $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
             if ($model->imageFile) {
                 $model->uploadMainImage();
             }
-
             Yii::$app->session->setFlash('success', "Успешно создано");
-            return $this->redirect(['index']);
+            return $this->refresh();
         } else {
             return $this->render('generate', [
                 'model' => $model,
@@ -213,10 +208,9 @@ class ArticleController extends Controller
             if ($model->imageFile) {
                 $model->uploadMainImage();
             }
-            Yii::$app->session->setFlash('success', "Успешно создано");
-            return $this->redirect(['index']);
+            Yii::$app->session->setFlash('success', "Успешно обновлено");
+            return $this->refresh();
         } else {
-            // var_dump($model);die;
             return $this->render('update', [
                 'model' => $model,
                 'cities' => City::find()->all(),

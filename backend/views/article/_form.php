@@ -49,6 +49,7 @@ $this->registerJsFile(
 
     <?php $form = ActiveForm::begin() ?>
     <div class="form-group">
+        <?= Html::a(Yii::t('backend', 'Назад'), ['index'], ['class' => 'btn btn-default']) ?>
         <?= Html::submitButton($model->isNewRecord ? Yii::t('backend', 'Create') : Yii::t('backend', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>
 
