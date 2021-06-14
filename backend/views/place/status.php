@@ -9,6 +9,7 @@ use yii\helpers\ArrayHelper;
 use common\models\City;
 use nickdenry\grid\toggle\components\RoundSwitchColumn;
 use yii\widgets\Pjax;
+use yii\jui\DatePicker;
 
 $this->title = Yii::t('backend', 'Places');
 
@@ -65,6 +66,17 @@ $controller = Yii::$app->controller->id;
                 'filter' => function ($model) {
                   return ArrayHelper::map($model->city, 'id', 'name');
               },
+            ],
+            [
+              'attribute'=>'created_at',
+              'format' => ['date', 'dd.MM.YYYY'],
+              'options' => ['width' => '90'],
+              'filter' => DatePicker::widget([
+                'model' => $searchModel,
+                'attribute' => 'created_at',
+                'dateFormat' => 'dd.MM.yyyy',
+                'options' => ['width' => '90']
+              ]),
             ],
             [
                 'attribute' => 'imageFile',

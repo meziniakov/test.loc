@@ -69,18 +69,14 @@ class PlaceController extends Controller
      */
     public function actionIndex()
     {
-        $img = '';
         $searchModel = new PlaceSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $categories = PlaceCategory::find()->active()->all();
         $cities = City::find()->all();
-        // var_dump($categories);die;
-        // $img = $dataProvider->getImage();
 
         return $this->render('index', [
-            'searchModel' => $searchModel,
-            'img' => $img,
             'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
             'categories' => $categories,
             'cities' => $cities
         ]);
@@ -90,36 +86,14 @@ class PlaceController extends Controller
      * Lists all Place models.
      * @return mixed
      */
-    // public function actionIndex()
-    // {
-    //     $searchModel = new PlaceSearch();
-
-    //     return $this->render('status', [
-    //         'searchModel' => $searchModel,
-    //         'categories' => PlaceCategory::findAll(['status' => 1]),
-    //         'data' => new ActiveDataProvider([
-    //             // 'query' => Place::find()->with('category', 'city'),
-    //             'query' => $searchModel->search(Place::find()->with('category', 'city')-),
-    //             'totalCount' => $this->all,
-    //                 ])
-    //     ]);
-    // }
-    /**
-     * Lists all Place models.
-     * @return mixed
-     */
     public function actionParsed()
     {
         $searchModel = new PlaceSearch();
-
         return $this->render('status', [
+            'data' => $searchModel->searchByStatus(Yii::$app->request->queryParams, Place::STATUS_PARSED, $this->parsed),
             'searchModel' => $searchModel,
             'categories' => PlaceCategory::findAll(['status' => 1]),
             'cities' => City::find()->all(),
-            'data' => new ActiveDataProvider([
-                'query' => Place::find()->with('category', 'city')->where(['=', 'status', Place::STATUS_PARSED]),
-                'totalCount' => $this->parsed,
-                    ])
         ]);
     }
 
@@ -130,15 +104,11 @@ class PlaceController extends Controller
     public function actionEdited()
     {
         $searchModel = new PlaceSearch();
-
         return $this->render('status', [
+            'data' => $searchModel->searchByStatus(Yii::$app->request->queryParams, Place::STATUS_EDITED, $this->edited),
             'searchModel' => $searchModel,
             'cities' => City::find()->all(),
             'categories' => PlaceCategory::findAll(['status' => 1]),
-            'data' => new ActiveDataProvider([
-                'query' => Place::find()->with('category', 'city')->where(['=', 'status', Place::STATUS_EDITED]),
-                'totalCount' => $this->edited
-                    ])
         ]);
     }
 
@@ -151,13 +121,10 @@ class PlaceController extends Controller
         $searchModel = new PlaceSearch();
 
         return $this->render('status', [
+            'data' => $searchModel->searchByStatus(Yii::$app->request->queryParams, Place::STATUS_PUBLISHED, $this->published),
             'searchModel' => $searchModel,
             'cities' => City::find()->all(),
             'categories' => PlaceCategory::findAll(['status' => 1]),
-            'data' => new ActiveDataProvider([
-                'query' => Place::find()->with('category', 'city')->where(['=', 'status', Place::STATUS_PUBLISHED]),
-                'totalCount' => $this->published
-                    ])
         ]);
     }
 
@@ -170,13 +137,10 @@ class PlaceController extends Controller
         $searchModel = new PlaceSearch();
 
         return $this->render('status', [
+            'data' => $searchModel->searchByStatus(Yii::$app->request->queryParams, Place::STATUS_UPDATED, $this->updated),
             'searchModel' => $searchModel,
             'categories' => PlaceCategory::findAll(['status' => 1]),
             'cities' => City::find()->all(),
-            'data' => new ActiveDataProvider([
-                'query' => Place::find()->with('category', 'city')->where(['=', 'status', Place::STATUS_UPDATED]),
-                'totalCount' => $this->updated
-                    ])
         ]);
     }
 
@@ -185,13 +149,10 @@ class PlaceController extends Controller
         $searchModel = new PlaceSearch();
 
         return $this->render('status', [
+            'data' => $searchModel->searchByStatus(Yii::$app->request->queryParams, Place::STATUS_TRASHED, $this->trashed),
             'searchModel' => $searchModel,
             'cities' => City::find()->all(),
             'categories' => PlaceCategory::findAll(['status' => 1]),
-            'data' => new ActiveDataProvider([
-                'query' => Place::find()->with('category', 'city')->where(['=', 'status', Place::STATUS_TRASHED]),
-                'totalCount' => $this->trashed
-                    ])
         ]);
     }
 
@@ -218,7 +179,6 @@ class PlaceController extends Controller
             $model->uploadGallery();
             
             Yii::$app->session->setFlash('success', "Успешно создано");
-            
             return $this->refresh();
         }
 
@@ -257,7 +217,6 @@ class PlaceController extends Controller
     {
         $this->findModel($id)->delete();
         Yii::$app->session->setFlash('success', 'Успешно удалено');
-
         return $this->redirect(['index']);
     }
 
@@ -272,7 +231,6 @@ class PlaceController extends Controller
                 $place->removeImage($image);
             }
         }
-    
         return $this->redirect(["/place/update", "id" => $id]);
     }
 
@@ -282,7 +240,6 @@ class PlaceController extends Controller
             Place::updateAll(['status' => 0], ['id' => Yii::$app->request->post('id')]);
         }
         Yii::$app->session->setFlash('success', 'Успешно удалено');
-
         return $this->redirect(Yii::$app->request->referrer);
 
     }
@@ -311,7 +268,7 @@ class PlaceController extends Controller
             Place::updateAll(['city_id' => Yii::$app->request->post('city_id')], ['id' => Yii::$app->request->post('id')]);
         }
         Yii::$app->session->setFlash('success', 'Успешно изменено');
-        return $this->redirect(Yii::$app->request->referrer);
+        return $this->refresh();
     }
 
     protected function findModel($id)
@@ -319,7 +276,6 @@ class PlaceController extends Controller
         if (($model = Place::findOne($id)) !== null) {
             return $model;
         }
-
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 }

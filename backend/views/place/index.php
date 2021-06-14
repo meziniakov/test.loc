@@ -9,6 +9,7 @@ use yii\grid\GridView;
 use yii\helpers\ArrayHelper;
 use yii\widgets\Pjax;
 use nickdenry\grid\toggle\components\RoundSwitchColumn;
+use yii\jui\DatePicker;
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\PlaceSearch */
@@ -25,7 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= GridView::widget([
         'id' => 'grid',
         'dataProvider' => $dataProvider,
-        // 'layout' => "\n\n",
+        // 'layout' => "{sorter}",
         'filterModel' => $searchModel,
         'options' => ['class' => 'table-responsive'],
         'tableOptions' => ['class' => 'table table-striped'],
@@ -45,13 +46,15 @@ $this->params['breadcrumbs'][] = $this->title;
                     return Html::a(Html::encode($data->title), Url::to(['update', 'id' => $data->id]));
                 },
                 'format' => 'raw',
+                'headerOptions' => ['width' => 400],
             ],
             // 'description:ntext',
             [
                 'class' => RoundSwitchColumn::class,
                 'attribute' => 'is_home',
+                'label' => 'На главной',
                 'action' => 'switch',
-                // 'headerOptions' => ['width' => 150],
+                'headerOptions' => ['width' => 60],
             ],
             [
                 'attribute' => 'category_id',
@@ -59,6 +62,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $model->category ? $model->category->title : null;
                 },
                 'filter' => ArrayHelper::map(PlaceCategory::find()->all(), 'id', 'title'),
+                'headerOptions' => ['width' => 100],
             ],
             [
                 'attribute' => 'city_id',
@@ -66,9 +70,27 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $model->city ? $model->city->name : null;
                 },
                 'filter' => ArrayHelper::map(City::find()->all(), 'id', 'name'),
+                'headerOptions' => ['width' => 100],
             ],
             [
+                'attribute' => 'created_at',
+                'format' => ['date', 'dd.MM.YYYY'],
+                'options' => ['width' => '90'],
+                'filter' => DatePicker::widget([
+                    'model' => $searchModel,
+                    'attribute' => 'created_at',
+                    'dateFormat' => 'dd.MM.yyyy',
+                    'options' => ['width' => '90']
+                ]),
+            ],
+            // [
+            //     'attribute' => 'updated_at',
+            //     'format' =>  ['date', 'HH:mm dd.MM.YY'],
+            //     'options' => ['width' => '90']
+            // ],
+            [
                 'attribute' => 'imageFile',
+                'label' => 'Фото',
                 // 'format' => 'image',
                 'format' => 'html',
                 'filter' => false,

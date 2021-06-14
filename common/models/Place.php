@@ -17,8 +17,6 @@ use common\models\Tag;
 use common\models\query\PlaceQuery;
 use yii\imagine\Image;
 
-
-
 /**
  * This is the model class for table "Place".
  *
@@ -199,6 +197,19 @@ class Place extends ActiveRecord
                 ]
             ],
         ]);
+    }
+
+    public static function getActiveDataProvider($status, $count)
+    {
+        return new ActiveDataProvider([
+            'query' => Place::find()->with('category', 'city')->where(['=', 'status', $status]),
+            'sort' => [
+                'defaultOrder' => [
+                        'id' => SORT_DESC
+                ]
+            ],    
+            'totalCount' => $count,
+                ]);
     }
 
     public static function getJsonForMap($models)

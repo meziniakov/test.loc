@@ -70,9 +70,9 @@ class PlaceController extends Controller
     $tag_id = Yii::$app->request->get('tag_id');
 
     if ($city = City::find()->where('url = :url', [':url' => Yii::$app->params['city']])->one()) {
-      $query = Place::find()->parsed()->where(['city_id' => $city->id])->with('category');
+      $query = Place::find()->where(['city_id' => $city->id])->published()->with('category');
     } elseif (Yii::$app->params['city'] == 'global') {
-      $query = Place::find()->parsed()->with('category');
+      $query = Place::find()->published()->with('category');
     } else {
       throw new NotFoundHttpException(Yii::t('frontend', 'Page not found.'));
     }
@@ -167,10 +167,10 @@ class PlaceController extends Controller
   {
     if ($city = City::find()->where('url = :url', [':url' => Yii::$app->params['city']])->one()) {
       $place = $this->findModel($slug, $city->id);
-      $otherPlace = Place::find()->parsed()->where(['!=', 'id', $place->id])->andWhere(['category_id' => $place->category_id])->andWhere(['city_id' => $city->id])->limit(5)->all();
+      $otherPlace = Place::find()->published()->where(['!=', 'id', $place->id])->andWhere(['category_id' => $place->category_id])->andWhere(['city_id' => $city->id])->limit(5)->all();
     } elseif (Yii::$app->params['city'] == 'global') {
       $place = $this->findModel($slug);
-      $otherPlace = Place::find()->parsed()->where(['!=', 'id', $place->id])->with('category')->limit(5)->all();
+      $otherPlace = Place::find()->published()->where(['!=', 'id', $place->id])->with('category')->limit(5)->all();
     } else {
       throw new NotFoundHttpException(Yii::t('frontend', 'Page not found.'));
     }
@@ -237,7 +237,7 @@ class PlaceController extends Controller
 
   public function findModel($slug, $city_id = null)
   {
-    if (($model = Place::find()->where(['slug' => $slug])->andWhere(['city_id' => $city_id])->with('category', 'tags')->one()) !== null) {
+    if (($model = Place::find()->where(['slug' => $slug])->published()->andWhere(['city_id' => $city_id])->with('category', 'tags')->one()) !== null) {
       return $model;
     }
     throw new NotFoundHttpException('Страницы не существует');
@@ -245,7 +245,7 @@ class PlaceController extends Controller
 
   public function findModelCategory($slug, $city_id = null)
   {
-    $model = Place::find()->joinWith(['category'])->where('{{%place_category}}.slug = :slug', [':slug' => $slug])->andWhere(['city_id' => $city_id]);
+    $model = Place::find()->published()->joinWith(['category'])->where('{{%place_category}}.slug = :slug', [':slug' => $slug])->andWhere(['city_id' => $city_id]);
     if ($model->one() !== null) {
       return $model;
     }

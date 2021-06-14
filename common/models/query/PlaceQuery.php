@@ -21,9 +21,9 @@ class PlaceQuery extends \yii\db\ActiveQuery
     {
         return $this->andWhere(['status' => Place::STATUS_PARSED]);
     }
-    public function deleted()
+    public function trashed()
     {
-        return $this->andWhere(['status' => Place::STATUS_DELETED]);
+        return $this->andWhere(['status' => Place::STATUS_TRASHED]);
     }
     public function edited()
     {
