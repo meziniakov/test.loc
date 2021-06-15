@@ -174,9 +174,8 @@ class PlaceController extends Controller
             }
             $model->imageFiles = UploadedFile::getInstances($model, 'imageFiles');
             if ($model->imageFiles){
-                var_dump($model->imageFiles);die;
+                $model->uploadGallery();
             }
-            $model->uploadGallery();
             
             Yii::$app->session->setFlash('success', "Успешно создано");
             return $this->refresh();

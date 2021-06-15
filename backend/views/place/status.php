@@ -69,6 +69,7 @@ $controller = Yii::$app->controller->id;
             ],
             [
               'attribute'=>'created_at',
+              'label' => 'Дата создания',
               'format' => ['date', 'dd.MM.YYYY'],
               'options' => ['width' => '90'],
               'filter' => DatePicker::widget([
