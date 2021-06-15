@@ -90,19 +90,19 @@ class PlaceController extends Controller
     Yii::$app->view->registerLinkTag(['rel' => 'canonical', 'href' => Url::canonical()], 'canonical');
     Yii::$app->view->registerMetaTag([
       'name' => 'description',
-      'content' => 'Surf-city - изучайте Россию вместе с нами.'
+      'content' => 'trip2place.com - путешествуй, открывая новые места в России.'
     ], 'description');
 
     Yii::$app->seo->putFacebookMetaTags([
       'og:locale'     => 'ru_RU',
       'og:url'        => Url::canonical(),
       'og:type'       => 'article',
-      'og:title'      => 'Surf-City - открывай интересные места России',
-      'og:description' => 'Surf-city - изучайте Россию вместе с нами.',
+      'og:title'      => 'trip2place.com - открывай интересные места России',
+      'og:description' => 'trip2place.com - изучайте Россию вместе с нами.',
       // 'og:image'      => Url::to($place->getImage()->getUrl(), true),
       // 'og:image:width' => $place->getImage()->getSizes()['width'],
       // 'og:image:height' => $place->getImage()->getSizes()['height'],
-      'og:site_name' => 'Surf-City - открывай интересные места России',
+      'og:site_name' => 'trip2place.com - открывай интересные места России',
       // 'og:updated_time' => Yii::$app->formatter->asDatetime($place->updated_at, "php:Y-m-dTH:i:s+00:00"),
       // 'og:updated_time' => date(DATE_ATOM, $place->updated_at),
       // 'fb:app_id' => '',
@@ -178,7 +178,7 @@ class PlaceController extends Controller
     Yii::$app->view->registerLinkTag(['rel' => 'canonical', 'href' => Url::canonical()], 'canonical');
     Yii::$app->view->registerMetaTag([
       'name' => 'description',
-      'content' => $place->city ? $place->title . " $place->address в городе {$place->city->name} - описание, все фотографии, местоположение на Surf-city.ru. Контакты" : $place->title . " $place->address - описание, все фотографии, местоположение на Surf-city.ru. Контакты",
+      'content' => $place->city ? $place->title . " $place->address в городе {$place->city->name} - как проехать, описание, фото на trip2place.com" : $place->title . " $place->address - как проехать, описание, фото на trip2place.com",
     ], 'description');
 
     Yii::$app->seo->putFacebookMetaTags([
@@ -186,11 +186,11 @@ class PlaceController extends Controller
       'og:url'        => Url::canonical(),
       'og:type'       => 'article',
       'og:title'      => $place->title,
-      'og:description' => $place->city ? $place->title . " $place->address в городе {$place->city->name} - описание, все фотографии, местоположение на Surf-city.ru. Контакты" : $place->title . " $place->address - описание, все фотографии, местоположение на Surf-city.ru. Контакты",
+      'og:description' => $place->city ? $place->title . " $place->address в городе {$place->city->name} - как проехать, описание, фото на trip2place.com" : $place->title . " $place->address - как проехать, описание, фото на trip2place.com",
       'og:image'      => Url::to($place->getImage()->getUrl(), true),
       'og:image:width' => $place->getImage()->getSizes()['width'],
       'og:image:height' => $place->getImage()->getSizes()['height'],
-      'og:site_name' => 'Surf-City - открывай интересные места России',
+      'og:site_name' => ' - trip2place.com - открывай интересные места России',
       // 'og:updated_time' => Yii::$app->formatter->asDatetime($place->updated_at, "php:Y-m-dTH:i:s+00:00"),
       'og:updated_time' => date(DATE_ATOM, $place->updated_at),
       // 'fb:app_id' => '',
@@ -267,6 +267,12 @@ class PlaceController extends Controller
     $dataProvider = Place::getDataProvider($query);
 
     $models = $dataProvider->getModels();
+
+    Yii::$app->view->registerLinkTag(['rel' => 'canonical', 'href' => Url::canonical()], 'canonical');
+    Yii::$app->view->registerMetaTag([
+      'name' => 'description',
+      'content' => isset($place->city) ? 'Места, которые стоит посетить в категории ' . $place->category->title . ' в городе ' . $place->city->name : 'Места, которые стоит посетить в категории' . $place->category->title,
+    ], 'description');
 
     return $this->render('category', [
       'place' => $place,

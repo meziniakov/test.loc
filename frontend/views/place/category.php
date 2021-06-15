@@ -3,7 +3,7 @@
 use yii\helpers\Url;
 use yii\widgets\ListView;
 
-$this->title = Yii::t('frontend', 'Места в категории {title}', ['title' => $place->category->title]);
+$this->title = isset($place->city) ? $place->city->name . ', ' . Yii::t('frontend', 'все достопримечательности в категории {title}', ['title' => $place->category->title]) : Yii::t('frontend', 'все достопримечательности в категории {title}', ['title' => $place->category->title]);
 $this->params['breadcrumbs']['<i></i>'] = [
 	'label' => Yii::t('frontend', 'Места'),
 	'url' => Url::to('/place')
@@ -13,7 +13,7 @@ $this->params['breadcrumbs'][] = Yii::t('frontend', $place->category->title);
 
 <div class="container">
 	<div class="col-12 p-0">
-			<h2>Места в категории <?= $place->category->title ?><?= isset($place->city) ? ' в городе ' . $place->city->name : '' ?></h2>
+			<h2>Места, которые стоит посетить в категории <?= $place->category->title ?><?= isset($place->city) ? ' в городе ' . $place->city->name : '' ?></h2>
 	</div>
 	<div class="col-12 p-0">
 		<?= ListView::widget([

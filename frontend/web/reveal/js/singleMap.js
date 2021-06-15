@@ -10,38 +10,44 @@ function init() {
 	var addres = data['addres']
 	var lat = data['lat']
 	var lng = data['lng']
-		var markerIcon2 = {
-		url: '/reveal/img/marker.png',
+
+	function routeControl(coords) {
+		var myMap = new ymaps.Map('singleMap', {
+			center: coords,
+			zoom: 9,
+			controls: ['routePanelControl']
+	});
+		var control = myMap.controls.get('routePanelControl');
+		control.routePanel.state.set({
+			type: "AUTO",
+			fromEnabled: true,
+			// from: 'Москва, Льва Толстого 16',
+			toEnabled: false,
+			to: coords
+		});
+
+		control.routePanel.options.set({
+			allowSwitch: true,
+			reverseGeocoding: true,
+			types: { auto: true, masstransit: true, pedestrian: true, taxi: true }
+		});
 	}
 
-	if(lat && lng) {
-		var myMap = new ymaps.Map("singleMap", {
-			center: [lat, lng],
-			zoom: 15,
-			controls: ['geolocationControl'],
-			zoomMargin: [10]
-		})
-	
-		var placemark = new ymaps.Placemark([lat, lng])
-		myMap.geoObjects.add(placemark)
+	if (lat && lng) {
+		var coords = [lat, lng]
+		var placemark = new ymaps.Placemark(coords)
+		routeControl(coords)
+		// myMap.geoObjects.add(placemark);
 	} else {
 		var myGeocoder = ymaps.geocode(addres);
-		myGeocoder.then(
-			function (res) {
-				var coords = res.geoObjects.get(0).geometry.getCoordinates();
-
-				var myMap = new ymaps.Map("singleMap", {
-					center: coords,
-					zoom: 10,
-					controls: ['geolocationControl']
-				})
-				var myPlacemark = new ymaps.Placemark(coords, {}, {
-					iconLayout: 'default#image',
-					iconImageHref: '/reveal/img/marker.png'
-				})
-
-				myMap.geoObjects.add(myPlacemark);
-			},
+		myGeocoder.then(function (res) {
+			var coords = res.geoObjects.get(0).geometry.getCoordinates();
+			var placemark = new ymaps.Placemark(coords, {}, {
+				iconLayout: 'default#image',
+				iconImageHref: '/reveal/img/marker.png'
+			})
+			routeControl(coords)
+		},
 			function (err) {
 			}
 		);

@@ -5,7 +5,7 @@ use yii\helpers\Url;
 use yii\helpers\Json;
 use saschati\youtube\YouTube;
 
-$this->title = Html::decode($place->title) . ' — фото, описание на trip2place.com';
+$this->title = isset($place->city->name) ? $place->city->name . ', ': '' . Html::decode($place->title) . ' — фото, описание, контакты на trip2place.com';
 $this->registerJsFile(
 	"/reveal/js/singleMap.js",
 	$options = [
@@ -143,9 +143,37 @@ $images = $place->getImages();
 					<?php if ($place->address || $place->lng) : ?>
 						<div class="block-wrap">
 							<div class="block-header">
-								<h4 class="block-title">Местоположение</h4>
+								<h2 class="block-title">Как добраться</h2>
 							</div>
 							<div class="block-body">
+							<div class="tr-single-body">
+								<ul class="extra-service">
+									<?php if (!empty($place->lat) && !empty($place->lng)) : ?>
+										<li>
+											<div class="icon-box-icon-block">
+												<div class="icon-box-round">
+													<i class="lni-map-marker"></i>
+												</div>
+												<div style="display:contents">
+													<?= $place->lat .', ' . $place->lng?>
+												</div>
+											</div>
+										</li>
+									<?php endif ?>
+									<?php if (!empty($place->address)) : ?>
+										<li>
+											<div class="icon-box-icon-block">
+												<div class="icon-box-round">
+													<i class="lni-map-marker"></i>
+												</div>
+												<div style="display:contents">
+													<?= $place->address ?>
+												</div>
+											</div>
+										</li>
+									<?php endif ?>
+								</ul>
+							</div>
 								<div class="map-container">
 									<div id="singleMap" data-addres='<?php echo ($addressInJson) ? $addressInJson : "" ?>'></div>
 								</div>
@@ -384,7 +412,7 @@ $images = $place->getImages();
 							?>
 							<div class="tr-single-box">
 								<div class="tr-single-header listing-hours-header open">
-									<h4><i class="lni-timer"></i>Сейчас
+									<h4><i class="lni-timer"></i>Режим работы
 										<?php $date = new DateTime();
 										if ($date->format('H:i') >= '10:00' && $date->format('H:i') <= '19:00') : ?>
 											<span class="listing-hours-status l-open ml-2">Открыто</span>
@@ -498,7 +526,7 @@ $images = $place->getImages();
 
 						<div class="tr-single-box">
 							<div class="tr-single-header">
-								<h4><i class="ti-direction"></i> Информация</h4>
+								<h4><i class="ti-direction"></i> Контактные данные</h4>
 							</div>
 
 							<div class="tr-single-body">
