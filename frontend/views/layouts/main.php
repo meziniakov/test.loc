@@ -34,7 +34,7 @@ AppAsset::register($this);
 <head>
     <meta charset="<?= Yii::$app->charset ?>">
     <?php $this->registerJsFile('/reveal/js/gtm.js') ?>
-    <?= $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/svg', 'href' => Yii::getAlias('@storageUrl').'/theme/favicon.svg']);?>
+    <?= $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/svg', 'href' => '/favicon.svg']);?>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <link rel="preconnect" href="//api-maps.yandex.ru">
     <link rel="dns-prefetch" href="//api-maps.yandex.ru">

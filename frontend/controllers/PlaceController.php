@@ -87,7 +87,7 @@ class PlaceController extends Controller
 
     $models = $dataProvider->getModels();
 
-    Yii::$app->view->registerLinkTag(['rel' => 'canonical', 'href' => Url::canonical()], 'canonical');
+    Yii::$app->view->registerLinkTag(['rel' => 'canonical', 'href' => Url::current([], true)], 'canonical');
     Yii::$app->view->registerMetaTag([
       'name' => 'description',
       'content' => 'trip2place.com - путешествуй, открывая новые места в России.'
@@ -95,7 +95,7 @@ class PlaceController extends Controller
 
     Yii::$app->seo->putFacebookMetaTags([
       'og:locale'     => 'ru_RU',
-      'og:url'        => Url::canonical(),
+      'og:url'        => Url::current([], true),
       'og:type'       => 'article',
       'og:title'      => 'trip2place.com - открывай интересные места России',
       'og:description' => 'trip2place.com - изучайте Россию вместе с нами.',
@@ -113,7 +113,7 @@ class PlaceController extends Controller
     ]);
 
     //   \Yii::$app->seo->putTwitterMetaTags([
-    //     'twitter:site'        => Url::canonical(),
+    //     'twitter:site'        => Url::current([], true),
     //     'twitter:title'       => $place->title,
     //     'twitter:description' => $place->description,
     //     'twitter:site'     => '@trip2place',
@@ -174,8 +174,7 @@ class PlaceController extends Controller
     } else {
       throw new NotFoundHttpException(Yii::t('frontend', 'Page not found.'));
     }
-
-    Yii::$app->view->registerLinkTag(['rel' => 'canonical', 'href' => Url::canonical()], 'canonical');
+    Yii::$app->view->registerLinkTag(['rel' => 'canonical', 'href' => Url::current([], true)], 'canonical');
     Yii::$app->view->registerMetaTag([
       'name' => 'description',
       'content' => $place->city ? $place->title . " $place->address в городе {$place->city->name} - как проехать, описание, фото на trip2place.com" : $place->title . " $place->address - как проехать, описание, фото на trip2place.com",
@@ -183,7 +182,7 @@ class PlaceController extends Controller
 
     Yii::$app->seo->putFacebookMetaTags([
       'og:locale'     => 'ru_RU',
-      'og:url'        => Url::canonical(),
+      'og:url'        => Url::current([], true),
       'og:type'       => 'article',
       'og:title'      => $place->title,
       'og:description' => $place->city ? $place->title . " $place->address в городе {$place->city->name} - как проехать, описание, фото на trip2place.com" : $place->title . " $place->address - как проехать, описание, фото на trip2place.com",
@@ -201,7 +200,7 @@ class PlaceController extends Controller
     ]);
 
     //   \Yii::$app->seo->putTwitterMetaTags([
-    //     'twitter:site'        => Url::canonical(),
+    //     'twitter:site'        => Url::current([], true),
     //     'twitter:title'       => $place->title,
     //     'twitter:description' => $place->description,
     //     'twitter:site'     => '@trip2place',
@@ -268,7 +267,7 @@ class PlaceController extends Controller
 
     $models = $dataProvider->getModels();
 
-    Yii::$app->view->registerLinkTag(['rel' => 'canonical', 'href' => Url::canonical()], 'canonical');
+    Yii::$app->view->registerLinkTag(['rel' => 'canonical', 'href' => Url::current([], true)], 'canonical');
     Yii::$app->view->registerMetaTag([
       'name' => 'description',
       'content' => isset($place->city) ? 'Места, которые стоит посетить в категории ' . $place->category->title . ' в городе ' . $place->city->name : 'Места, которые стоит посетить в категории' . $place->category->title,
