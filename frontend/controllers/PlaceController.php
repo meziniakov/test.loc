@@ -187,8 +187,6 @@ class PlaceController extends Controller
       'og:title'      => $place->title,
       'og:description' => $place->city ? $place->title . " $place->address в городе {$place->city->name} - как проехать, описание, фото на trip2place.com" : $place->title . " $place->address - как проехать, описание, фото на trip2place.com",
       'og:image'      => Url::to($place->getImage()->getUrl(), true),
-      'og:image:width' => $place->getImage()->getSizes()['width'],
-      'og:image:height' => $place->getImage()->getSizes()['height'],
       'og:site_name' => ' - trip2place.com - открывай интересные места России',
       // 'og:updated_time' => Yii::$app->formatter->asDatetime($place->updated_at, "php:Y-m-dTH:i:s+00:00"),
       'og:updated_time' => date(DATE_ATOM, $place->updated_at),
@@ -199,15 +197,15 @@ class PlaceController extends Controller
       // 'fb:app_id'=> '1811670458869631',//для статистики по переходам
     ]);
 
-    //   \Yii::$app->seo->putTwitterMetaTags([
-    //     'twitter:site'        => Url::current([], true),
-    //     'twitter:title'       => $place->title,
-    //     'twitter:description' => $place->description,
-    //     'twitter:site'     => '@trip2place',
-    //     'twitter:creator'     => '@trip2place',
-    //     'twitter:image:src'      => Url::to($place->getImage()->getUrl(), true),
-    //     'twitter:card'=> 'summary_large_image',
-    // ]);
+      \Yii::$app->seo->putTwitterMetaTags([
+        'twitter:site'        => Url::current([], true),
+        'twitter:title'       => $place->title,
+        'twitter:description' => $place->description,
+        'twitter:site'     => '@trip2place',
+        'twitter:creator'     => '@trip2place',
+        'twitter:image:src'      => Url::to($place->getImage()->getUrl(), true),
+        'twitter:card'=> 'summary_large_image',
+    ]);
 
     $image = $place->getImage();
     $img = Yii::$app->request->hostInfo . $image->getUrl();
