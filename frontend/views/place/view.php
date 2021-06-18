@@ -198,7 +198,6 @@ $images = $place->getImages();
 					</div>
 					<div class="page-sidebar">
 						<?php if (!empty($place->schedule)) : ?>
-							?>
 							<div class="tr-single-box">
 								<div class="tr-single-header listing-hours-header open">
 									<h4><i class="lni-timer"></i>Режим работы
