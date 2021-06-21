@@ -18,6 +18,9 @@ return [
         'contact' => 'site/contact',
         'ajax-login' => 'site/ajax-login',
         'faq' => 'site/faq',
+        'ekskursii' => 'site/ekskursii',
+        // Activity
+        // 'activity' => 'activity/index',
         // Pages
         'page/<slug>' => 'page/view',
         // Articles

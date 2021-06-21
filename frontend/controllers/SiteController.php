@@ -125,6 +125,12 @@ class SiteController extends Controller
     //     ]);
     // }
 
+    public function actionEkskursii()
+    {
+        return $this->render('ekskursii', [
+        ]);
+    }
+
     /**
      * Displays contact page.
      *
