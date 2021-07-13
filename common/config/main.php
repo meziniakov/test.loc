@@ -7,12 +7,18 @@ $config = [
     'timeZone' => env('TIMEZONE'),
     'sourceLanguage' => 'en-US',
     'language' => env('LANGUAGE'),
-    'bootstrap' => ['log'],
+    'bootstrap' => ['log', 'queue'],
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
     ],
     'modules' => [
+        'debug' => [
+            'class' => \yii\debug\Module::class,
+            'panels' => [
+                'queue' => \yii\queue\debug\Panel::class,
+            ],
+        ],
         'noty' => [
             'class' => 'lo\modules\noty\Module',
         ],
@@ -27,6 +33,16 @@ $config = [
         ],
     ],
     'components' => [
+        'queue' => [
+            // 'class' => \yii\queue\file\Queue::class,
+            'class' => \yii\queue\db\Queue::class,
+            // 'path' => '@console/runtime/queue',
+            'as log' => \yii\queue\LogBehavior::class,
+            'db' => 'db',
+            'tableName' => '{{%queue}}', // Имя таблицы
+            'channel' => 'default', // Queue channel key
+            'mutex' => \yii\mutex\MysqlMutex::class, // Mutex used to sync queries
+        ],
         'db' => [
             'class' => 'yii\db\Connection',
             'dsn' => env('DB_DSN'),
@@ -94,6 +110,9 @@ $config = [
         'cache' => [
             'class' => YII_ENV_DEV ? 'yii\caching\DummyCache' : 'yii\caching\FileCache',
         ],
+    ],
+    'bootstrap' => [
+        'queue', // Компонент регистрирует свои консольные команды
     ],
 ];
 

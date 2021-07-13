@@ -31,7 +31,9 @@ use backend\widgets\Menu;
                     'icon' => '<i class="fa fa-search"></i>',
                     'options' => ['class' => 'treeview'],
                     'items' => [
-                        ['label' => Yii::t('backend', 'Json'), 'url' => ['/parser/json-parser'], 'icon' => '<i class="fa fa-angle-double-right"></i>'],
+                        ['label' => Yii::t('backend', 'Места'), 'url' => ['/parser/json/place'], 'icon' => '<i class="fa fa-angle-double-right"></i>'],
+                        ['label' => Yii::t('backend', 'События'), 'url' => ['/parser/json/event'], 'icon' => '<i class="fa fa-angle-double-right"></i>'],
+                        ['label' => Yii::t('backend', 'Json'), 'url' => ['/parser/json'], 'icon' => '<i class="fa fa-angle-double-right"></i>'],
                         ['label' => Yii::t('backend', 'Xml'), 'url' => ['/parser/index'], 'icon' => '<i class="fa fa-angle-double-right"></i>'],
                     ],
 

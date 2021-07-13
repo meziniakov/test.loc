@@ -3,26 +3,23 @@
 namespace backend\modules\parser\controllers;
 
 use Yii;
-use yii\web\Response;
 use backend\modules\parser\models\JsonParser;
 use common\models\City;
 use common\models\Event;
+use common\models\EventCategory;
 use common\models\Place;
 use common\models\PlaceCategory;
-use GuzzleHttp\Client as GuzzleHttpClient;
-use yii\base\Response as BaseResponse;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\helpers\Json;
-use yii\httpclient\Client;
 use yii\web\UploadedFile;
+use backend\jobs\PlaceJob;
+use backend\jobs\EventJob;
+use backend\modules\parser\models\JsonForm;
 
-/**
- * JsonParserController implements the CRUD actions for JsonParser model.
- */
-class JsonParserController extends Controller
+class JsonController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -39,10 +36,6 @@ class JsonParserController extends Controller
         ];
     }
 
-    /**
-     * Lists all JsonParser models.
-     * @return mixed
-     */
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
@@ -54,12 +47,64 @@ class JsonParserController extends Controller
         ]);
     }
 
-    /**
-     * Displays a single JsonParser model.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
+    public function actionPlace()
+    {
+        $model = new JsonForm();
+        if ($model->load(Yii::$app->request->post())) {
+            $model->jsonFile = UploadedFile::getInstance($model, 'jsonFile');
+            if ($model->jsonFile) {
+                $path = $model->uploadJsonFile();
+            }
+            $json = file_get_contents($path, true);
+            $array = Json::decode($json, false);
+
+            $countSave = 0;
+            foreach ($array as $object) {    
+                if(Yii::$app->queue->push(new PlaceJob([
+                    'object' => $object = $object->data->general,
+                    'pathinfo' => pathinfo($object->image->url),
+                ]))) {
+                    $countSave++;
+                }
+            }
+            Yii::$app->session->setFlash('success', "Успешно обновлено  записей\rn Успешно запущено {$countSave} записей в очередь.");
+        }
+
+        return $this->render('job', [
+            'model' => $model,
+        ]);
+    }
+
+    public function actionEvent()
+    {
+        $model = new JsonForm();
+        if ($model->load(Yii::$app->request->post())) {
+            $model->jsonFile = UploadedFile::getInstance($model, 'jsonFile');
+            if ($model->jsonFile) {
+                $path = $model->uploadJsonFile();
+            }
+            $json = file_get_contents($path, true);
+            $array = Json::decode($json, false);
+
+            $countSave = 0;
+
+            foreach ($array as $object) {
+                if(Yii::$app->queue->push(new EventJob([
+                    'object' => $object = $object->data->general,
+                    'pathinfo' => pathinfo($object->image->url),
+                ]))) {
+                    $countSave++;
+                }
+            }
+            Yii::$app->session->setFlash('success', "Успешно запущено {$countSave} записей в очередь.");
+        }
+
+        return $this->render('job', [
+            'model' => $model,
+        ]);
+
+    }
+
     public function actionView($id)
     {
         return $this->render('view', [
@@ -67,11 +112,6 @@ class JsonParserController extends Controller
         ]);
     }
 
-    /**
-     * Creates a new JsonParser model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
     public function actionCreate()
     {
         $model = new JsonParser();
@@ -85,13 +125,6 @@ class JsonParserController extends Controller
         ]);
     }
 
-    /**
-     * Updates an existing JsonParser model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
@@ -142,8 +175,8 @@ class JsonParserController extends Controller
                 'street' => $object->data->general->address->street,
                 'street_comment' => $object->data->general->address->comment,
                 'full_address' => $object->data->general->address->fullAddress,
-                'lat' => $object->data->general->address->mapPosition->coordinates[0],
-                'lng' => $object->data->general->address->mapPosition->coordinates[1],
+                'lng' => $object->data->general->address->mapPosition->coordinates[0],
+                'lat' => $object->data->general->address->mapPosition->coordinates[1],
                 'category_name' => $object->data->general->category->name,
                 'category_sys_name' => $object->data->general->category->sysName,
                 'image_url' => $object->data->general->image->url,
@@ -214,8 +247,8 @@ class JsonParserController extends Controller
                     $place->address = $object->address->fullAddress;
                     $place->street = $object->address->street;
                     $place->street_comment = $object->address->comment;
-                    $place->lat = $object->address->mapPosition->coordinates[0];
-                    $place->lng = $object->address->mapPosition->coordinates[1];
+                    $place->lng = $object->address->mapPosition->coordinates[0];
+                    $place->lat = $object->address->mapPosition->coordinates[1];
                     if(isset($object->contacts->email)) {
                         $place->email = $object->contacts->email;
                     }
@@ -257,38 +290,38 @@ class JsonParserController extends Controller
                         $place->addTagValues($tags);
                     }
 
-                    // if (isset($object->image)) {
-                    //     $pathinfo = pathinfo($object->image->url);
-                    //     if ($place->getImage()->name !== $pathinfo['filename']) {
-                    //         $place->download($object->image->url, $pathinfo);
-                    //         //название файла без расширения
-                    //         //preg_replace('/\.\w+$/', '', $object->image->title)
-                    //         $place->uploadImage($pathinfo, $object);
-                    //     } else {
-                    //         $image = \alex290\yii2images\models\Image::findOne(['name' => $pathinfo['filename']]);
-                    //         $image->alt = $object->name;
-                    //         $image->title = $object->name;
-                    //         $image->save(false);
-                    //     }
-                    // }
+                    if (isset($object->image)) {
+                        $pathinfo = pathinfo($object->image->url);
+                        if ($place->getImage()->name !== $pathinfo['filename']) {
+                            $place->download($object->image->url, $pathinfo);
+                            //название файла без расширения
+                            //preg_replace('/\.\w+$/', '', $object->image->title)
+                            $place->uploadImage($pathinfo, $object);
+                        } else {
+                            $image = \alex290\yii2images\models\Image::findOne(['name' => $pathinfo['filename']]);
+                            $image->alt = $object->name;
+                            $image->title = $object->name;
+                            $image->save(false);
+                        }
+                    }
 
-                    // if (isset($object->gallery)) {
-                    //     foreach ($object->gallery as $image) {
-                    //         $pathinfo = pathinfo($image->url);
-                    //         if ($place->getImage()->name !== $pathinfo['filename']) {
-                    //             $place->images[] = $pathinfo;
-                    //             $place->download($image->url, $pathinfo);
-                    //         } else {
-                    //             $image = \alex290\yii2images\models\Image::findOne(['name' => $pathinfo['filename']]);
-                    //             $image->alt = $object->name;
-                    //             $image->title = $object->name;
-                    //             $image->save(false);
-                    //         }
-                    //     }
-                    //     if ($imageFiles = $place->images) {
-                    //         $place->uploadImages($imageFiles, $object);
-                    //     }
-                    // }
+                    if (isset($object->gallery)) {
+                        foreach ($object->gallery as $image) {
+                            $pathinfo = pathinfo($image->url);
+                            if ($place->getImage()->name !== $pathinfo['filename']) {
+                                $place->images[] = $pathinfo;
+                                $place->download($image->url, $pathinfo);
+                            } else {
+                                $image = \alex290\yii2images\models\Image::findOne(['name' => $pathinfo['filename']]);
+                                $image->alt = $object->name;
+                                $image->title = $object->name;
+                                $image->save(false);
+                            }
+                        }
+                        if ($imageFiles = $place->images) {
+                            $place->uploadImages($imageFiles, $object);
+                        }
+                    }
                     $place->save(false);
                     $countUpdate++;
                 } else {
@@ -299,8 +332,8 @@ class JsonParserController extends Controller
                     $place->address = $object->address->fullAddress;
                     $place->street = $object->address->street;
                     $place->street_comment = $object->address->comment;
-                    $place->lat = $object->address->mapPosition->coordinates[0];
-                    $place->lng = $object->address->mapPosition->coordinates[1];
+                    $place->lng = $object->address->mapPosition->coordinates[0];
+                    $place->lat = $object->address->mapPosition->coordinates[1];
                     if(isset($object->contacts->email)) {
                         $place->email = $object->contacts->email;
                     }
@@ -377,8 +410,7 @@ class JsonParserController extends Controller
                         }
                         $imageFiles = $place->images;
                         $place->uploadImages($imageFiles, $object);
-                    };
-
+                    }
                     $countSave++;
                 }
             }
@@ -390,7 +422,7 @@ class JsonParserController extends Controller
         ]);
     }
 
-    public function actionEvent($id)
+    public function actionEvent_($id)
     {
         $model = $this->findModel($id);
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -411,184 +443,127 @@ class JsonParserController extends Controller
 
                 //Если по названию в базе находим объект - обновляем его
                 if ($event = Event::findOne(['title' => $object->name])) {
+                    $event->src_id = $object->id;
                     $event->text = $object->description;
                     $event->preview = $object->shortDescription;
                     $event->organizer = $object->organizer;
-                    $event->address = $object->address->fullAddress;
-                    $event->street = $object->address->street;
-                    $event->street_comment = $object->address->comment;
-                    $event->lat = $object->address->mapPosition->coordinates[0];
-                    $event->lng = $object->address->mapPosition->coordinates[1];
-                    if(isset($object->contacts->email)) {
-                        $event->email = $object->contacts->email;
-                    }
-                    if(isset($object->contacts->website)) {
-                        $event->website = $object->contacts->website;
-                    }
+                    $event->start = strtotime($object->start);
+                    $event->end = strtotime($object->end);
+                    // $event->organizer_place_id = $object->organizerPlace->id;
+                    // $event->organizer_place_name = $object->organizerPlace->name;
+                    // $event->place_id = $object->organizerPlace->id;
                     $event->status = 4;
 
-                    // Если в массиве есть поле с phones, перебираем их и забираем данные
-                    if (isset($object->contacts->phones)) {
-                        $phones = [];
-                        foreach ($object->contacts->phones as $phone) {
-                            $phones[] = ['phones' => $phone->value, 'phones_comment' => $phone->comment];
-                        }
-                        Json::encode($phones);
-                        $event->phone = $phones;
-                    }
-                    // Если в массиве есть поле с workingSchedule, перебираем их и забираем данные
-                    if (isset($object->workingSchedule)) {
-                        $_workingSchedule = [];
-                        foreach($object->workingSchedule as $key => $item) {
-                            $_workingSchedule[] = $key = [
-                                'from' => strtotime($item->from),
-                                'to' => strtotime($item->to),
+                    // Если в массиве есть поле с seances, перебираем их и забираем данные
+                    if (isset($object->seances)) {
+                        $_seances = [];
+                        foreach($object->seances as $key => $item) {
+                            $_seances[] = $key = [
+                                'start' => strtotime($item->start),
+                                'end' => strtotime($item->end),
                             ];
                         }
-                        // $workingSchedule = array_combine($daysweek, $_workingSchedule);
-                        $workingScheduleJson = Json::encode($_workingSchedule);
-                        $event->schedule = $workingScheduleJson;
+                        $seancesJson = Json::encode($_seances);
+                        $event->seances = $seancesJson;
                     }
                     // Если в массиве есть поле с tags, перебираем их и забираем данные
-                    // var_dump($object->tags);die;
-                    if (isset($object->tags)) {
-                        $tags = [];
-                        foreach ($object->tags as $tag) {
-                            $tags[] = $tag->name;
-                        }
-                        // var_dump($tags);die;
-                        $event->addTagValues($tags);
-                    }
+                    // if (isset($object->tags)) {
+                    //     $tags = [];
+                    //     foreach ($object->tags as $tag) {
+                    //         $tags[] = $tag->name;
+                    //     }
+                    //     $event->addTagValues($tags);
+                    // }
 
-                    if (isset($object->image)) {
-                        $pathinfo = pathinfo($object->image->url);
-                        if ($event->getImage()->name !== $pathinfo['filename']) {
-                            $event->download($object->image->url, $pathinfo);
-                            //название файла без расширения
-                            //preg_replace('/\.\w+$/', '', $object->image->title)
-                            $event->uploadImage($pathinfo, $object);
-                        } else {
-                            $image = \alex290\yii2images\models\Image::findOne(['name' => $pathinfo['filename']]);
-                            $image->alt = $object->name;
-                            $image->title = $object->name;
-                            $image->save(false);
-                        }
-                    }
+                    // if (isset($object->image)) {
+                    //     $pathinfo = pathinfo($object->image->url);
+                    //     if ($event->getImage()->name !== $pathinfo['filename']) {
+                    //         $event->download($object->image->url, $pathinfo);
+                    //         //название файла без расширения
+                    //         //preg_replace('/\.\w+$/', '', $object->image->title)
+                    //         $event->uploadImage($pathinfo, $object);
+                    //     } else {
+                    //         $image = \alex290\yii2images\models\Image::findOne(['name' => $pathinfo['filename']]);
+                    //         $image->alt = $object->name;
+                    //         $image->title = $object->name;
+                    //         $image->save(false);
+                    //     }
+                    // }
 
-                    if (isset($object->gallery)) {
-                        foreach ($object->gallery as $image) {
-                            $pathinfo = pathinfo($image->url);
-                            if ($event->getImage()->name !== $pathinfo['filename']) {
-                                $event->images[] = $pathinfo;
-                                $event->download($image->url, $pathinfo);
-                            } else {
-                                $image = \alex290\yii2images\models\Image::findOne(['name' => $pathinfo['filename']]);
-                                $image->alt = $object->name;
-                                $image->title = $object->name;
-                                $image->save(false);
-                            }
-                        }
-                        if ($imageFiles = $event->images) {
-                            $event->uploadImages($imageFiles, $object);
-                        }
-                    }
-                    $event->save(false);
+                    $event->save();
                     $countUpdate++;
                 } else {
                     $event = new Event();
+                    $event->src_id = $object->id;
                     $event->title = $object->name;
                     $event->text = $object->description;
-                    $event->address = $object->address->fullAddress;
-                    // $place->street = $object->data->general->address->street;
-                    $event->lat = $object->address->mapPosition->coordinates[0];
-                    $event->lng = $object->address->mapPosition->coordinates[1];
-                    if(isset($object->contacts->email)) {
-                        $event->email = $object->contacts->email;
-                    }
-                    if(isset($object->contacts->website)) {
-                        $event->website = $object->contacts->website;
-                    }
+                    $event->preview = $object->shortDescription;
+                    $event->organizer = $object->organizer;
+                    $event->start = strtotime($object->start);
+                    $event->end = strtotime($object->end);
+                    // $event->organizer_place_id = $object->organizerPlace->id;
+                    // $event->organizer_place_name = $object->organizerPlace->name;
+                    // $event->place_id = $object->organizerPlace->id;
                     $event->status = 1;
 
-                    if ($placeCategory = PlaceCategory::findOne(['title' => $object->category->name])) {
-                        $event->category_id = $placeCategory->id;
-                    } else {
-                        $category = new PlaceCategory();
-                        $category->title = $object->category->name;
-                        $category->slug = $object->category->sysName;
-                        $category->save();
-                        $event->category_id = $category->id;
-                    }
+                    // if ($eventCategory = EventCategory::findOne(['title' => $object->category->name])) {
+                    //     $event->category_id = $eventCategory->id;
+                    // } else {
+                    //     $category = new EventCategory();
+                    //     $category->title = $object->category->name;
+                    //     $category->slug = $object->category->sysName;
+                    //     $category->save();
+                    //     $event->category_id = $category->id;
+                    // }
 
-                    if ($city = City::findOne(['name' => $object->locale->name])) {
-                        $event->city_id = $city->id;
-                    } else {
-                        $city = new City();
-                        $city->name = $object->locale->name;
-                        $city->url = $object->locale->sysName;
-                        $city->save();
-                        $event->city_id = $city->id;
-                    }
+                    // if ($city = City::findOne(['name' => $object->organization->locale->name])) {
+                    //     $event->city_id = $city->id;
+                    // } else {
+                    //     $city = new City();
+                    //     $city->name = $object->organization->locale->name;
+                    //     $city->url = $object->organization->locale->sysName;
+                    //     $city->save();
+                    //     $event->city_id = $city->id;
+                    // }
 
-                    // Если в массиве есть поле с phones, перебираем их и забираем данные
-                    if (isset($object->contacts->phones)) {
-                        $phones = [];
-                        foreach ($object->contacts->phones as $phone) {
-                            $phones[] = ['phones' => $phone->value, 'phones_comment' => $phone->comment];
-                        }
-                        Json::encode($phones);
-                        $event->phone = $phones;
-                    }
                     // Если в массиве есть поле с workingSchedule, перебираем их и забираем данные
-                    if (isset($object->workingSchedule)) {
-                        $daysweek = [1 => 'Понедельник', 2 => 'Вторник', 3 => 'Среда', 4 => 'Четверг', 5 => 'Пятница', 6 => 'Суббота', 7 => 'Воскресенье'];
-                        $_workingSchedule = [];
-                        foreach($object->workingSchedule as $key => $item) {
-                            $_workingSchedule[] = $key = [
-                                'from' => strtotime($item->from),
-                                'to' => strtotime($item->to),
-                            ];
-                        }
-                        // $workingSchedule = array_combine($daysweek, $_workingSchedule);
-                        $workingScheduleJson = Json::encode($_workingSchedule);
-                        $event->schedule = $workingScheduleJson;
-                    }
-                    // Если в массиве есть поле с tags, перебираем их и забираем данные
-                    if (isset($object->tags)) {
-                        $tags = [];
-                        foreach ($object->tags as $tag) {
-                            $tags[] = trim(str_replace("\n", "", strpos($tag->name, '.')));
-                        }
-                        $event->addTagValues($tags);
-                    }
+                    // if (isset($object->seances)) {
+                    //     $daysweek = [1 => 'Понедельник', 2 => 'Вторник', 3 => 'Среда', 4 => 'Четверг', 5 => 'Пятница', 6 => 'Суббота', 7 => 'Воскресенье'];
+                    //     $_seances = [];
+                    //     foreach($object->seances as $key => $item) {
+                    //         $_seances[] = $key = [
+                    //             'start' => strtotime($item->start),
+                    //             'end' => strtotime($item->end),
+                    //         ];
+                    //     }
+                    //     // $workingSchedule = array_combine($daysweek, $_workingSchedule);
+                    //     $seancesJson = Json::encode($_seances);
+                    //     $event->seances = $seancesJson;
+                    // }
+                    // // Если в массиве есть поле с tags, перебираем их и забираем данные
+                    // if (isset($object->tags)) {
+                    //     $tags = [];
+                    //     foreach ($object->tags as $tag) {
+                    //         $tags[] = trim(str_replace("\n", "", strpos($tag->name, '.')));
+                    //     }
+                    //     $event->addTagValues($tags);
+                    // }
 
                     $event->save(false);
 
-                    if (isset($object->image)) {
-                        $pathinfo = pathinfo($object->image->url);
-                        $event->download($object->image->url, $pathinfo);
-                        $event->uploadImage($pathinfo, $object);
-                    }
-
-                    if (isset($object->gallery)) {
-                        foreach ($object->gallery as $image) {
-                            $pathinfo = pathinfo($image->url);
-                            $event->images[] = $pathinfo;
-                            $event->download($image->url, $pathinfo);
-                        }
-                        $imageFiles = $event->images;
-                        $event->uploadImages($imageFiles, $object);
-                    };
-
+                    // if (isset($object->image)) {
+                    //     $pathinfo = pathinfo($object->image->url);
+                    //     $event->download($object->image->url, $pathinfo);
+                    //     $event->uploadImage($pathinfo, $object);
+                    // }
                     $countSave++;
                 }
             }
-            Yii::$app->session->setFlash('success', "Успешно обновлено {$countUpdate} записей\rn Успешно сохарнено {$countSave} записей.");
+            Yii::$app->session->setFlash('success', "Успешно обновлено {$countUpdate} записей\rn <br> Успешно сохарнено {$countSave} записей.");
         }
 
-        return $this->render('start', [
+        return $this->render('event', [
             'model' => $model,
         ]);
     }
-
 }

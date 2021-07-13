@@ -51,9 +51,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 'class' => 'yii\grid\ActionColumn',
                 'header' => 'Actions',
                 'headerOptions' => ['style' => 'color:#337ab7'],
-                'template' => '{start}{update}{delete}',
+                'template' => '{start}{job}{update}{delete}',
                 'buttons' => [
                   'start' => function ($url, $model) {
+                      return Html::a('<span class="glyphicon glyphicon-fire"></span>', $url, [
+                                  'title' => Yii::t('app', 'lead-view'),
+                      ]);
+                  },
+                  'job' => function ($url, $model) {
                       return Html::a('<span class="glyphicon glyphicon-fire"></span>', $url, [
                                   'title' => Yii::t('app', 'lead-view'),
                       ]);
