@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2f1b6c6b0ff16ad2d60f41f375b63d44",
+    "content-hash": "fb848df8dd4dad54a7cf68577d42c8c1",
     "packages": [
         {
             "name": "2amigos/yii2-highcharts-widget",
@@ -5883,6 +5883,113 @@
             "time": "2020-10-30T21:45:55+00:00"
         },
         {
+            "name": "yiisoft/yii2-queue",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/yiisoft/yii2-queue.git",
+                "reference": "58527d2977406dede9c820219214053ed2a002f9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/yiisoft/yii2-queue/zipball/58527d2977406dede9c820219214053ed2a002f9",
+                "reference": "58527d2977406dede9c820219214053ed2a002f9",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5.0",
+                "symfony/process": "^3.3||^4.0||^5.0",
+                "yiisoft/yii2": "~2.0.14"
+            },
+            "require-dev": {
+                "aws/aws-sdk-php": ">=2.4",
+                "enqueue/amqp-lib": "^0.8||^0.9.10",
+                "enqueue/stomp": "^0.8.39",
+                "jeremeamia/superclosure": "*",
+                "pda/pheanstalk": "v3.*",
+                "php-amqplib/php-amqplib": "*",
+                "phpunit/phpunit": "~4.4",
+                "yiisoft/yii2-debug": "*",
+                "yiisoft/yii2-gii": "*",
+                "yiisoft/yii2-redis": "*"
+            },
+            "suggest": {
+                "aws/aws-sdk-php": "Need for aws SQS.",
+                "enqueue/amqp-lib": "Need for AMQP interop queue.",
+                "enqueue/stomp": "Need for Stomp queue.",
+                "ext-gearman": "Need for Gearman queue.",
+                "ext-pcntl": "Need for process signals.",
+                "pda/pheanstalk": "Need for Beanstalk queue.",
+                "php-amqplib/php-amqplib": "Need for AMQP queue.",
+                "yiisoft/yii2-redis": "Need for Redis queue."
+            },
+            "default-branch": true,
+            "type": "yii2-extension",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "yii\\queue\\": "src",
+                    "yii\\queue\\amqp\\": "src/drivers/amqp",
+                    "yii\\queue\\amqp_interop\\": "src/drivers/amqp_interop",
+                    "yii\\queue\\beanstalk\\": "src/drivers/beanstalk",
+                    "yii\\queue\\db\\": "src/drivers/db",
+                    "yii\\queue\\file\\": "src/drivers/file",
+                    "yii\\queue\\gearman\\": "src/drivers/gearman",
+                    "yii\\queue\\redis\\": "src/drivers/redis",
+                    "yii\\queue\\sync\\": "src/drivers/sync",
+                    "yii\\queue\\sqs\\": "src/drivers/sqs",
+                    "yii\\queue\\stomp\\": "src/drivers/stomp"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Roman Zhuravlev",
+                    "email": "zhuravljov@gmail.com"
+                }
+            ],
+            "description": "Yii2 Queue Extension which supported DB, Redis, RabbitMQ, Beanstalk, SQS and Gearman",
+            "keywords": [
+                "async",
+                "beanstalk",
+                "db",
+                "gearman",
+                "gii",
+                "queue",
+                "rabbitmq",
+                "redis",
+                "sqs",
+                "yii"
+            ],
+            "support": {
+                "docs": "https://github.com/yiisoft/yii2-queue/blob/master/docs/guide",
+                "issues": "https://github.com/yiisoft/yii2-queue/issues",
+                "source": "https://github.com/yiisoft/yii2-queue"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/yiisoft",
+                    "type": "github"
+                },
+                {
+                    "url": "https://opencollective.com/yiisoft",
+                    "type": "open_collective"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/yiisoft/yii2-queue",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2021-05-05T23:00:11+00:00"
+        },
+        {
             "name": "yiisoft/yii2-swiftmailer",
             "version": "dev-master",
             "source": {
@@ -7498,7 +7605,8 @@
         "dvizh/yii2-gallery": 20,
         "electrolinux/phpquery": 20,
         "kop/yii2-scroll-pager": 20,
-        "saschati/yii2-youtube-api-widget": 20
+        "saschati/yii2-youtube-api-widget": 20,
+        "yiisoft/yii2-queue": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
