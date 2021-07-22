@@ -80,7 +80,8 @@ class SiteController extends Controller
     public function actionIndex()
     {
         if ($city = Yii::$app->city->isCity()) {
-            $listing = Place::find()->where(['is_home' => 1])->andWhere(['city_id' => $city->id])->with('category', 'city')->all();
+            $places = Place::find();
+            $listing = $places->where(['is_home' => 1])->andWhere(['city_id' => $city->id])->with('category', 'city')->all();
             
             Yii::$app->view->registerLinkTag(['rel' => 'canonical', 'href' => Url::canonical()], 'canonical');
             Yii::$app->view->registerMetaTag([
@@ -108,12 +109,13 @@ class SiteController extends Controller
             ]);    
 
             return $this->render('/city/index', [
+              'places' => $places,
               'city' => $city,
               'listing' => $listing,
               'tags' => Tag::find()->all(),
               'categories' => PlaceCategory::find()->active()->all(),
-              'cities' => City::find()->all(),
-          ]);
+              'cities' => City::find()->with('placies', 'imageRico')->limit(8)->all(),
+              ]);
           } elseif (Yii::$app->params['city'] == 'global') {
             $places = Place::find();
             $listing = $places->where(['is_home' => 1])->with('category', 'imageRico', 'city')->all();
@@ -126,7 +128,7 @@ class SiteController extends Controller
             'places' => $places,
             'tags' => Tag::find()->all(),
             'categories' => PlaceCategory::find()->active()->all(),
-            'cities' => City::find()->with('placies', 'imageRico')->limit(7)->all(),
+            'cities' => City::find()->with('placies', 'imageRico')->limit(8)->all(),
         ]);
     }
 

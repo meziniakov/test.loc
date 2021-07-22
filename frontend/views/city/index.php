@@ -13,6 +13,7 @@ $this->title = $city->name . ' ' . date('Y') . ' - все о городе с ф�
 				'title' => $this->title
 			]); ?>
 
+<?php if(!empty($city->preview)):?>
 <section class="gray">
 	<div class="container">
 		<div class="row">
@@ -33,54 +34,14 @@ $this->title = $city->name . ' ' . date('Y') . ' - все о городе с ф�
 
 				</div>
 
-				<!-- Single Block Wrap -->
-				<div class="block-wrap">
-
-					<div class="block-header">
-						<h4 class="block-title">Ameneties</h4>
-					</div>
-
-					<div class="block-body">
-						<ul class="avl-features third">
-							<li>Air Conditioning</li>
-							<li>Swimming Pool</li>
-							<li>Central Heating</li>
-							<li>Laundry Room</li>
-							<li>Gym</li>
-							<li>Alarm</li>
-							<li>Window Covering</li>
-							<li>Internet</li>
-							<li>Pets Allow</li>
-							<li>Free WiFi</li>
-							<li>Car Parking</li>
-							<li>Spa & Massage</li>
-						</ul>
-					</div>
-
-				</div>
-
-				<!-- Single Block Wrap -->
-				<div class="block-wrap">
-
-					<div class="block-header">
-						<h4 class="block-title">Location</h4>
-					</div>
-
-					<div class="block-body">
-						<div class="map-container">
-							<div id="singleMap" data-latitude="40.7427837" data-longitude="-73.11445617675781" data-mapTitle="Our Location"></div>
-						</div>
-
-					</div>
-
-				</div>
-
 			</div>
 
 		</div>
 	</div>
 </section>
+<?php endif ?>
 
+<?php if(!empty($listing)):?>
 <section>
 	<div class="container-fluid">
 		<div class="row">
@@ -144,17 +105,16 @@ $this->title = $city->name . ' ' . date('Y') . ' - все о городе с ф�
 		<div class="row">
 			<!-- Single City Box -->
 			<?php foreach ($listing as $place) : ?>
-				<?php $img = $place->getImage(); ?>
 				<div class="col-lg-4 col-md-6 col-sm-12">
 					<article class="tourcity-box style-1">
 						<div class="tourcity-box-image">
 							<figure>
 								<?php if (isset($place->city)) : ?>
-									<a href="<?= Url::to(['place/view', 'city' => $place->city->url, 'category' => $place->category['slug'], 'slug' => $place->slug]) ?>" class="overlay-cate"><?= Html::img($img->getUrl('358x229'), ['class' => 'img-responsive listing-box-img', 'alt' => $place->slug]) ?>
+									<a href="<?= Url::to(['place/view', 'city' => $place->city->url, 'category' => $place->category['slug'], 'slug' => $place->slug]) ?>" class="overlay-cate"><?= Html::img($place->imageRico->getUrl('358x229'), ['class' => 'img-responsive listing-box-img', 'alt' => $place->slug]) ?>
 										<div class="list-overlay"></div>
 									</a>
 								<?php else : ?>
-									<a href="<?= Url::to(['place/view', 'category' => $place->category['slug'], 'slug' => $place->slug]) ?>" class="overlay-cate"><?= Html::img($img->getUrl('358x229'), ['class' => 'img-responsive listing-box-img', 'alt' => $place->slug]) ?>
+									<a href="<?= Url::to(['place/view', 'category' => $place->category['slug'], 'slug' => $place->slug]) ?>" class="overlay-cate"><?= Html::img($place->imageRico->getUrl('358x229'), ['class' => 'img-responsive listing-box-img', 'alt' => $place->slug]) ?>
 										<div class="list-overlay"></div>
 									</a>
 								<?php endif ?>
@@ -190,73 +150,32 @@ $this->title = $city->name . ' ' . date('Y') . ' - все о городе с ф�
 		</div>
 	</div>
 </section>
+<?php endif ?>
 
 <section>
-	<div class="container">
-
-		<div class="row">
-			<div class="col-lg-12 col-md-12">
-				<div class="sec-heading center">
-					<h2>Путешествуй по городам 🎉</h2>
-					<!-- <p>Top &amp; perfect 200+ location listings.</p> -->
+				<div class="container">
+					
+					<div class="row">
+						<div class="col-lg-12 col-md-12">
+							<div class="sec-heading center">
+								<h2>Путешествуй по городам 🎉</h2>
+								<!-- <p>Top &amp; perfect 200+ location listings.</p> -->
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<?php $i = 0; foreach($cities as $city):?>
+						<?php // var_dump($city);die;?>
+								<div class="col-lg-<?= ($i === 0) ? '8' : '4'?> col-md-8">
+									<a href="list-layout-with-sidebar.html" class="img-wrap">
+											<div class="img-wrap-content visible">
+												<h4><?= $city->name?></h4>
+											</div>
+										<div class="img-wrap-background" style="background-image: url(<?= $city->imageRico ? $city->imageRico->getUrl('560x359'): ''?>);"></div>
+									</a>
+								</div>
+							<?php $i++; ?>
+						<?php endforeach ?>
+					</div>
 				</div>
-			</div>
-		</div>
-
-		<div class="row">
-			<div class="col-lg-8 col-md-8">
-				<a href="list-layout-with-sidebar.html" class="img-wrap">
-					<div class="img-wrap-content visible">
-						<h4>Los Angeles</h4>
-						<span>24 Listins</span>
-					</div>
-					<div class="img-wrap-background" style="background-image: url(https://via.placeholder.com/1200x850);"></div>
-				</a>
-			</div>
-
-			<div class="col-lg-4 col-md-4">
-				<a href="list-layout-with-sidebar.html" class="img-wrap">
-					<div class="img-wrap-content visible">
-						<h4>San Francisco</h4>
-						<span>104 Listins</span>
-					</div>
-					<div class="img-wrap-background" style="background-image: url(https://via.placeholder.com/1200x850);"></div>
-				</a>
-			</div>
-		</div>
-
-		<div class="row">
-			<div class="col-lg-4 col-md-4">
-				<a href="list-layout-with-sidebar.html" class="img-wrap">
-					<div class="img-wrap-content visible">
-						<h4>Philadelphia</h4>
-						<span>74 Listins</span>
-					</div>
-					<div class="img-wrap-background" style="background-image: url(https://via.placeholder.com/1200x850);"></div>
-				</a>
-			</div>
-
-			<div class="col-lg-4 col-md-4">
-				<a href="list-layout-with-sidebar.html" class="img-wrap">
-					<div class="img-wrap-content visible">
-						<h4>New York</h4>
-						<span>312 Listins</span>
-					</div>
-					<div class="img-wrap-background" style="background-image: url(https://via.placeholder.com/1200x850);"></div>
-				</a>
-			</div>
-
-			<div class="col-lg-4 col-md-4">
-				<a href="list-layout-with-sidebar.html" class="img-wrap">
-					<div class="img-wrap-content visible">
-						<h4>San Diego</h4>
-						<span>710 Listins</span>
-					</div>
-					<div class="img-wrap-background" style="background-image: url(https://via.placeholder.com/1200x850);"></div>
-				</a>
-			</div>
-
-		</div>
-
-	</div>
-</section>
+			</section>

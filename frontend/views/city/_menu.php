@@ -11,13 +11,13 @@ $this->params['breadcrumbs'][] = [
 ];
 
 ?>
-<section class="page-title-banner" style="background-image:url(<?= $city->getImage()->getUrl('1920x') ?>);">
+<section class="page-title-banner" style="background-image:url(<?= $city->imageRico->getUrl('1920x') ?>);">
 	<div class="container">
 		<div class="row m-0 align-items-end detail-swap">
 			<div class="tr-list-wrap">
 				<div class="tr-list-detail">
 					<div class="tr-list-info">
-						<h1 class="big-header-capt"><?= $title ?></h1>
+						<h1 class="big-header-capt"><?= $city->name ?></h1>
 					</div>
 				</div>
 				<div class="listing-detail_right">
