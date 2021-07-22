@@ -208,7 +208,7 @@ $this->title = isset($city->name) ? 'Все достопримечательно
 												<h4><?= $city->name?></h4>
 												<span>Мест: <?= $places->where(['city_id' => $city->id])->count() ?></span>
 											</div>
-										<div class="img-wrap-background" style="background-image: url(<?= $city->imageRico->getUrl('560x359')?>);"></div>
+										<div class="img-wrap-background" style="background-image: url(<?= $city->imageRico ? $city->imageRico->getUrl('560x359'): ''?>);"></div>
 									</a>
 								</div>
 							<?php $i++; ?>
