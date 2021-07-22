@@ -17,22 +17,22 @@ class EventQuery extends \yii\db\ActiveQuery
             TaggableQueryBehavior::class,
         ];
     }
-    // public function parsed()
-    // {
-    //     return $this->andWhere(['status' => Event::STATUS_PARSED]);
-    // }
-    // public function deleted()
-    // {
-    //     return $this->andWhere(['status' => Event::STATUS_DELETED]);
-    // }
-    // public function edited()
-    // {
-    //     return $this->andWhere(['status' => Event::STATUS_EDITED]);
-    // }
-    // public function published()
-    // {
-    //     return $this->andWhere(['status' => Event::STATUS_PUBLISHED]);
-    // }
+    public function parsed()
+    {
+        return $this->andWhere(['status' => Event::STATUS_PARSED]);
+    }
+    public function deleted()
+    {
+        return $this->andWhere(['status' => Event::STATUS_TRASHED]);
+    }
+    public function edited()
+    {
+        return $this->andWhere(['status' => Event::STATUS_EDITED]);
+    }
+    public function published()
+    {
+        return $this->andWhere(['status' => Event::STATUS_PUBLISHED]);
+    }
 
     /**
      * {@inheritdoc}

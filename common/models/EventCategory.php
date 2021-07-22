@@ -14,7 +14,6 @@ use common\models\query\EventCategoryQuery;
  * @property integer $id
  * @property string $title
  * @property string $slug
- * @property string $comment
  * @property integer $parent_id
  * @property integer $status
  * @property integer $created_at
@@ -60,7 +59,6 @@ class EventCategory extends ActiveRecord
     {
         return [
             ['title', 'required'],
-            ['comment', 'string'],
             [['parent_id', 'status', 'created_at', 'updated_at'], 'integer'],
             [['title', 'slug'], 'string', 'max' => 255],
             ['parent_id', 'exist', 'skipOnError' => true, 'targetClass' => self::class, 'targetAttribute' => ['parent_id' => 'id']],
@@ -76,7 +74,6 @@ class EventCategory extends ActiveRecord
         return [
             'title' => Yii::t('common', 'Title'),
             'slug' => Yii::t('common', 'Slug'),
-            'comment' => Yii::t('common', 'Comment'),
             'parent_id' => Yii::t('common', 'Parent'),
             'status' => Yii::t('common', 'Status'),
             'created_at' => Yii::t('common', 'Created at'),

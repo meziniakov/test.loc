@@ -2,12 +2,16 @@
 
 namespace backend\controllers;
 
+use common\models\City;
 use Yii;
 use common\models\Event;
-use common\models\EventSearch;
+use common\models\EventCategory;
+// use common\models\EventSearch;
+use backend\models\search\EventSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\UploadedFile;
 
 /**
  * EventController implements the CRUD actions for Event model.
@@ -21,7 +25,7 @@ class EventController extends Controller
     {
         return [
             'verbs' => [
-                'class' => VerbFilter::className(),
+                'class' => VerbFilter::class,
                 'actions' => [
                     'delete' => ['POST'],
                 ],
@@ -41,6 +45,8 @@ class EventController extends Controller
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'categories' => EventCategory::find()->active()->all(),
+            'cities' => City::find()->all()
         ]);
     }
 
@@ -67,7 +73,17 @@ class EventController extends Controller
         $model = new Event();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
+            if ($model->imageFile){
+                $model->uploadMainImage();
+            }
+            $model->imageFiles = UploadedFile::getInstances($model, 'imageFiles');
+            if ($model->imageFiles){
+                $model->uploadGallery();
+            }
+
+            Yii::$app->session->setFlash('success', "Успешно создано");
+            return $this->refresh();
         }
 
         return $this->render('create', [
@@ -87,11 +103,23 @@ class EventController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
+            if ($model->imageFile){
+                $model->uploadMainImage();
+            }
+            $model->imageFiles = UploadedFile::getInstances($model, 'imageFiles');
+            if ($model->imageFiles){
+                $model->uploadGallery();
+            }
+            
+            Yii::$app->session->setFlash('success', "Успешно создано");
+            return $this->refresh();
         }
 
         return $this->render('update', [
             'model' => $model,
+            'categories' => EventCategory::find()->active()->all(),
+            'cities' => City::find()->all()
         ]);
     }
 
@@ -107,6 +135,57 @@ class EventController extends Controller
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
+    }
+
+    public function actionDeletemoreimg($id){
+
+        $place = Event::findOne($id);
+
+        $imageId = Yii::$app->request->get('imageId');
+        $images = $place->getImages();
+        foreach ($images as $image) {
+            if ($image->id == $imageId) {
+                $place->removeImage($image);
+            }
+        }
+        return $this->redirect(["/event/update", "id" => $id]);
+    }
+
+    public function actionMultipleDelete()
+    {
+        if (Yii::$app->request->post('id')) {
+            Event::updateAll(['status' => 0], ['id' => Yii::$app->request->post('id')]);
+        }
+        Yii::$app->session->setFlash('success', 'Успешно удалено');
+        return $this->redirect(Yii::$app->request->referrer);
+
+    }
+
+    public function actionMultipleChangeStatus()
+    {
+        if (Yii::$app->request->post('id','status')) {
+            Event::updateAll(['status' => Yii::$app->request->post('status')], ['id' => Yii::$app->request->post('id')]);
+        }
+        Yii::$app->session->setFlash('success', 'Успешно изменено');
+        return $this->redirect(Yii::$app->request->referrer);
+    }
+
+    public function actionMultipleChangeCategory()
+    {
+        if (Yii::$app->request->post('id', 'category_id')) {
+            Event::updateAll(['category_id' => Yii::$app->request->post('category_id')], ['id' => Yii::$app->request->post('id')]);
+        }
+        Yii::$app->session->setFlash('success', 'Успешно изменено');
+        return $this->redirect(Yii::$app->request->referrer);
+    }
+
+    public function actionMultipleChangeCity()
+    {
+        if (Yii::$app->request->post('id', 'city_id')) {
+            Event::updateAll(['city_id' => Yii::$app->request->post('city_id')], ['id' => Yii::$app->request->post('id')]);
+        }
+        Yii::$app->session->setFlash('success', 'Успешно изменено');
+        return $this->refresh();
     }
 
     /**

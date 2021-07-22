@@ -1,9 +1,10 @@
+
 <?php
 
 use yii\helpers\Url;
 use yii\widgets\ListView;
 
-$this->title = $event->city->name ? Yii::t('frontend', 'Все {title} в городе ' . $event->city->name, ['title' => $event->category->title]) : "Все {$event->category->title} на сайте trip2place.com";
+$this->title = Yii::t('frontend', 'Все {title} ', ['title' => $event->category->title]) . "на сайте trip2place.com";
 $this->params['breadcrumbs']['<i></i>'] = [
 	'label' => Yii::t('frontend', 'События'),
 	'url' => Url::to('/event')
@@ -13,7 +14,7 @@ $this->params['breadcrumbs'][] = Yii::t('frontend', $event->category->title);
 
 <div class="container">
 	<div class="col-12 p-0">
-			<h2>Все <?= $event->category->title ?><?= isset($event->city) ? ' в городе ' . $event->city->name : '' ?></h2>
+			<h2>Все <?= $event->category->title ?>  на сайте trip2place.com</h2>
 	</div>
 	<div class="col-12 p-0">
 		<?= ListView::widget([
@@ -21,8 +22,8 @@ $this->params['breadcrumbs'][] = Yii::t('frontend', $event->category->title);
 			//  'options' => ['class' => ['col-md-12 col-sm-12 mt-3']],
 			'itemOptions' => ['class' => ['item col-lg-4 col-md-6 col-sm-12 p-0']],
 			'itemView' => '_item_view',
-			'summary' => 'Показаны записи <strong>{begin} - {end} </strong> из <strong>{totalCount}</strong>',
-			'summaryOptions' => ['class' => 'shorting-wrap'],
+			// 'summary' => 'Показаны записи <strong>{begin} - {end} </strong> из <strong>{totalCount}</strong>',
+			// 'summaryOptions' => ['class' => 'shorting-wrap'],
 			'pager' => [
 				'class' => \kop\y2sp\ScrollPager::class,
 				'triggerTemplate' => '<div class="col-lg-12 text-center">

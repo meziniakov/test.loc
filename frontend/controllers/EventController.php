@@ -2,14 +2,13 @@
 
 namespace frontend\controllers;
 
-use common\models\PlaceCategory;
 use Yii;
 use yii\web\Controller;
 use yii\web\Response;
 use common\models\Event;
-use common\models\Place;
 use common\models\Tag;
 use common\models\City;
+use common\models\EventCategory;
 use yii\web\NotFoundHttpException;
 use SimpleXMLElement;
 use Exception;
@@ -85,12 +84,12 @@ class EventController extends Controller
       'og:type'       => 'article',
       'og:title'      => 'Surf-City - открывай интересные места России',
       'og:description' => 'Surf-city - изучайте Россию вместе с нами.',
-      // 'og:image'      => Url::to($place->getImage()->getUrl(), true),
-      // 'og:image:width' => $place->getImage()->getSizes()['width'],
-      // 'og:image:height' => $place->getImage()->getSizes()['height'],
+      // 'og:image'      => Url::to($event->getImage()->getUrl(), true),
+      // 'og:image:width' => $event->getImage()->getSizes()['width'],
+      // 'og:image:height' => $event->getImage()->getSizes()['height'],
       'og:site_name' => 'Surf-City - открывай интересные места России',
-      // 'og:updated_time' => Yii::$app->formatter->asDatetime($place->updated_at, "php:Y-m-dTH:i:s+00:00"),
-      // 'og:updated_time' => date(DATE_ATOM, $place->updated_at),
+      // 'og:updated_time' => Yii::$app->formatter->asDatetime($event->updated_at, "php:Y-m-dTH:i:s+00:00"),
+      // 'og:updated_time' => date(DATE_ATOM, $event->updated_at),
       // 'fb:app_id' => '',
       // 'vk:app_id' => '',
       // 'vk:page_id' => '',
@@ -100,11 +99,11 @@ class EventController extends Controller
 
     //   \Yii::$app->seo->putTwitterMetaTags([
     //     'twitter:site'        => Url::canonical(),
-    //     'twitter:title'       => $place->title,
-    //     'twitter:description' => $place->description,
-    //     'twitter:site'     => '@trip2place',
-    //     'twitter:creator'     => '@trip2place',
-    //     'twitter:image:src'      => Url::to($place->getImage()->getUrl(), true),
+    //     'twitter:title'       => $event->title,
+    //     'twitter:description' => $event->description,
+    //     'twitter:site'     => '@trip2event',
+    //     'twitter:creator'     => '@trip2event',
+    //     'twitter:image:src'      => Url::to($event->getImage()->getUrl(), true),
     //     'twitter:card'=> 'summary_large_image',
     // ]);
 
@@ -112,8 +111,8 @@ class EventController extends Controller
       'index',
       [
         'dataProvider' => $dataProvider,
-        'addressInJson' => Event::getJsonForMap($models),
-        // 'categories' => PlaceCategory::find()->active()->asArray()->all(),
+        // 'addressInJson' => Event::getJsonForMap($models),
+        'categories' => EventCategory::find()->active()->asArray()->all(),
         'cities' => City::find()->all(),
         'tags' => Tag::find()->asArray()->all()
       ]
@@ -127,7 +126,7 @@ class EventController extends Controller
     $city_id = Yii::$app->request->get('city_id');
     $tag_id = Yii::$app->request->get('tag_id');
 
-    $query = Place::find()->parsed();
+    $query = Event::find()->parsed();
     $query->andFilterWhere([
       'category_id' => $category_id,
       'city_id' => $city_id,
@@ -136,7 +135,7 @@ class EventController extends Controller
     $query->andFilterWhere(['like', 'title', $q])
       ->andFilterWhere(['like', 'text', $q]);
 
-    $dataProvider = Place::getDataProvider($query);
+    $dataProvider = Event::getDataProvider($query);
 
     $models = $dataProvider->getModels();
 
@@ -144,8 +143,8 @@ class EventController extends Controller
       'search',
       [
         'dataProvider' => $dataProvider,
-        'addressInJson' => Place::getJsonForMap($models),
-        'categories' => PlaceCategory::find()->active()->all(),
+        'addressInJson' => Event::getJsonForMap($models),
+        'categories' => EventCategory::find()->active()->all(),
         'cities' => City::find()->all(),
         'tags' => Tag::find()->all()
       ]
@@ -155,11 +154,11 @@ class EventController extends Controller
   public function actionView($slug)
   {
     if ($city = City::find()->where('url = :url', [':url' => Yii::$app->params['city']])->one()) {
-      $place = $this->findModel($slug, $city->id);
-      $otherPlace = Place::find()->parsed()->where(['!=', 'id', $place->id])->andWhere(['category_id' => $place->category_id])->andWhere(['city_id' => $city->id])->limit(5)->all();
+      $event = $this->findModel($slug, $city->id);
+      $otherEvent = Event::find()->parsed()->where(['!=', 'id', $event->id])->andWhere(['category_id' => $event->category_id])->andWhere(['city_id' => $city->id])->limit(5)->all();
     } elseif (Yii::$app->params['city'] == 'global') {
-      $place = $this->findModel($slug);
-      $otherPlace = Place::find()->parsed()->where(['!=', 'id', $place->id])->with('category')->limit(5)->all();
+      $event = $this->findModel($slug);
+      $otherEvent = Event::find()->parsed()->where(['!=', 'id', $event->id])->with('category')->limit(5)->all();
     } else {
       throw new NotFoundHttpException(Yii::t('frontend', 'Page not found.'));
     }
@@ -167,21 +166,21 @@ class EventController extends Controller
     Yii::$app->view->registerLinkTag(['rel' => 'canonical', 'href' => Url::canonical()], 'canonical');
     Yii::$app->view->registerMetaTag([
       'name' => 'description',
-      'content' => $place->city ? $place->title . " $place->address в городе {$place->city->name} - описание, все фотографии, местоположение на Surf-city.ru. Контакты" : $place->title . " $place->address - описание, все фотографии, местоположение на Surf-city.ru. Контакты",
+      // 'content' => $event->city ? $event->title . " $event->address в городе {$event->city->name} - описание, все фотографии, местоположение на Surf-city.ru. Контакты" : $event->title . " $event->address - описание, все фотографии, местоположение на Surf-city.ru. Контакты",
     ], 'description');
 
     Yii::$app->seo->putFacebookMetaTags([
       'og:locale'     => 'ru_RU',
       'og:url'        => Url::canonical(),
       'og:type'       => 'article',
-      'og:title'      => $place->title,
-      'og:description' => $place->city ? $place->title . " $place->address в городе {$place->city->name} - описание, все фотографии, местоположение на Surf-city.ru. Контакты" : $place->title . " $place->address - описание, все фотографии, местоположение на Surf-city.ru. Контакты",
-      'og:image'      => Url::to($place->getImage()->getUrl(), true),
-      'og:image:width' => $place->getImage()->getSizes()['width'],
-      'og:image:height' => $place->getImage()->getSizes()['height'],
+      'og:title'      => $event->title,
+      // 'og:description' => $event->city ? $event->title . " $event->address в городе {$event->city->name} - описание, все фотографии, местоположение на Surf-city.ru. Контакты" : $event->title . " $event->address - описание, все фотографии, местоположение на Surf-city.ru. Контакты",
+      'og:image'      => Url::to($event->getImage()->getUrl(), true),
+      'og:image:width' => $event->getImage()->getSizes()['width'],
+      'og:image:height' => $event->getImage()->getSizes()['height'],
       'og:site_name' => 'Surf-City - открывай интересные места России',
-      // 'og:updated_time' => Yii::$app->formatter->asDatetime($place->updated_at, "php:Y-m-dTH:i:s+00:00"),
-      'og:updated_time' => date(DATE_ATOM, $place->updated_at),
+      // 'og:updated_time' => Yii::$app->formatter->asDatetime($event->updated_at, "php:Y-m-dTH:i:s+00:00"),
+      'og:updated_time' => date(DATE_ATOM, $event->updated_at),
       // 'fb:app_id' => '',
       // 'vk:app_id' => '',
       // 'vk:page_id' => '',
@@ -191,42 +190,42 @@ class EventController extends Controller
 
     //   \Yii::$app->seo->putTwitterMetaTags([
     //     'twitter:site'        => Url::canonical(),
-    //     'twitter:title'       => $place->title,
-    //     'twitter:description' => $place->description,
-    //     'twitter:site'     => '@trip2place',
-    //     'twitter:creator'     => '@trip2place',
-    //     'twitter:image:src'      => Url::to($place->getImage()->getUrl(), true),
+    //     'twitter:title'       => $event->title,
+    //     'twitter:description' => $event->description,
+    //     'twitter:site'     => '@trip2event',
+    //     'twitter:creator'     => '@trip2event',
+    //     'twitter:image:src'      => Url::to($event->getImage()->getUrl(), true),
     //     'twitter:card'=> 'summary_large_image',
     // ]);
 
-    $image = $place->getImage();
+    $image = $event->getImage();
     $img = Yii::$app->request->hostInfo . $image->getUrl();
-    $phone = '+'.$place->phone[0]['phones'];
+    // $phone = '+'.$event->phone[0]['phones'];
     
-    $schema = Json::encode([
-      "@context" => "http://schema.org",
-      "@type" => "LocalBusiness",
-      "name" => $place->title,
-      "image" => $img,
-      "telephone" => $phone,
-      "email" => "",
-      "address" => [
-        "@type" => "PostalAddress",
-        "streetAddress" => $place->address
-        ]
-      ]);
+    // $schema = Json::encode([
+    //   "@context" => "http://schema.org",
+    //   "@type" => "LocalBusiness",
+    //   "name" => $event->title,
+    //   "image" => $img,
+    //   "telephone" => $phone,
+    //   "email" => "",
+    //   "address" => [
+    //     "@type" => "PostalAddress",
+    //     "streetAddress" => $event->address
+    //     ]
+    //   ]);
       
     return $this->render('view', [
-      'place' => $place,
-      'otherPlace' => $otherPlace,
-      'schema' => $schema,
-      'addressInJson' => Place::getJsonForMap($place),
+      'event' => $event,
+      'otherEvent' => $otherEvent,
+      // 'schema' => $schema,
+      // 'addressInJson' => Event::getJsonForMap($event),
     ]);
   }
 
   public function findModel($slug, $city_id = null)
   {
-    if (($model = Place::find()->where(['slug' => $slug])->andWhere(['city_id' => $city_id])->with('category', 'tags')->one()) !== null) {
+    if (($model = Event::find()->where(['slug' => $slug])->andWhere(['city_id' => $city_id])->with('category', 'tags')->one()) !== null) {
       return $model;
     }
     throw new NotFoundHttpException('Страницы не существует');
@@ -234,9 +233,14 @@ class EventController extends Controller
 
   public function findModelCategory($slug, $city_id = null)
   {
-    $model = Place::find()->joinWith(['category'])->where('{{%place_category}}.slug = :slug', [':slug' => $slug])->andWhere(['city_id' => $city_id]);
-    if ($model->one() !== null) {
+    $model = Event::find()->joinWith(['category'])->where('{{%event_category}}.slug = :slug', [':slug' => $slug])->andWhere(['city_id' => $city_id]);
+    if($model->one() !== null) {
       return $model;
+    } else {
+      $model = Event::find()->joinWith(['category'])->where('{{%event_category}}.slug = :slug', [':slug' => $slug]);
+      if ($model->one() !== null) {
+        return $model;
+      }
     }
     throw new NotFoundHttpException('Страницы не существует');
   }
@@ -245,23 +249,30 @@ class EventController extends Controller
   {
     if ($city = City::find()->where('url = :url', [':url' => Yii::$app->params['city']])->one()) {
       $query = $this->findModelCategory($slug, $city->id);
-      $place = $query->one();
+      $event = $query->one();
     } elseif (Yii::$app->params['city'] == 'global') {
       $query = $this->findModelCategory($slug);
-      $place = $query->one();
-    } else {
+      $event = $query->one();
+      $dataProvider = Event::getDataProvider($query);
+
+      return $this->render('allcategory', [
+        'event' => $event,
+        'dataProvider' => $dataProvider,
+        // 'addressInJson' => Event::getJsonForMap($models),
+        'categories' => EventCategory::find()->active()->asArray()->all(),
+        // 'tags' => Tag::find()->asArray()->all()
+      ]);
+      } else {
       throw new NotFoundHttpException(Yii::t('frontend', 'Page not found.'));
     }
 
-    $dataProvider = Place::getDataProvider($query);
-
-    $models = $dataProvider->getModels();
+    $dataProvider = Event::getDataProvider($query);
 
     return $this->render('category', [
-      'place' => $place,
+      'event' => $event,
       'dataProvider' => $dataProvider,
-      'addressInJson' => Place::getJsonForMap($models),
-      // 'categories' => PlaceCategory::find()->active()->asArray()->all(),
+      // 'addressInJson' => Event::getJsonForMap($models),
+      'categories' => EventCategory::find()->active()->asArray()->all(),
       // 'tags' => Tag::find()->asArray()->all()
     ]);
   }
@@ -272,16 +283,16 @@ class EventController extends Controller
     if (!$model) {
       throw new NotFoundHttpException(Yii::t('frontend', 'Page not found.'));
     }
-    // $listing = Place::find()->with('category')->joinWith('tags')->where('{{%tag}}.slug = :slug', [':slug' => $slug])->all();
-    $query = Place::find()->with('category')->joinWith('tags')->where('{{%tag}}.slug = :slug', [':slug' => $slug]);
-    $dataProvider = Place::getDataProvider($query);
+    // $listing = Event::find()->with('category')->joinWith('tags')->where('{{%tag}}.slug = :slug', [':slug' => $slug])->all();
+    $query = Event::find()->with('category')->joinWith('tags')->where('{{%tag}}.slug = :slug', [':slug' => $slug]);
+    $dataProvider = Event::getDataProvider($query);
 
     $models = $dataProvider->getModels();
 
     return $this->render('index', [
       'dataProvider' => $dataProvider,
-      'categories' => PlaceCategory::find()->active()->asArray()->all(),
-      'addressInJson' => Place::getJsonForMap($models),
+      'categories' => EventCategory::find()->active()->asArray()->all(),
+      'addressInJson' => Event::getJsonForMap($models),
       'tags' => Tag::find()->asArray()->all()
     ]);
   }

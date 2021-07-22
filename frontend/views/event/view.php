@@ -5,7 +5,7 @@ use yii\helpers\Url;
 use yii\helpers\Json;
 use yii\web\View;
 
-$this->title = Html::decode($place->title);
+$this->title = Html::decode($event->title);
 $this->registerJsFile(
 	"/reveal/js/singleMap.js",
 	$options = [
@@ -17,19 +17,19 @@ $this->registerJsFile(
 	]
 );
 
-echo yii\helpers\Html::script($schema, ["type" => "application/ld+json"]);
+// echo yii\helpers\Html::script($schema, ["type" => "application/ld+json"]);
 
 $this->params['breadcrumbs'][] = [
     'label' => Yii::t('frontend', 'Места'),
-    'url' => Url::to('/place')
+    'url' => Url::to('/event')
 ];
 $this->params['breadcrumbs'][] = [
-    'label' => $place->category->title,
-    'url' => Url::to('/place/'.$place->category->slug)
+    'label' => $event->category->title,
+    'url' => Url::to('/event/'.$event->category->slug)
 ];
-$this->params['breadcrumbs'][] = Yii::t('frontend', $place->title);
+$this->params['breadcrumbs'][] = Yii::t('frontend', $event->title);
 
-$images = $place->getImages();
+$images = $event->getImages();
 
 ?>
 <div class="featured-slick">
@@ -52,12 +52,12 @@ $images = $place->getImages();
 					<div class="slide-property-detail">
 						<div class="slide-property-first">
 							<div class="listname-into">
-								<h1><?= $place->title ?>
+								<h1><?= $event->title ?>
 									<span class="prt-type rent">
-										<?= Html::a($place->category['title'], ['place/category', 'slug' => $place->category['slug']], ['class' => 'cat-icon cl-1']) ?>
+										<?= Html::a($event->category['title'], ['event/category', 'slug' => $event->category['slug']], ['class' => 'cat-icon cl-1']) ?>
 									</span>
 								</h1>
-								<span><?= $place->address ? '<i class="lni-map-marker"></i>' . $place->address : '' ?></span>
+								<span><?php // $event->address ? '<i class="lni-map-marker"></i>' . $event->address : '' ?></span>
 							</div>
 						</div>
 						<div class="slide-property-sec">
@@ -98,10 +98,10 @@ $images = $place->getImages();
 				<div class="col-lg-8 col-md-12 col-sm-12">
 					<div class="block-wrap">
 						<div class="block-header">
-							<h2 class="block-title">Информация про "<?= $place->title ?>"</h4>
+							<h2 class="block-title">Информация про "<?= $event->title ?>"</h4>
 						</div>
 						<div class="block-body">
-							<p><?= $place->text ?></p>
+							<p><?= $event->text ?></p>
 						</div>
 					</div>
 
@@ -131,7 +131,7 @@ $images = $place->getImages();
 								
 							</div> -->
 					<!-- Карта -->
-					<?php if ($place->address || $place->lng) : ?>
+					<?php if (isset($event->address) || isset($event->lng)) : ?>
 						<div class="block-wrap">
 
 							<div class="block-header">
@@ -314,21 +314,21 @@ $images = $place->getImages();
 										<div class="col-lg-6 col-md-6 col-sm-12">
 											<div class="form-group">
 												<label>Имя</label>
-												<input class="form-control" type="text" placeholder="Ваше имя">
+												<input class="form-control" type="text" eventholder="Ваше имя">
 											</div>
 										</div>
 
 										<div class="col-lg-6 col-md-6 col-sm-12">
 											<div class="form-group">
 												<label>Email</label>
-												<input class="form-control" type="email" placeholder="Ваш Email">
+												<input class="form-control" type="email" eventholder="Ваш Email">
 											</div>
 										</div>
 
 										<div class="col-lg-12 col-md-12 col-sm-12">
 											<div class="form-group">
 												<label>Отзыв</label>
-												<textarea class="form-control ht-140" placeholder="Отзыв"></textarea>
+												<textarea class="form-control ht-140" eventholder="Отзыв"></textarea>
 											</div>
 										</div>
 
@@ -355,7 +355,7 @@ $images = $place->getImages();
 						<!-- Agent Detail -->
 						<!-- <div class="agent-widget">
 						<div class="agent-title">
-							<div class="agent-photo"><img src="https://via.placeholder.com/400x400" alt=""></div>
+							<div class="agent-photo"><img src="https://via.eventholder.com/400x400" alt=""></div>
 							<div class="agent-details">
 								<h4><a href="author-detail.html">Shaurya Preet</a></h4>
 								<span><i class="ti-view-grid"></i>202 Listings</span>
@@ -364,19 +364,19 @@ $images = $place->getImages();
 						</div>
 
 						<div class="form-group">
-							<input type="text" class="form-control" placeholder="Your Name">
+							<input type="text" class="form-control" eventholder="Your Name">
 						</div>
 						<div class="form-group">
-							<input type="text" class="form-control" placeholder="Your Email">
+							<input type="text" class="form-control" eventholder="Your Email">
 						</div>
 						<div class="form-group">
-							<textarea class="form-control" placeholder="Send Message to author..."></textarea>
+							<textarea class="form-control" eventholder="Send Message to author..."></textarea>
 						</div>
 						<button class="btn btn-theme full-width">Send Message</button>
 					</div> -->
 						<!-- Listing Hour Detail -->
-						<?php if (isset($place->schedule)) : ?>
-							<?php //var_dump(Json::decode($place->schedule)); die;?>
+						<?php if (isset($event->schedule)) : ?>
+							<?php //var_dump(Json::decode($event->schedule)); die;?>
 							<div class="tr-single-box">
 								<div class="tr-single-header listing-hours-header open">
 									<h4><i class="lni-timer"></i>Сейчас
@@ -391,7 +391,7 @@ $images = $place->getImages();
 								<div class="tr-single-body">
 									<ul class="listing-hour-day">
 									<?php $daysweek = [0 => 'Понедельник', 1 => 'Вторник', 2 => 'Среда', 3 => 'Четверг', 4 => 'Пятница', 5 => 'Суббота', 6 => 'Воскресенье'];?>
-										<?php foreach (Json::decode($place->schedule) as $dn => $working) : ?>
+										<?php foreach (Json::decode($event->schedule) as $dn => $working) : ?>
 											<li>
 												<span class="listing-hour-day"><?= $daysweek[$dn] ?></span>
 												<span class="listing-hour-time"><?= date('H:i', $working['from']) ?> - <?= date('H:i', $working['to']) ?></span>
@@ -499,19 +499,19 @@ $images = $place->getImages();
 							<div class="tr-single-body">
 								<ul class="extra-service">
 									<li>
-										<?php if ($place->address) : ?>
+										<?php if (isset($event->address)) : ?>
 											<div class="icon-box-icon-block">
 													<div class="icon-box-round">
 														<i class="lni-map-marker"></i>
 													</div>
 													<div style="display:contents">
-														<?= $place->address ?>
+														<?= $event->address ?>
 													</div>
 											</div>
 										<?php endif ?>
 									</li>
-									<?php if (isset($place->phone)) : ?>
-										<?php foreach ($place->phone as $phone) : ?>
+									<?php if (isset($event->phone)) : ?>
+										<?php foreach ($event->phone as $phone) : ?>
 											<li>
 												<div class="icon-box-icon-block">
 														<div class="icon-box-round">
@@ -524,26 +524,26 @@ $images = $place->getImages();
 											</li>
 										<?php endforeach; ?>
 									<?php endif; ?>
-									<?php if (isset($place->email)) : ?>
+									<?php if (isset($event->email)) : ?>
 										<li>
 											<div class="icon-box-icon-block">
 													<div class="icon-box-round">
 														<i class="lni-envelope"></i>
 													</div>
 													<div class="icon-box-text">
-													<?= Html::mailto($place->email, $place->email, ['rel' => 'nofollow']) ?>
+													<?= Html::mailto($event->email, $event->email, ['rel' => 'nofollow']) ?>
 													</div>
 											</div>
 										</li>
 									<?php endif; ?>
-									<?php if (isset($place->website)) : ?>
+									<?php if (isset($event->website)) : ?>
 										<li>
 											<div class="icon-box-icon-block">
 													<div class="icon-box-round">
 														<i class="lni-world"></i>
 													</div>
 													<div class="icon-box-text">
-													<?= Html::a($place->website, $place->website, ['rel' => 'nofollow', 'referrerpolicy' => "unsafe-url", 'target' => "_blank"]) ?>
+													<?= Html::a($event->website, $event->website, ['rel' => 'nofollow', 'referrerpolicy' => "unsafe-url", 'target' => "_blank"]) ?>
 													</div>
 											</div>
 										</li>
@@ -553,14 +553,14 @@ $images = $place->getImages();
 
 						</div>
 						<!-- Tags -->
-						<?php if ($place->tagLinksArray) : ?>
+						<?php if ($event->tagLinksArray) : ?>
 							<div class="tr-single-box">
 								<div class="tr-single-header">
 									<h4><i class="lni-tag"></i> Метки</h4>
 								</div>
 								<div class="tr-single-body">
 									<ul class="extra-service half">
-										<?php foreach ($place->tagLinksArray as $tag) : ?>
+										<?php foreach ($event->tagLinksArray as $tag) : ?>
 											<li>
 												<div class="icon-box-icon-block">
 													<a href="<?// $tag->name?>">
@@ -589,7 +589,7 @@ $images = $place->getImages();
 											<img src="<?= $img->getUrl('560x359'); ?>" alt="<?= $img->title?>" class="">
 										</span>
 										<span class="right">
-											<a class="feed-title" href="<?= Url::to(['place/view', 'category' => $item->category->slug, 'city' => ($item->city) ? $item->city->url : null, 'slug' => $item->slug]) ?>"><?= $item->title?></a> 
+											<a class="feed-title" href="<?= Url::to(['event/view', 'category' => $item->category->slug, 'city' => ($item->city) ? $item->city->url : null, 'slug' => $item->slug]) ?>"><?= $item->title?></a> 
 											<!-- <span class="post-date"><i class="ti-calendar"></i>10 Min ago</span> -->
 										</span>
 									</li>

@@ -56,6 +56,14 @@ class Event extends \yii\db\ActiveRecord
     public $images;
     public $gallery;
 
+    /**
+     * {@inheritdoc}
+     */
+    public static function tableName()
+    {
+        return '{{%event}}';
+    }
+
     public function behaviors()
     {
         return [
@@ -88,37 +96,29 @@ class Event extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
-    {
-        return 'event';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function rules()
     {
         return [
             [['title', 'text'], 'required'],
-            [['ageRestriction', 'isFree', 'category_id', 'place_id', 'city_id', 'published_at', 'created_at', 'updated_at', 'author_id', 'updater_id'], 'integer'],
+            [['ageRestriction', 'slug','isFree', 'category_id', 'place_id', 'city_id', 'published_at', 'created_at', 'updated_at', 'author_id', 'updater_id'], 'safe'],
             [['start', 'end', 'slug'], 'safe'],
-            [['title', 'preview', 'organizer', 'text'], 'string', 'max' => 255],
+            // [['title', 'preview', 'organizer'], 'string', 'max' => 255],
             [['title'], 'unique'],
-            // ['published_at', 'default',
-            //     'value' => function () {
-            //         return date(DATE_ATOM);
-            //     }
-            // ],
-            // ['published_at', 'filter', 'filter' => 'strtotime'],
-            // ['status', 'default', 'value' => self::STATUS_PARSED],
-            // ['author_id', 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['author_id' => 'id']],
-            // ['category_id', 'exist', 'skipOnError' => true, 'targetClass' => EventCategory::class, 'targetAttribute' => ['category_id' => 'id']],
-            // ['city_id', 'exist', 'skipOnError' => true, 'targetClass' => City::class, 'targetAttribute' => ['city_id' => 'id']],
-            // ['updater_id', 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['updater_id' => 'id']],
-            // [['tagValues', 'slug'], 'safe'],
-            // [['image', 'images', 'gallery'], 'safe'],
-            // [['imageFile'], 'file', 'extensions' => 'png, jpg, jpeg'],
-            // [['imageFiles'], 'file', 'extensions' => 'png, jpg, jpeg', 'maxFiles' => 25],
+            ['published_at', 'default',
+                'value' => function () {
+                    return date(DATE_ATOM);
+                }
+            ],
+            ['published_at', 'filter', 'filter' => 'strtotime'],
+            ['status', 'default', 'value' => self::STATUS_PARSED],
+            ['author_id', 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['author_id' => 'id']],
+            ['category_id', 'exist', 'skipOnError' => true, 'targetClass' => EventCategory::class, 'targetAttribute' => ['category_id' => 'id']],
+            ['city_id', 'exist', 'skipOnError' => true, 'targetClass' => City::class, 'targetAttribute' => ['city_id' => 'id']],
+            ['updater_id', 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['updater_id' => 'id']],
+            [['tagValues', 'slug'], 'safe'],
+            [['image', 'images', 'gallery'], 'safe'],
+            [['imageFile'], 'file', 'extensions' => 'png, jpg, jpeg'],
+            [['imageFiles'], 'file', 'extensions' => 'png, jpg, jpeg', 'maxFiles' => 25],
         ];
     }
 
@@ -159,6 +159,14 @@ class Event extends \yii\db\ActiveRecord
         return $this->hasOne(City::class, ['id' => 'city_id']);
     }
 
+    public function getImageRico(){
+        return $this->hasOne(\alex290\yii2images\models\Image::class, ['itemId' => 'id'])->where(['isMain' => 1]);
+    }
+
+    public function getImagesRico(){
+        return $this->hasOne(\alex290\yii2images\models\Image::class, ['itemId' => 'id']);
+    }
+
     public static function getDataProvider($query)
     {
         $countQuery = clone $query;
@@ -180,25 +188,38 @@ class Event extends \yii\db\ActiveRecord
         ]);
     }
 
+    public static function getActiveDataProvider($status, $count)
+    {
+        return new ActiveDataProvider([
+            'query' => Place::find()->with('category', 'city')->where(['=', 'status', $status]),
+            'sort' => [
+                'defaultOrder' => [
+                        'id' => SORT_DESC
+                ]
+            ],    
+            'totalCount' => $count,
+                ]);
+    }
+
     public static function getJsonForMap($models)
     {
         if (is_array($models)) {
             foreach ($models as $row) {
                 $img = $row->getImage();
                 $addressInJson[] = [
-                    'addres' => trim($row['address']),
+                    // 'addres' => trim($row['address']),
                     'title' => $row['title'],
                     'slug' => $row['slug'],
                     'mainImg' => $img->getUrl('358x229'),
                     'category' => $row['category']['title'],
                     'categorySlug' => $row['category']['slug'],
-                    'lng' => $row['lng'],
-                    'lat' => $row['lat'],
+                    // 'lng' => $row['lng'],
+                    // 'lat' => $row['lat'],
                 ];
             }
         } else {
             $addressInJson[] = [
-                'addres' => trim($models['address']),
+                // 'addres' => trim($models['address']),
                 'title' => $models['title'],
                 'slug' => $models['slug'],
                 'category' => $models['category']['title'],
@@ -277,10 +298,10 @@ class Event extends \yii\db\ActiveRecord
             return false;
         }
     }
-    public function uploadImage($pathinfo, $object)
+    public function uploadImage($pathinfo, $object = null)
     {
         if ($this->validate()) {
-            $path = Yii::getAlias('@storage') . '/img/' . $pathinfo['filename'] . '.' . $pathinfo['extension'];
+            $path = Yii::getAlias('@storage') . '/tmp/' . $pathinfo['filename'] . '.' . $pathinfo['extension'];
             $this->attachImage($path, true, $pathinfo['filename']);
             $image = \alex290\yii2images\models\Image::findOne(['name' => $pathinfo['filename']]);
             $image->alt = $object->name;
@@ -308,16 +329,16 @@ class Event extends \yii\db\ActiveRecord
         }
     }
 
-    public function uploadImages($imageFiles, $object)
+    public function uploadImages($imageFiles, $object = null)
     {
         if ($this->validate()) {
             foreach ($imageFiles as $file) {
-                $path = Yii::getAlias('@storage') . '/img/' . $file['filename'] . '.' . $file['extension'];
+                $path = Yii::getAlias('@storage') . '/tmp/' . $file['filename'] . '.' . $file['extension'];
                 $this->attachImage($path, false, $file['filename']);
                 $image = \alex290\yii2images\models\Image::findOne(['name' => $file['filename']]);
                 $image->alt = $object->name;
                 $image->title = $object->name;
-                $image->save(false);    
+                $image->save(false);   
                 @unlink($path);
             }
             return true;
@@ -328,7 +349,7 @@ class Event extends \yii\db\ActiveRecord
 
     public function download($url, $pathinfo)
     {
-        $path = Yii::getAlias('@storage') . '/img/' . $pathinfo['filename'] . '.' . $pathinfo['extension'];
+        $path = Yii::getAlias('@storage') . '/tmp/' . $pathinfo['filename'] . '.' . $pathinfo['extension'];
         $file_path = fopen($path, 'w');
         $client = new \GuzzleHttp\Client(['connect_timeout' => 30, 'timeout' => 30]);
         $this->imageFile = $client->get($url, ['sink' => $file_path]);
@@ -350,13 +371,13 @@ class Event extends \yii\db\ActiveRecord
     }
 
 
-    public function afterSave($insert, $changedAttributes)
-    {
-        if ($insert) {
-            Yii::$app->session->setFlash('success', 'Запись добавлена');
-        } else {
-            Yii::$app->session->setFlash('success', 'Запись обновлена');
-        }
-        parent::afterSave($insert, $changedAttributes);
-    }
+    // public function afterSave($insert, $changedAttributes)
+    // {
+    //     if ($insert) {
+    //         Yii::$app->session->setFlash('success', 'Запись добавлена');
+    //     } else {
+    //         Yii::$app->session->setFlash('success', 'Запись обновлена');
+    //     }
+    //     parent::afterSave($insert, $changedAttributes);
+    // }
 }

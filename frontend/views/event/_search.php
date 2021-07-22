@@ -29,7 +29,7 @@ use yii\helpers\Url;
 	<div class="col-lg-5 col-md-5 col-sm-6 small-padd">
 		<div class="form-group">
 			<div class="input-with-icon">
-				<?= Html::dropDownList('category_id', null, ArrayHelper::map($categories, 'id', 'title'), ['id' => 'list-category', 'class' => 'form-control', 'prompt' => '&nbsp;']) ?>
+				<? Html::dropDownList('category_id', null, ArrayHelper::map($categories, 'id', 'title'), ['id' => 'list-category', 'class' => 'form-control', 'prompt' => '&nbsp;']) ?>
 				<i class="theme-cl ti-briefcase"></i>
 			</div>
 		</div>
