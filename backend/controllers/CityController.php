@@ -2,12 +2,15 @@
 
 namespace backend\controllers;
 
+use backend\models\search\CitySearch;
 use Yii;
 use common\models\City;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\UploadedFile;
+use nickdenry\grid\toggle\actions\ToggleAction;
 
 /**
  * CityController implements the CRUD actions for City model.
@@ -29,25 +32,58 @@ class CityController extends Controller
         ];
     }
 
+    public function actions()
+    {
+        return [
+            'switch' => [
+                'class' => ToggleAction::class,
+                'modelClass' => 'common\models\City', // Your model class
+            ],
+        ];
+    }
+
+    // public function init()
+    // {
+    //     parent::init();
+    //     $this->all = City::find()->count();
+    //     $this->trashed = Place::find()->where(['=', 'status', Place::STATUS_TRASHED])->count();
+    //     $this->parsed = Place::find()->where(['=', 'status', Place::STATUS_PARSED])->count();
+    //     $this->edited = Place::find()->where(['=', 'status', Place::STATUS_EDITED])->count();
+    //     $this->published = Place::find()->where(['=', 'status', Place::STATUS_PUBLISHED])->count();
+    //     $this->updated = Place::find()->where(['=', 'status', Place::STATUS_UPDATED])->count();
+    //     }
+
     /**
      * Lists all City models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $dataProvider = new ActiveDataProvider([
-            'query' => City::find(),
-            'pagination' => [
-                'pageSize' => 100,
-            ],
-            'sort' => [
-                'defaultOrder' => [
-                    'name' => SORT_ASC, 
-                ]
-            ],        ]);
+
+        $searchModel = new CitySearch();
+        
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        // $dataProvider->sort = [
+        //     'defaultOrder' => ['name_en' => SORT_DESC],
+        // ];
+
+        // print_r($dataProvider->getKeys());die;
+
+        // $dataProvider = new ActiveDataProvider([
+        //     'query' => City::find(),
+        //     'pagination' => [
+        //         'pageSize' => 100,
+        //     ],
+        //     'sort' => [
+        //         'defaultOrder' => [
+        //             'name_en' => SORT_DESC, 
+        //         ]
+        //     ],        ]);
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel
         ]);
     }
 
@@ -74,6 +110,16 @@ class CityController extends Controller
         $model = new City();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
+            if ($model->imageFile){
+                // $model->frameImage();
+                $model->uploadMainImage();
+            }
+            $model->imageFiles = UploadedFile::getInstances($model, 'imageFiles');
+            if ($model->imageFiles){
+                $model->uploadGallery();
+            }
+            Yii::$app->session->setFlash('success', "успешно обновлено");
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
@@ -94,7 +140,17 @@ class CityController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
+            if ($model->imageFile){
+                // $model->frameImage();
+                $model->uploadMainImage();
+            }
+            $model->imageFiles = UploadedFile::getInstances($model, 'imageFiles');
+            if ($model->imageFiles){
+                $model->uploadGallery();
+            }
+            Yii::$app->session->setFlash('success', "успешно обновлено");
+            return $this->refresh();
         }
 
         return $this->render('update', [
@@ -114,6 +170,20 @@ class CityController extends Controller
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
+    }
+
+    public function actionDeletemoreimg($id){
+
+        $place = City::findOne($id);
+
+        $imageId = Yii::$app->request->get('imageId');
+        $images = $place->getImages();
+        foreach ($images as $image) {
+            if ($image->id == $imageId) {
+                $place->removeImage($image);
+            }
+        }
+        return $this->redirect(["/city/update", "id" => $id]);
     }
 
     /**

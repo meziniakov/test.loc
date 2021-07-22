@@ -144,7 +144,7 @@ return [
     'Trashed' => 'В корзине',
     'URL' => '',
     'Update' => 'Редактировать',
-    'Update City: ' => 'Обновить город',
+    'Update City: ' => 'Обновить город ',
     'Update Event: {name}' => '',
     'Update Json Parser: {name}' => '',
     'Update article category: {title}' => 'Редактировать категорию статей: {title}',
