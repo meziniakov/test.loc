@@ -11,6 +11,6 @@ use common\models\City;
 class CityComponent extends Component
 {
   public function isCity() {
-    return City::find()->where('url = :url', [':url' => Yii::$app->params['city']])->one();
+    return City::find()->where('url = :url', [':url' => Yii::$app->params['city']])->with('imageRico')->one();
   }
 }

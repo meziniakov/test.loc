@@ -81,7 +81,7 @@ class SiteController extends Controller
     {
         if ($city = Yii::$app->city->isCity()) {
             $places = Place::find();
-            $listing = $places->where(['is_home' => 1])->andWhere(['city_id' => $city->id])->with('category', 'city')->all();
+            $listing = $places->where(['is_home' => 1])->andWhere(['city_id' => $city->id])->with('category', 'imageRico', 'city')->all();
             
             Yii::$app->view->registerLinkTag(['rel' => 'canonical', 'href' => Url::canonical()], 'canonical');
             Yii::$app->view->registerMetaTag([
