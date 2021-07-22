@@ -50,7 +50,7 @@ class TripsterController extends Controller
       $api = new TripsterAPI("41323de3f24c6a81d6bca4ac1cdf13c4d4089350");
       $page = 1;
       $countSave = 0;
-      while($page < 12) {
+      while($page < 64) {
           $page_results = $api->get("cities", ["page" => $page]);
 
           // Добавляем экскурсии из России к общему массиву экскурсий

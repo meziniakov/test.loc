@@ -25,8 +25,44 @@ class CityByTripsterJob extends BaseObject implements \yii\queue\JobInterface
 
     public function execute($queue)
     {
+    //     $result = $this->city;
+    //     if(!City::findOne(['name' => $result['name_ru']])){
+    //         $city = new City();
+    //         $city->name = $result['name_ru'];
+    //         $city->url = str_replace('_', '-', $result['ascii_name']);
+    //         $city->name_en = $result['name_en'];
+    //         $city->iata = $result['iata'];
+    //         $city->in_obj_phrase = $result['in_obj_phrase'];
+    //         $city->from_obj_phrase = $result['from_obj_phrase'];
+    //         $city->name_prepositional = $result['name_prepositional'];
+    //         $city->ascii_name = $result['ascii_name'];
+    //         $city->save(false);
+    //         if (!empty($cover = $result['image']['cover'])) {
+    //             $pathinfo = pathinfo($cover);
+    //             $city->download($cover, $pathinfo);
+    //             $city->uploadImage($pathinfo, $city->name);
+    //         }
+    //     } else {
+
+    //     }
+    // }
+
+    // {
         $result = $this->city;
-        if(!City::findOne(['name' => $result['name_ru']])){
+        if($city = City::findOne(['name' => $result['name_ru']])){
+            $city->name_en = $result['name_en'];
+            $city->iata = $result['iata'];
+            $city->in_obj_phrase = $result['in_obj_phrase'];
+            $city->from_obj_phrase = $result['from_obj_phrase'];
+            $city->name_prepositional = $result['name_prepositional'];
+            $city->ascii_name = $result['ascii_name'];
+            $city->save(false);
+            if (!empty($cover = $result['image']['cover'])) {
+                $pathinfo = pathinfo($cover);
+                $city->download($cover, $pathinfo);
+                $city->uploadImage($pathinfo, $city->name);
+            }
+        } else {
             $city = new City();
             $city->name = $result['name_ru'];
             $city->url = str_replace('_', '-', $result['ascii_name']);
@@ -44,39 +80,4 @@ class CityByTripsterJob extends BaseObject implements \yii\queue\JobInterface
             }
         }
     }
-
-    // {
-    //     $result = $this->city;
-    //     if($city = City::findOne(['name' => $result['name_ru']])){
-    //         $city->name_en = $result['name_en'];
-    //         $city->iata = $result['iata'];
-    //         $city->in_obj_phrase = $result['in_obj_phrase'];
-    //         $city->from_obj_phrase = $result['from_obj_phrase'];
-    //         $city->name_prepositional = $result['name_prepositional'];
-    //         $city->ascii_name = $result['ascii_name'];
-    //         $city->save(false);
-    //         if (!empty($cover = $result['image']['cover'])) {
-    //             $pathinfo = pathinfo($cover);
-    //             $city->download($cover, $pathinfo);
-    //             $city->uploadImage($pathinfo, $city->name);
-    //         }
-    //     } else {
-    //         $city = new City();
-    //         $city->name = $result['name_ru'];
-    //         $city->url = str_replace('_', '-', $result['ascii_name']);
-    //         $city->name_en = $result['name_en'];
-    //         $city->iata = $result['iata'];
-    //         $city->in_obj_phrase = $result['in_obj_phrase'];
-    //         $city->from_obj_phrase = $result['from_obj_phrase'];
-    //         $city->name_prepositional = $result['name_prepositional'];
-    //         $city->ascii_name = $result['ascii_name'];
-    //         $city->save(false);
-    //         if (!empty($cover = $result['image']['cover'])) {
-    //             $pathinfo = pathinfo($cover);
-    //             $city->download($cover, $pathinfo);
-    //             $city->uploadImage($pathinfo, $city->name);
-    //         }
-    //     }
-    // }
-
 }
