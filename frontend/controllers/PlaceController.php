@@ -69,10 +69,10 @@ class PlaceController extends Controller
     $city_id = Yii::$app->request->get('city_id');
     $tag_id = Yii::$app->request->get('tag_id');
 
-    if ($city = City::find()->where('url = :url', [':url' => Yii::$app->params['city']])->one()) {
-      $query = Place::find()->where(['city_id' => $city->id])->published()->with('category');
+    if ($city = Yii::$app->city->isCity()) {
+      $query = Place::find()->published()->where(['city_id' => $city->id])->with('category', 'city' ,'imageRico');
     } elseif (Yii::$app->params['city'] == 'global') {
-      $query = Place::find()->published()->with('category');
+      $query = Place::find()->published()->with('category', 'city' ,'imageRico');
     } else {
       throw new NotFoundHttpException(Yii::t('frontend', 'Page not found.'));
     }
@@ -87,17 +87,20 @@ class PlaceController extends Controller
 
     $models = $dataProvider->getModels();
 
+    $title = 'trip2place.com - открывай интересные места России';
+    $content = "trip2place.com - путешествуй, открывая новые места в России.";
+
     Yii::$app->view->registerLinkTag(['rel' => 'canonical', 'href' => Url::current([], true)], 'canonical');
     Yii::$app->view->registerMetaTag([
       'name' => 'description',
-      'content' => 'trip2place.com - путешествуй, открывая новые места в России.'
+      'content' => $content
     ], 'description');
 
     Yii::$app->seo->putFacebookMetaTags([
       'og:locale'     => 'ru_RU',
       'og:url'        => Url::current([], true),
       'og:type'       => 'article',
-      'og:title'      => 'trip2place.com - открывай интересные места России',
+      'og:title'      => $title,
       'og:description' => 'trip2place.com - изучайте Россию вместе с нами.',
       // 'og:image'      => Url::to($place->getImage()->getUrl(), true),
       // 'og:image:width' => $place->getImage()->getSizes()['width'],
@@ -126,7 +129,6 @@ class PlaceController extends Controller
         'dataProvider' => $dataProvider,
         'addressInJson' => Place::getJsonForMap($models),
         'categories' => PlaceCategory::find()->active()->asArray()->all(),
-        'cities' => City::find()->all(),
         'tags' => Tag::find()->asArray()->all()
       ]);
   }
@@ -163,30 +165,35 @@ class PlaceController extends Controller
     );
   }
 
+
   public function actionView($slug)
   {
-    if ($city = City::find()->where('url = :url', [':url' => Yii::$app->params['city']])->one()) {
-      $place = $this->findModel($slug, $city->id);
-      $otherPlace = Place::find()->published()->where(['!=', 'id', $place->id])->andWhere(['category_id' => $place->category_id])->andWhere(['city_id' => $city->id])->limit(5)->all();
+    if ($city = Yii::$app->city->isCity()) {
+      $place = $this->findModel($slug);
+      $otherPlace = Place::find()->published()->where(['!=', 'id', $place->id])->andWhere(['category_id' => $place->category_id])->andWhere(['city_id' => $city->id])->with('city','category','imageRico')->limit(5)->all();
     } elseif (Yii::$app->params['city'] == 'global') {
       $place = $this->findModel($slug);
-      $otherPlace = Place::find()->published()->where(['!=', 'id', $place->id])->with('category')->limit(5)->all();
+      $otherPlace = Place::find()->published()->where(['!=', 'id', $place->id])->with('city','category','imageRico')->limit(5)->all();
     } else {
       throw new NotFoundHttpException(Yii::t('frontend', 'Page not found.'));
     }
+    $title = $place->title;
+    $content = $city ? $place->title . " $place->address в городе {$city->name} - как проехать, описание, фото на trip2place.com" : $place->title . " $place->address - как проехать, описание, фото на trip2place.com";
+    $mainImage = Url::to($place->imageRico->getUrl(), true);
+
     Yii::$app->view->registerLinkTag(['rel' => 'canonical', 'href' => Url::current([], true)], 'canonical');
     Yii::$app->view->registerMetaTag([
       'name' => 'description',
-      'content' => $place->city ? $place->title . " $place->address в городе {$place->city->name} - как проехать, описание, фото на trip2place.com" : $place->title . " $place->address - как проехать, описание, фото на trip2place.com",
+      'content' => $content,
     ], 'description');
 
     Yii::$app->seo->putFacebookMetaTags([
       'og:locale'     => 'ru_RU',
       'og:url'        => Url::current([], true),
       'og:type'       => 'article',
-      'og:title'      => $place->title,
-      'og:description' => $place->city ? $place->title . " $place->address в городе {$place->city->name} - как проехать, описание, фото на trip2place.com" : $place->title . " $place->address - как проехать, описание, фото на trip2place.com",
-      'og:image'      => Url::to($place->getImage()->getUrl(), true),
+      'og:title'      => $title,
+      'og:description' => $content,
+      'og:image'      => $mainImage,
       'og:site_name' => ' - trip2place.com - открывай интересные места России',
       // 'og:updated_time' => Yii::$app->formatter->asDatetime($place->updated_at, "php:Y-m-dTH:i:s+00:00"),
       'og:updated_time' => date(DATE_ATOM, $place->updated_at),
@@ -199,24 +206,20 @@ class PlaceController extends Controller
 
       \Yii::$app->seo->putTwitterMetaTags([
         'twitter:site'        => Url::current([], true),
-        'twitter:title'       => $place->title,
+        'twitter:title'       => $title,
         'twitter:description' => $place->description,
         'twitter:site'     => '@trip2place',
         'twitter:creator'     => '@trip2place',
-        'twitter:image:src'      => Url::to($place->getImage()->getUrl(), true),
+        'twitter:image:src'      => $mainImage,
         'twitter:card'=> 'summary_large_image',
     ]);
-
-    $image = $place->getImage();
-    $img = Yii::$app->request->hostInfo . $image->getUrl();
-    $phone = '+'.$place->phone[0]['phones'];
     
     $schema = Json::encode([
       "@context" => "http://schema.org",
       "@type" => "LocalBusiness",
-      "name" => $place->title,
-      "image" => $img,
-      "telephone" => $phone,
+      "name" => $title,
+      "image" => $mainImage,
+      "telephone" => '+'.$place->phone[0]['phones'],
       "email" => "",
       "address" => [
         "@type" => "PostalAddress",
@@ -232,9 +235,9 @@ class PlaceController extends Controller
     ]);
   }
 
-  public function findModel($slug, $city_id = null)
+  public function findModel($slug)
   {
-    if (($model = Place::find()->where(['slug' => $slug])->published()->andWhere(['city_id' => $city_id])->with('category', 'tags')->one()) !== null) {
+    if (($model = Place::find()->published()->where(['slug' => $slug])->with('tags', 'imageRico')->one()) !== null) {
       return $model;
     }
     throw new NotFoundHttpException('Страницы не существует');
@@ -251,7 +254,7 @@ class PlaceController extends Controller
 
   public function actionCategory($slug)
   {
-    if ($city = City::find()->where('url = :url', [':url' => Yii::$app->params['city']])->one()) {
+    if ($city = Yii::$app->city->isCity()) {
       $query = $this->findModelCategory($slug, $city->id);
       $place = $query->one();
     } elseif (Yii::$app->params['city'] == 'global') {

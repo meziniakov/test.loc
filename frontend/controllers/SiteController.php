@@ -35,22 +35,24 @@ class SiteController extends Controller
     // public function init()
     // {
     //     parent::init();
+    //   return $this->city = Yii::$app->city->isCity();
 
     //     // $uri = explode(".", Yii::$app->request->serverName);
-    //     var_dump(Yii::$app->params['city']);
+    //     // var_dump(Yii::$app->params['city']);
     //     // echo "Hi";
     //     // return $this->city = $city;
     // }
-    // public function __construct($city)
+    // public function __construct()
     // {
-    //     echo $this->city = $city;
+    //   return $this->city = Yii::$app->city->isCity();
+    //   // print_r($this->city);die;
+    //   // echo $this->city = Yii::$app->city->isCity();
+    //   // // echo $this->city;die;
+    //   // var_dump(Yii::$app->params['city']); die;
+    //   // var_dump(Yii::$app->city->isCity()); die;
     // }
 
-    // public function beforeAction($action)
-    // {
-    //     // var_dump($action);die;
-    //     // return parent::beforeAction($action);
-    // }
+
     /**
      * @inheritdoc
      */
@@ -77,45 +79,54 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        if ($city = City::find()->where('url = :url', [':url' => Yii::$app->params['city']])->one()) {
+        if ($city = Yii::$app->city->isCity()) {
             $listing = Place::find()->where(['is_home' => 1])->andWhere(['city_id' => $city->id])->with('category', 'city')->all();
-        } elseif (Yii::$app->params['city'] == 'global') {
-            $listing = Place::find()->where(['is_home' => 1])->with('category')->all();
+            
+            Yii::$app->view->registerLinkTag(['rel' => 'canonical', 'href' => Url::canonical()], 'canonical');
+            Yii::$app->view->registerMetaTag([
+              'name' => 'description',
+              'content' => isset($city->name) ? 'Достопримечательности, музеи, цирки, места отдыха и многое другое в городе ' . $city->name : 'Достопримечательности, музеи, цирки, места отдыха и многое другое',
+            ], 'description');
+        
+            Yii::$app->seo->putFacebookMetaTags([
+              'og:locale'     => 'ru_RU',
+              'og:url'        => Url::canonical(),
+              'og:type'       => 'article',
+              'og:title'      => isset($city->name) ? 'Все достопримечательности в городе ' . $city->name : Yii::$app->keyStorage->get('frontend.index.title'),
+              'og:title'      => isset($city->name) ? 'Достопримечательности, музеи, цирки, места отдыха и многое другое в городе ' . $city->name : 'Достопримечательности, музеи, цирки, места отдыха и многое другое',
+              // 'og:image'      => Url::to($place->getImage()->getUrl(), true),
+              // 'og:image:width' => $place->getImage()->getSizes()['width'],
+              // 'og:image:height' => $place->getImage()->getSizes()['height'],
+              'og:site_name' => 'trip2place - открывай интересные места России',
+              // 'og:updated_time' => Yii::$app->formatter->asDatetime($place->updated_at, "php:Y-m-dTH:i:s+00:00"),
+              // 'og:updated_time' => date(DATE_ATOM, $place->updated_at),
+              // 'fb:app_id' => '',
+              // 'vk:app_id' => '',
+              // 'vk:page_id' => '',
+              // 'vk:image' => '',
+              // 'fb:app_id'=> '1811670458869631',//для статистики по переходам
+            ]);    
+
+            return $this->render('/city/index', [
+              'city' => $city,
+              'listing' => $listing,
+              'tags' => Tag::find()->all(),
+              'categories' => PlaceCategory::find()->active()->all(),
+              'cities' => City::find()->all(),
+          ]);
+          } elseif (Yii::$app->params['city'] == 'global') {
+            $places = Place::find();
+            $listing = $places->where(['is_home' => 1])->with('category', 'imageRico', 'city')->all();
         } else {
             throw new NotFoundHttpException(Yii::t('frontend', 'Page not found.'));
         }
-
-        Yii::$app->view->registerLinkTag(['rel' => 'canonical', 'href' => Url::canonical()], 'canonical');
-        Yii::$app->view->registerMetaTag([
-          'name' => 'description',
-          'content' => isset($city->name) ? 'Достопримечательности, музеи, цирки, места отдыха и многое другое в городе ' . $city->name : 'Достопримечательности, музеи, цирки, места отдыха и многое другое',
-        ], 'description');
-    
-        Yii::$app->seo->putFacebookMetaTags([
-          'og:locale'     => 'ru_RU',
-          'og:url'        => Url::canonical(),
-          'og:type'       => 'article',
-          'og:title'      => isset($city->name) ? 'Все достопримечательности в городе ' . $city->name : Yii::$app->keyStorage->get('frontend.index.title'),
-          'og:title'      => isset($city->name) ? 'Достопримечательности, музеи, цирки, места отдыха и многое другое в городе ' . $city->name : 'Достопримечательности, музеи, цирки, места отдыха и многое другое',
-          // 'og:image'      => Url::to($place->getImage()->getUrl(), true),
-          // 'og:image:width' => $place->getImage()->getSizes()['width'],
-          // 'og:image:height' => $place->getImage()->getSizes()['height'],
-          'og:site_name' => 'Surf-City - открывай интересные места России',
-          // 'og:updated_time' => Yii::$app->formatter->asDatetime($place->updated_at, "php:Y-m-dTH:i:s+00:00"),
-          // 'og:updated_time' => date(DATE_ATOM, $place->updated_at),
-          // 'fb:app_id' => '',
-          // 'vk:app_id' => '',
-          // 'vk:page_id' => '',
-          // 'vk:image' => '',
-          // 'fb:app_id'=> '1811670458869631',//для статистики по переходам
-        ]);
     
         return $this->render('index', [
-            'city' => $city,
             'listing' => $listing,
+            'places' => $places,
             'tags' => Tag::find()->all(),
             'categories' => PlaceCategory::find()->active()->all(),
-            'cities' => City::find()->all(),
+            'cities' => City::find()->with('placies', 'imageRico')->limit(7)->all(),
         ]);
     }
 
@@ -129,6 +140,14 @@ class SiteController extends Controller
     {
         return $this->render('ekskursii', [
         ]);
+    }
+
+    public function actionCity()
+    {
+      $model = City::find()->all();
+      return $this->render('city', [
+          'model' => $model,
+      ]);
     }
 
     /**
