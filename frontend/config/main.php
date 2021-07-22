@@ -28,6 +28,12 @@ $config = [
         // ],
     ],
     'components' => [
+        'city' => [
+            'class' => 'frontend\components\CityComponent'
+        ],
+        'tripster' => [
+            'class' => 'frontend\components\TripsterComponent'
+        ],
         'seo' => [
             'class' => 'frontend\components\SeoComponent'
         ],
