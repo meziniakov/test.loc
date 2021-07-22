@@ -120,11 +120,11 @@ class City extends \yii\db\ActiveRecord
     }
 
     public function getImageRico(){
-        return $this->hasOne(\alex290\yii2images\models\Image::class, ['itemId' => 'id'])->where(['isMain' => 1]);
+        return $this->hasOne(\alex290\yii2images\models\Image::class, ['itemId' => 'id'])->where(['modelName' => $this->formName()])->andWhere(['isMain' => 1]);
     }
 
     public function getImagesRico(){
-        return $this->hasMany(\alex290\yii2images\models\Image::class, ['itemId' => 'id']);
+        return $this->hasMany(\alex290\yii2images\models\Image::class, ['itemId' => 'id'])->where(['modelName' => $this->formName()]);
     }
 
     public function download($url, $pathinfo)
