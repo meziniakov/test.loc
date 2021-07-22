@@ -4,10 +4,8 @@ use yii\bootstrap\ActiveForm;
 use yii\bootstrap\Html;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
-use backend\widgets\TinyMCECallback;
 use bs\Flatpickr\FlatpickrWidget;
 use dosamigos\selectize\SelectizeTextInput;
-use dosamigos\tinymce\TinyMce;
 use zakurdaev\editorjs\EditorJsWidget;
 
 /* @var $this yii\web\View */

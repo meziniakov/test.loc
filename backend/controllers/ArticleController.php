@@ -105,6 +105,7 @@ class ArticleController extends Controller
             return $this->render('create', [
                 'model' => $model,
                 'categories' => ArticleCategory::find()->active()->all(),
+                'cities' => City::find()->all()
             ]);
         }
     }
