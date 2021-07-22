@@ -11,7 +11,7 @@ $this->params['breadcrumbs'][] = [
 ];
 
 ?>
-<section class="page-title-banner" style="background-image:url(<?= $city->imageRico->getUrl('1920x') ?>);">
+<section class="page-title-banner" style="background-image:url(<?= $city->imageRico ? $city->imageRico->getUrl('1920x'): '' ?>);">
 	<div class="container">
 		<div class="row m-0 align-items-end detail-swap">
 			<div class="tr-list-wrap">
