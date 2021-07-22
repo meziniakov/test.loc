@@ -16,7 +16,7 @@ $this->registerJsFile(
 	<div class="fs-left-map-box">
 		<div class="home-map fl-wrap">
 			<div class="map-container fw-map">
-				<div id="map-main" data-addres='<?php echo ($addressInJson) ? $addressInJson : "" ?>'></div>
+				<div id="map-main" data-addres='<?php echo (!empty($addressInJson)) ? $addressInJson : "" ?>'></div>
 			</div>
 		</div>
 	</div>

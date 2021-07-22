@@ -5,7 +5,7 @@ namespace backend\controllers;
 use Yii;
 use common\models\Place;
 use common\models\City;
-use backend\models\PlaceSearch;
+use backend\models\search\PlaceSearch;
 use common\models\PlaceCategory;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -45,12 +45,12 @@ class PlaceController extends Controller
         ];
     }
 
-    public $all = 10;
-    public $parsed = 1;
-    public $edited = 2;
-    public $published = 3;
-    public $updated = 4;
-    public $trashed = 0;
+    public $all;
+    public $parsed;
+    public $edited;
+    public $published;
+    public $updated;
+    public $trashed;
 
     public function init()
     {

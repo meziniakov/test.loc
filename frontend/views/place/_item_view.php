@@ -3,7 +3,6 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\helpers\HtmlPurifier;
 ?>
-          <?php $img = $model->getImage(); ?>
 						<div class="list-slide-box" data-name=<?= $model->title ?>>
 							<div class="modern-list ml-2">
 								<?php if(isset($model->schedule)):?>
@@ -11,9 +10,9 @@ use yii\helpers\HtmlPurifier;
 								<?php endif?>
 								<div class="grid-category-thumb">
 								<?php if(isset($model->city) && isset($model->category)):?>
-									<a href="<?= Url::to(['place/view', 'category' => $model->category->slug, 'city' => $model->city->url, 'slug' => $model->slug]) ?>" class="overlay-cate"><?= Html::img($img->getUrl('358x229'), ['class' => 'img-responsive', 'alt' => $img->alt]) ?></a>
+									<a href="<?= Url::to(['place/view', 'category' => $model->category->slug, 'city' => $model->city->url, 'slug' => $model->slug]) ?>" class="overlay-cate"><?= Html::img($model->imageRico->getUrl('358x229'), ['class' => 'img-responsive', 'alt' => $model->imageRico->alt]) ?></a>
 								<?php else :?>
-									<a href="<?= Url::to(['place/view', 'category' => $model->category->slug, 'slug' => $model->slug]) ?>" class="overlay-cate"><?= Html::img($img->getUrl('358x229'), ['class' => 'img-responsive', 'alt' => $img->alt]) ?></a>
+									<a href="<?= Url::to(['place/view', 'category' => $model->category->slug, 'slug' => $model->slug]) ?>" class="overlay-cate"><?= Html::img($model->imageRico->getUrl('358x229'), ['class' => 'img-responsive', 'alt' => $model->imageRico->alt]) ?></a>
 									<?php endif ?>
 									<div class="property_meta">
 										<div class="list-rates">

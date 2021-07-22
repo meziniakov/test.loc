@@ -91,7 +91,7 @@ $images = $place->getImages();
 	<section class="gray">
 		<div class="container">
 			<div class="row">
-			<?php if (!empty($place->phone) || !empty($place->email) || !empty($place->website) || !empty($place->schedule)) : ?>
+			<?php if (!empty($otherPlace) || !empty($place->phone) || !empty($place->email) || !empty($place->website) || !empty($place->schedule)) : ?>
 				<div class="col-lg-8 col-md-12 col-sm-12">
 				<?php else:?>
 					<div class="col-lg-12 col-md-12 col-sm-12">
@@ -179,7 +179,7 @@ $images = $place->getImages();
 								</ul>
 							</div>
 								<div class="map-container">
-									<div id="singleMap" data-addres='<?php echo ($addressInJson) ? $addressInJson : "" ?>'></div>
+									<div id="singleMap" data-addres='<?php echo (!empty($addressInJson)) ? $addressInJson : "" ?>'></div>
 								</div>
 							</div>
 						</div>
@@ -191,7 +191,7 @@ $images = $place->getImages();
 				</div>
 
 <!-- sidebar -->
-<?php if (!empty($place->phone) || !empty($place->email) || !empty($place->website) || !empty($place->schedule)) : ?>
+<?php if (!empty($otherPlace) || !empty($place->phone) || !empty($place->email) || !empty($place->website) || !empty($place->schedule)) : ?>
 				<div class="col-lg-4 col-md-12 col-sm-12">
 					<div class="verified-list mb-4">
 						<i class="ti-check"></i>Проверенное место
@@ -302,10 +302,9 @@ $images = $place->getImages();
 								<h4 class="title">Смотрите также</h4>
 								<ul>
 									<?php foreach ($otherPlace as $item) : ?>
-										<?php $img = $item->getImage(); ?>
 										<li>
 											<span class="left">
-												<?= Html::a(Html::img($img->getUrl('560x359'), ['alt' => $img->title]), ['place/view', 'category' => $item->category->slug, 'city' => ($item->city) ? $item->city->url : null, 'slug' => $item->slug])?>
+												<?= Html::a(Html::img($item->imageRico->getUrl('560x359'), ['alt' => $item->imageRico->title]), ['place/view', 'category' => $item->category->slug, 'city' => ($item->city) ? $item->city->url : null, 'slug' => $item->slug])?>
 											</span>
 											<span class="right">
 												<?= Html::a($item->title,['place/view', 'category' => $item->category->slug, 'city' => ($item->city) ? $item->city->url : null, 'slug' => $item->slug], ['class' => 'feed-title']) ?>

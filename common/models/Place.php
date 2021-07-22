@@ -124,8 +124,8 @@ class Place extends ActiveRecord
             ['date_parsed', 'safe'],
             ['tmp_uniq', 'safe'],
             [['status', 'is_home', 'category_id', 'city_id', 'author_id', 'updater_id', 'created_at', 'updated_at'], 'integer'],
-            [['url', 'description', 'title', 'website', 'street', 'street_comment'], 'string', 'max' => 255],
-            [['title', 'youtube_url'], 'string', 'max' => 80],
+            // [['url', 'description', 'title', 'website', 'street', 'street_comment'], 'string', 'max' => 255],
+            // [['title', 'youtube_url'], 'string', 'max' => 80],
             ['status', 'default', 'value' => self::STATUS_PARSED],
             ['author_id', 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['author_id' => 'id']],
             ['category_id', 'exist', 'skipOnError' => true, 'targetClass' => PlaceCategory::class, 'targetAttribute' => ['category_id' => 'id']],
@@ -135,7 +135,7 @@ class Place extends ActiveRecord
             [['image', 'images', 'gallery'], 'safe'],
             [['imageFile'], 'file', 'extensions' => 'png, jpg, jpeg'],
             [['imageFiles'], 'file', 'extensions' => 'png, jpg, jpeg', 'maxFiles' => 25],
-            // [['images'], 'file', 'extensions' => 'png, jpg, jpeg', 'maxFiles' => 25],
+            [['images'], 'file', 'extensions' => 'png, jpg, jpeg', 'maxFiles' => 25],
         ];
     }
 
@@ -178,13 +178,21 @@ class Place extends ActiveRecord
         return $this->hasOne(City::class, ['id' => 'city_id']);
     }
 
+    public function getImageRico(){
+        return $this->hasOne(\alex290\yii2images\models\Image::class, ['itemId' => 'id'])->where(['isMain' => 1]);
+    }
+
+    public function getImagesRico(){
+        return $this->hasOne(\alex290\yii2images\models\Image::class, ['itemId' => 'id']);
+    }
+
     public static function getDataProvider($query)
     {
-        $countQuery = clone $query;
+        // $countQuery = clone $query;
 
         return new ActiveDataProvider([
             'query' => $query,
-            'totalCount' => (int)$countQuery->count(),
+            // 'totalCount' => (int)$countQuery->count(),
             'pagination' => [
                 'pageSize' => self::PAGE_SIZE,
                 'pageSizeParam' => false,
@@ -216,12 +224,11 @@ class Place extends ActiveRecord
     {
         if (is_array($models)) {
             foreach ($models as $row) {
-                $img = $row->getImage();
                 $addressInJson[] = [
                     'addres' => trim($row['address']),
                     'title' => $row['title'],
                     'slug' => $row['slug'],
-                    'mainImg' => $img->getUrl('358x229'),
+                    'mainImg' => $row->imageRico->getUrl('358x229'),
                     'category' => $row['category']['title'],
                     'categorySlug' => $row['category']['slug'],
                     'lng' => $row['lng'],
@@ -233,8 +240,6 @@ class Place extends ActiveRecord
                 'addres' => trim($models['address']),
                 'title' => $models['title'],
                 'slug' => $models['slug'],
-                'category' => $models['category']['title'],
-                'categorySlug' => $models['category']['slug'],
                 'lng' => $models['lng'],
                 'lat' => $models['lat'],
             ];
@@ -330,10 +335,10 @@ class Place extends ActiveRecord
             return false;
         }
     }
-    public function uploadImage($pathinfo, $object)
+    public function uploadImage($pathinfo, $object = null)
     {
         if ($this->validate()) {
-            $path = Yii::getAlias('@storage') . '/img/' . $pathinfo['filename'] . '.' . $pathinfo['extension'];
+            $path = Yii::getAlias('@storage') . '/tmp/' . $pathinfo['filename'] . '.' . $pathinfo['extension'];
             $this->attachImage($path, true, $pathinfo['filename']);
             $image = \alex290\yii2images\models\Image::findOne(['name' => $pathinfo['filename']]);
             $image->alt = $object->name;
@@ -361,16 +366,16 @@ class Place extends ActiveRecord
         }
     }
 
-    public function uploadImages($imageFiles, $object)
+    public function uploadImages($imageFiles, $object = null)
     {
         if ($this->validate()) {
             foreach ($imageFiles as $file) {
-                $path = Yii::getAlias('@storage') . '/img/' . $file['filename'] . '.' . $file['extension'];
+                $path = Yii::getAlias('@storage') . '/tmp/' . $file['filename'] . '.' . $file['extension'];
                 $this->attachImage($path, false, $file['filename']);
                 $image = \alex290\yii2images\models\Image::findOne(['name' => $file['filename']]);
                 $image->alt = $object->name;
                 $image->title = $object->name;
-                $image->save(false);    
+                $image->save(false);   
                 @unlink($path);
             }
             return true;
@@ -381,7 +386,7 @@ class Place extends ActiveRecord
 
     public function download($url, $pathinfo)
     {
-        $path = Yii::getAlias('@storage') . '/img/' . $pathinfo['filename'] . '.' . $pathinfo['extension'];
+        $path = Yii::getAlias('@storage') . '/tmp/' . $pathinfo['filename'] . '.' . $pathinfo['extension'];
         $file_path = fopen($path, 'w');
         $client = new \GuzzleHttp\Client(['connect_timeout' => 30, 'timeout' => 30]);
         $this->imageFile = $client->get($url, ['sink' => $file_path]);
@@ -403,13 +408,13 @@ class Place extends ActiveRecord
     }
 
 
-    public function afterSave($insert, $changedAttributes)
-    {
-        if ($insert) {
-            Yii::$app->session->setFlash('success', 'Запись добавлена');
-        } else {
-            Yii::$app->session->setFlash('success', 'Запись обновлена');
-        }
-        parent::afterSave($insert, $changedAttributes);
-    }
+    // public function afterSave($insert, $changedAttributes)
+    // {
+    //     if ($insert) {
+    //         Yii::$app->session->setFlash('success', 'Запись добавлена');
+    //     } else {
+    //         Yii::$app->session->setFlash('success', 'Запись обновлена');
+    //     }
+    //     parent::afterSave($insert, $changedAttributes);
+    // }
 }

@@ -11,7 +11,7 @@ return [
         'action' => UrlNormalizer::ACTION_REDIRECT_TEMPORARY,
     ],
     'rules' => [
-        // '/' => 'site/index',
+        '' => 'site/index',
         'cities' => 'site/cities',
         'sitemap.xml' => 'sitemap/index',
         'robots.txt' => 'robots/index',
@@ -19,8 +19,11 @@ return [
         'ajax-login' => 'site/ajax-login',
         'faq' => 'site/faq',
         'ekskursii' => 'site/ekskursii',
+        'dostoprimechatelnosti' => 'city/dostoprimechatelnosti',
+        'events' => 'city/events',
+        'gidy' => 'city/gidy',
         // Activity
-        // 'activity' => 'activity/index',
+        'activity' => 'activity/index',
         // Pages
         'page/<slug>' => 'page/view',
         // Articles
@@ -41,6 +44,18 @@ return [
         'tag/<slug>' => 'place/tag',
         'tag/<slug>/json' => 'place/json',
         'tag/<slug>/address' => 'place/address',
-        // '//blog.test.loc/' => 'article/index',
+        // Events
+        'event/page/<page>' => 'event/index',
+        'event/search' => 'event/search',
+        'event' => 'event/index',
+        // 'event/tags' => 'event/tags',
+        'event/tag/<slug>' => 'event/tag',
+        'event/<slug>' => 'event/category',
+        '//<city>.'.Yii::getAlias('@domain').'/event/<category>/<slug>' => 'event/view',
+        'event/<category>/<slug>' => 'event/view',
+        // 'event/category/<slug>/page/<page>' => 'event/category',
+        'tag/<slug>' => 'event/tag',
+        'tag/<slug>/json' => 'event/json',
+        'tag/<slug>/address' => 'event/address',
     ],
 ];
