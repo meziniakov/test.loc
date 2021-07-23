@@ -88,6 +88,8 @@ class EventController extends Controller
 
         return $this->render('create', [
             'model' => $model,
+            'categories' => EventCategory::find()->active()->all(),
+            'cities' => City::find()->all()
         ]);
     }
 
