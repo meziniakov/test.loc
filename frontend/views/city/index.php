@@ -55,7 +55,6 @@ $this->title = $city->name . ' ' . date('Y') . ' - все о городе с ф�
 		<div class="row">
 			<div class="owl-carousel owl-theme" id="lists-slide">
 				<?php foreach ($listing as $place) : ?>
-					<?php $img = $place->getImage(); ?>
 					<div class="list-slide-box">
 						<div class="modern-list ml-2">
 							<?php if (isset($model->schedule)) : ?>
@@ -63,9 +62,9 @@ $this->title = $city->name . ' ' . date('Y') . ' - все о городе с ф�
 							<?php endif ?>
 							<div class="grid-category-thumb">
 								<?php if (isset($place->city)) : ?>
-									<a href="<?= Url::to(['place/view', 'city' => $place->city->url, 'category' => $place->category['slug'], 'slug' => $place->slug]) ?>" class="overlay-cate"><?= Html::img($img->getUrl('358x229'), ['class' => 'img-responsive', 'alt' => $place->slug]) ?></a>
+									<a href="<?= Url::to(['place/view', 'city' => $place->city->url, 'category' => $place->category['slug'], 'slug' => $place->slug]) ?>" class="overlay-cate"><?= Html::img($place->imageRico->getUrl('358x229'), ['class' => 'img-responsive', 'alt' => $place->slug]) ?></a>
 								<?php else : ?>
-									<a href="<?= Url::to(['place/view', 'category' => $place->category['slug'], 'slug' => $place->slug]) ?>" class="overlay-cate"><?= Html::img($img->getUrl('358x229'), ['class' => 'img-responsive', 'alt' => $place->slug]) ?></a>
+									<a href="<?= Url::to(['place/view', 'category' => $place->category['slug'], 'slug' => $place->slug]) ?>" class="overlay-cate"><?= Html::img($place->imageRico->getUrl('358x229'), ['class' => 'img-responsive', 'alt' => $place->slug]) ?></a>
 								<?php endif ?>
 								<div class="property_meta">
 									<div class="list-rates">

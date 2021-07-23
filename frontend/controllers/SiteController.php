@@ -10,6 +10,7 @@ use common\models\Place;
 use common\models\Tag;
 use common\models\PlaceCategory;
 use common\models\City;
+use yii\db\Expression;
 use yii\web\NotFoundHttpException;
 
 /**
@@ -106,7 +107,7 @@ class SiteController extends Controller
               // 'vk:page_id' => '',
               // 'vk:image' => '',
               // 'fb:app_id'=> '1811670458869631',//для статистики по переходам
-            ]);    
+            ]);
 
             return $this->render('/city/index', [
               'places' => $places,
@@ -114,7 +115,7 @@ class SiteController extends Controller
               'listing' => $listing,
               'tags' => Tag::find()->all(),
               'categories' => PlaceCategory::find()->active()->all(),
-              'cities' => City::find()->with('placies', 'imageRico')->limit(8)->all(),
+              'cities' => City::find()->where('id != :id', ['id' => $city->id])->orderBy(new Expression('rand()'))->with('placies', 'imageRico')->limit(8)->all(),
               ]);
           } elseif (Yii::$app->params['city'] == 'global') {
             $places = Place::find();

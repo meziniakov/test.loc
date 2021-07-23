@@ -80,7 +80,7 @@ class CityController extends Controller
      */
     public function actionDostoprimechatelnosti()
     {
-      if ($city = City::find()->where('url = :url', [':url' => Yii::$app->params['city']])->one()) {
+      if ($city = Yii::$app->city->isCity()) {
         $query = Place::find()->published()->where(['city_id' => $city->id])->with('category', 'city' ,'imageRico');
       } elseif (Yii::$app->params['city'] == 'global') {
         $query = Place::find()->published()->with('category', 'city' ,'imageRico');
@@ -127,7 +127,7 @@ class CityController extends Controller
 
     public function actionEvents()
     {
-      if ($city = City::find()->where('url = :url', [':url' => Yii::$app->params['city']])->one()) {
+      if ($city = Yii::$app->city->isCity()) {
         $query = Event::find()->published()->where(['city_id' => $city->id])->with('category', 'city' ,'imageRico');
       } elseif (Yii::$app->params['city'] == 'global') {
         $query = Event::find()->published()->with('category', 'city' ,'imageRico');
@@ -174,7 +174,7 @@ class CityController extends Controller
 
     public function actionGidy()
     {
-      if ($city = City::find()->where('url = :url', [':url' => Yii::$app->params['city']])->one()) {
+      if ($city = Yii::$app->city->isCity()) {
       } elseif (Yii::$app->params['city'] == 'global') {
       } else {
         throw new NotFoundHttpException(Yii::t('frontend', 'Page not found.'));
