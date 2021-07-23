@@ -203,7 +203,7 @@ $this->title = isset($city->name) ? 'Все достопримечательно
 						<?php $i = 0; foreach($cities as $city):?>
 						<?php // var_dump($city);die;?>
 								<div class="col-lg-<?= ($i === 0) ? '8' : '4'?> col-md-8">
-									<a href="list-layout-with-sidebar.html" class="img-wrap">
+									<a href="https://<?= $city['url'] ?>.trip2place.com/" class="img-wrap">
 											<div class="img-wrap-content visible">
 												<h4><?= $city->name?></h4>
 												<span>Мест: <?= $places->where(['city_id' => $city->id])->count() ?></span>
