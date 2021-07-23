@@ -90,12 +90,12 @@ class JsonController extends Controller
 
             foreach ($array as $object) {
                 
-                // if(Yii::$app->queue->push(new EventJob([
-                //     'object' => $object = $object->data->general,
-                //     'pathinfo' => pathinfo($object->image->url),
-                // ]))) {
-                //     $countSave++;
-                // }
+                if(Yii::$app->queue->push(new EventJob([
+                    'object' => $object = $object->data->general,
+                    'pathinfo' => pathinfo($object->image->url),
+                ]))) {
+                    $countSave++;
+                }
             }
             Yii::$app->session->setFlash('success', "Успешно запущено {$countSave} записей в очередь.");
         }
