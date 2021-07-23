@@ -8541,8 +8541,7 @@ span.current-page:before {
 	bottom:0;
 	left:0;
 	right:0;
-	background:#222e4c;
-	opacity:0.6;
+    background: linear-gradient(to bottom, transparent 50%, #3c302e);
 }
 .page-title-banner>*{
 	position:relative;
