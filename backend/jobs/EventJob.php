@@ -68,8 +68,9 @@ class EventJob extends BaseObject implements \yii\queue\JobInterface
                 $event->start = strtotime($object->start);
                 $event->end = strtotime($object->end);
             }
-            if(!empty($object->organizerPlace || $object->organizer)) {
-                $event->organizer = $object->organizer;
+            $event->organizer = $object->organizer;
+            
+            if(!empty($object->organizerPlace)) {
                 $event->place_id = $object->organizerPlace->id;
                 // $event->organizer_place_id = $object->organizerPlace->id;
                 // $event->organizer_place_name = $object->organizerPlace->name;
