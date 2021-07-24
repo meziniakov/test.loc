@@ -13,6 +13,8 @@ use yii\base\Model;
 class JsonForm extends Model
 {
     public $jsonFile;
+    public $jsonFileByURL;
+    public $parts;
 
     /**
      * @inheritdoc
@@ -20,7 +22,9 @@ class JsonForm extends Model
     public function rules()
     {
         return [
-            [['jsonFile'], 'required'],
+            [['jsonFile'], 'safe'],
+            [['parts'], 'integer'],
+            [['jsonFileByURL'], 'string'],
             // [['jsonFile'], 'file', 'extensions' => 'json'],
         ];
     }

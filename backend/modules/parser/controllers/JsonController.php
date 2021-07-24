@@ -18,6 +18,7 @@ use yii\web\UploadedFile;
 use backend\jobs\PlaceJob;
 use backend\jobs\EventJob;
 use backend\modules\parser\models\JsonForm;
+use yii\helpers\FileHelper;
 
 class JsonController extends Controller
 {
@@ -79,22 +80,24 @@ class JsonController extends Controller
     {
         $model = new JsonForm();
         if ($model->load(Yii::$app->request->post())) {
-            $model->jsonFile = UploadedFile::getInstance($model, 'jsonFile');
-            if ($model->jsonFile) {
-                $path = $model->uploadJsonFile();
+            if($model->jsonFile = UploadedFile::getInstance($model, 'jsonFile')) {
+                if ($model->jsonFile) {
+                    $path = $model->uploadJsonFile();
+                }
+            } else {
+                $path = $model->jsonFileByURL;
             }
             $json = file_get_contents($path, true);
             $array = Json::decode($json, false);
 
             $countSave = 0;
+
             foreach ($array as $object) {
-                if($countSave <= 30) {
-                    if(Yii::$app->queue->push(new EventJob([
-                        'object' => $object = $object->data->general,
-                        'pathinfo' => pathinfo($object->image->url),
-                    ]))) {
-                        $countSave++;
-                    }
+                if(Yii::$app->queue->push(new EventJob([
+                    'object' => $object = $object->data->general,
+                    'pathinfo' => pathinfo($object->image->url),
+                ]))) {
+                    $countSave++;
                 }
             }
             Yii::$app->session->setFlash('success', "Успешно запущено {$countSave} записей в очередь.");
@@ -568,7 +571,7 @@ class JsonController extends Controller
         ]);
     }
 
-    public function actionNew()
+    public function actionChunk()
     {
         $model = new JsonForm();
         if ($model->load(Yii::$app->request->post())) {
@@ -579,88 +582,123 @@ class JsonController extends Controller
             $json = file_get_contents($path, true);
             $array = Json::decode($json, false);
 
-            $countSave = 0;
+            $n = $model->parts;
+            $to = 0;
+            $countFile = 0;
 
-            foreach ($array as $object) {
-                $object = $object->data->general;
-                $event = new Event();
-                $event->src_id = $object->id;
-                $event->title = $object->name;
-                $event->text = $object->description;
-                $event->preview = $object->shortDescription;
-                if(!empty($object->end)){
-                    $event->start = strtotime($object->start);
-                    $event->end = strtotime($object->end);
+            $res = array_chunk($array, $n);
+            foreach($res as $item) {
+                $last = count($item);
+                $json = Json::encode($item);
+                $from = $to + 1; //1 5
+                $to = $from + $n; //4 8
+                $filename = $model->jsonFile->baseName;
+                $dir = Yii::getAlias('@storage') . '/json/events/'.$filename.'/';
+                FileHelper::createDirectory($dir);
+                $model->jsonFile->saveAs($dir.$filename.'.json');
+                $path = $dir . $filename .'_'. $from .'-'. $to .'.json';
+                if(file_put_contents($path, $json)) {
+                    $countFile++;
                 }
-                $event->organizer = $object->organizer;
-
-                if(!empty($object->organizerPlace)) {
-                    $event->place_id = $object->organizerPlace->id;
-                    // $event->organizer_place_id = $object->organizerPlace->id;
-                    // $event->organizer_place_name = $object->organizerPlace->name;
-                }
-                if(!empty($object->ageRestriction)){
-                    $event->ageRestriction = $object->ageRestriction;
-                }
-                if(!empty($object->isFree)){
-                    $event->isFree = 1;
-                } else {
-                    $event->isFree = 0;
-                }
-                $event->status = 1;
-    
-                if ($eventCategory = EventCategory::findOne(['title' => $object->category->name])) {
-                    $event->category_id = $eventCategory->id;
-                } else {
-                    $category = new EventCategory();
-                    $category->title = $object->category->name;
-                    $category->slug = $object->category->sysName;
-                    $category->save();
-                    $event->category_id = $category->id;
-                }
-    
-                if ($city = City::findOne(['name' => $object->organization->locale->name])) {
-                    $event->city_id = $city->id;
-                } else {
-                    $city = new City();
-                    $city->name = $object->organization->locale->name;
-                    $city->url = $object->organization->locale->sysName;
-                    $city->save();
-                    $event->city_id = $city->id;
-                }
-    
-                // Если в массиве есть поле с tags, перебираем их и забираем данные
-                if (!empty($object->tags)) {
-                    $tags = [];
-                    foreach ($object->tags as $tag) {
-                        $tags[] = trim(str_replace("\n", "", strpos($tag->name, '.')));
-                    }
-                    $event->addTagValues($tags);
-                }
-    
-                $event->save();
-    
-                if (!empty($object->image)) {
-                    $pathinfo = pathinfo($object->image->url);
-                    $event->download($object->image->url, $pathinfo);
-                    $event->uploadImage($pathinfo, $object);
-                }
-        
-                if (!empty($object->gallery)) {
-                    foreach ($object->gallery as $image) {
-                        $pathinfo = pathinfo($image->url);
-                        $event->images[] = $pathinfo;
-                        $event->download($image->url, $pathinfo);
-                    }
-                    $imageFiles = $event->images;
-                    $event->uploadImages($imageFiles, $object);
-                }
+                // $json = file_get_contents($path, true);
+                // $array = Json::decode($json, false);
+                // $this->parser($array);
+                // die;
             }
+            Yii::$app->session->setFlash('success', "Успешно создано $countFile файлов. В " . --$countFile ." файлах по $n обЪектов. В последнем файле - $last объектов");
+            // die;
+
         }
         
         return $this->render('job', [
             'model' => $model,
         ]);
 
+    }
+
+    public function parser($array)
+    {
+        $countSave = 0;
+
+        foreach ($array as $object) {
+            $object = $object->data->general;
+            $event = new Event();
+            $event->src_id = $object->id;
+            $event->title = $object->name;
+            $event->text = $object->description;
+            $event->preview = $object->shortDescription;
+            if(!empty($object->end)){
+                $event->start = strtotime($object->start);
+                $event->end = strtotime($object->end);
+            }
+
+            if(!empty($object->organizer)){
+                $event->organizer = $object->organizer;
+            }
+
+            if(!empty($object->organizerPlace)) {
+                $event->place_id = $object->organizerPlace->id;
+                // $event->organizer_place_id = $object->organizerPlace->id;
+                // $event->organizer_place_name = $object->organizerPlace->name;
+            }
+            if(!empty($object->ageRestriction)){
+                $event->ageRestriction = $object->ageRestriction;
+            }
+            if(!empty($object->isFree)){
+                $event->isFree = 1;
+            } else {
+                $event->isFree = 0;
+            }
+            $event->status = 1;
+
+            if ($eventCategory = EventCategory::findOne(['title' => $object->category->name])) {
+                $event->category_id = $eventCategory->id;
+            } else {
+                $category = new EventCategory();
+                $category->title = $object->category->name;
+                $category->slug = $object->category->sysName;
+                $category->save();
+                $event->category_id = $category->id;
+            }
+
+            if ($city = City::findOne(['name' => $object->organization->locale->name])) {
+                $event->city_id = $city->id;
+            } else {
+                $city = new City();
+                $city->name = $object->organization->locale->name;
+                $city->url = $object->organization->locale->sysName;
+                $city->save();
+                $event->city_id = $city->id;
+            }
+
+            // Если в массиве есть поле с tags, перебираем их и забираем данные
+            if (!empty($object->tags)) {
+                $tags = [];
+                foreach ($object->tags as $tag) {
+                    $tags[] = trim(str_replace("\n", "", strpos($tag->name, '.')));
+                }
+                $event->addTagValues($tags);
+            }
+
+            $event->save();
+
+            if (!empty($object->image)) {
+                $pathinfo = pathinfo($object->image->url);
+                $event->download($object->image->url, $pathinfo);
+                $event->uploadImage($pathinfo, $object);
+            }
+    
+            if (!empty($object->gallery)) {
+                foreach ($object->gallery as $image) {
+                    $pathinfo = pathinfo($image->url);
+                    $event->images[] = $pathinfo;
+                    $event->download($image->url, $pathinfo);
+                }
+                $imageFiles = $event->images;
+                $event->uploadImages($imageFiles, $object);
+            }
+            $countSave++;
+        }
+        Yii::$app->session->setFlash('success', "Успешно запущено {$countSave} записей в очередь.");
     }
 }
