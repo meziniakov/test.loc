@@ -87,14 +87,14 @@ class JsonController extends Controller
             $array = Json::decode($json, false);
 
             $countSave = 0;
-
             foreach ($array as $object) {
-                
-                if(Yii::$app->queue->push(new EventJob([
-                    'object' => $object = $object->data->general,
-                    'pathinfo' => pathinfo($object->image->url),
-                ]))) {
-                    $countSave++;
+                if($countSave <= 30) {
+                    if(Yii::$app->queue->push(new EventJob([
+                        'object' => $object = $object->data->general,
+                        'pathinfo' => pathinfo($object->image->url),
+                    ]))) {
+                        $countSave++;
+                    }
                 }
             }
             Yii::$app->session->setFlash('success', "Успешно запущено {$countSave} записей в очередь.");
