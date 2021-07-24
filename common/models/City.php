@@ -17,6 +17,9 @@ use yii\helpers\Url;
  */
 class City extends \yii\db\ActiveRecord
 {
+    const STATUS_DRAFT = 0;
+    const STATUS_ACTIVE = 1;
+
     public $imageFile;
     public $imageFiles = [];
     public $image;
@@ -64,6 +67,7 @@ class City extends \yii\db\ActiveRecord
             [['name', 'url'], 'unique'],
             [['lat', 'lng'], 'number'],
             [['status', 'created_at', 'updated_at'], 'integer'],
+            ['status', 'default', 'value' => self::STATUS_DRAFT],
             [['name', 'url', 'description', 'youtube_url', 'website', 'in_obj_phrase', 'iata', 'name_en'], 'string', 'max' => 255],
             [['preview'], 'string'],
             [['title', 'h1'], 'string', 'max' => 80],
