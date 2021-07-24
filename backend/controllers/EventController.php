@@ -8,6 +8,7 @@ use common\models\Event;
 use common\models\EventCategory;
 // use common\models\EventSearch;
 use backend\models\search\EventSearch;
+use nickdenry\grid\toggle\actions\ToggleAction;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -29,6 +30,16 @@ class EventController extends Controller
                 'actions' => [
                     'delete' => ['POST'],
                 ],
+            ],
+        ];
+    }
+
+    public function actions()
+    {
+        return [
+            'switch' => [
+                'class' => ToggleAction::class,
+                'modelClass' => 'common\models\Event', // Your model class
             ],
         ];
     }
