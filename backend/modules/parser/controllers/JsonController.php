@@ -701,4 +701,9 @@ class JsonController extends Controller
         }
         Yii::$app->session->setFlash('success', "Успешно запущено {$countSave} записей в очередь.");
     }
+
+    public function actionPhpinfo()
+    {
+        return phpinfo();
+    }
 }
