@@ -63,7 +63,7 @@ class PlaceController extends Controller
         $this->edited = Place::find()->where(['=', 'status', Place::STATUS_EDITED])->count();
         $this->published = Place::find()->where(['=', 'status', Place::STATUS_PUBLISHED])->count();
         $this->updated = Place::find()->where(['=', 'status', Place::STATUS_UPDATED])->count();
-        $this->cities = City::find()->groupBy('name', 'id')->all();
+        $this->cities = City::find()->groupBy('id', 'name')->all();
         $this->categories = PlaceCategory::find()->active()->all();
     }
 
