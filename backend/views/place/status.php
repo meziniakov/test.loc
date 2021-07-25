@@ -54,18 +54,14 @@ $controller = Yii::$app->controller->id;
                 'value' => function ($model) {
                     return $model->category ? $model->category->title : null;
                 },
-                'filter' => function ($model) {
-                  return ArrayHelper::map($model->category, 'id', 'title');
-              },
+                'filter' => ArrayHelper::map($categories, 'id', 'title'),
             ],
             [
                 'attribute' => 'city_id',
                 'value' => function ($model) {
                     return $model->city ? $model->city->name : null;
                 },
-                'filter' => function ($model) {
-                  return ArrayHelper::map($model->city, 'id', 'name');
-              },
+                'filter' => ArrayHelper::map($cities, 'id', 'name'),
             ],
             [
               'attribute'=>'created_at',
@@ -85,7 +81,7 @@ $controller = Yii::$app->controller->id;
                 'format' => 'html',
                 'filter' => false,
                 'content' => function ($model) {
-                    return ($model->getImage()->getUrl()) ? Html::img($model->getImage()->getUrl('100x')) : '';
+                    return ($model->imageRico->getUrl()) ? Html::img($model->imageRico->getUrl('100x')) : '';
                 }
             ],
             [

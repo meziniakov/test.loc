@@ -51,36 +51,13 @@ class CitySearch extends City
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'sort'=> [
-                'defaultOrder' => ['id'=>SORT_DESC],
-                'attributes' => ['id','placeCount', 'eventCount'],
+                'defaultOrder' => ['name' => SORT_ASC],
+                'attributes' => ['id', 'name', 'placeCount', 'eventCount'],
             ],
             'pagination' => [
                 'pageSize' => Yii::$app->keyStorage->get('backend.show-count'),
             ],
-            // 'sort' => [
-            //     'defaultOrder' => [
-            //             'id' => SORT_DESC
-            //     ]
-            // ],
         ]);
-
-        // $dataProvider->sort->attributes['placeCount'] = [
-        //     'asc' => ['placeCount' => SORT_ASC],
-        //     'desc' => ['placeCount' => SORT_DESC],
-        // ];
-        // SELECT COUNT(*) FROM `city` LEFT JOIN (SELECT `city_id`, COUNT(*) AS `placeCount` FROM `place` GROUP BY `city_id`) `placeSum` ON "placeSum".city_id = id
-        // SELECT COUNT(*) FROM "tags" LEFT JOIN (SELECT "tag_id",  COUNT(*) as topic_count FROM "topic_tags" GROUP BY "tag_id") "topicSum" ON "topicSum".tag_id = id
-        // $dataProvider->setSort([
-        //     'attributes' => [
-        //         'id',
-        //         'name',
-        //         // 'placeCount' => [
-        //         //     'asc' => ['placeSum.placeCount' => SORT_ASC],
-        //         //     'desc' => ['placeSum.placeCount' => SORT_DESC],
-        //         //     'label' => 'Order Name'
-        //         // ]
-        //     ]
-        // ]);       
 
         $this->load($params);
         if (!$this->validate()) {

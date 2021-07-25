@@ -51,6 +51,8 @@ class PlaceController extends Controller
     public $published;
     public $updated;
     public $trashed;
+    public $cities;
+    public $categories;
 
     public function init()
     {
@@ -61,7 +63,9 @@ class PlaceController extends Controller
         $this->edited = Place::find()->where(['=', 'status', Place::STATUS_EDITED])->count();
         $this->published = Place::find()->where(['=', 'status', Place::STATUS_PUBLISHED])->count();
         $this->updated = Place::find()->where(['=', 'status', Place::STATUS_UPDATED])->count();
-        }
+        $this->cities = City::find()->groupBy('name')->all();
+        $this->categories = PlaceCategory::find()->active()->all();
+    }
 
     /**
      * Lists all Place models.
@@ -69,16 +73,11 @@ class PlaceController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new PlaceSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $categories = PlaceCategory::find()->active()->all();
-        $cities = City::find()->all();
-
         return $this->render('index', [
-            'dataProvider' => $dataProvider,
-            'searchModel' => $searchModel,
-            'categories' => $categories,
-            'cities' => $cities
+            'searchModel' => $searchModel = new PlaceSearch(),
+            'dataProvider' => $searchModel->search(Yii::$app->request->queryParams),
+            'categories' => $this->categories,
+            'cities' => $this->cities
         ]);
     }
 
@@ -88,12 +87,11 @@ class PlaceController extends Controller
      */
     public function actionParsed()
     {
-        $searchModel = new PlaceSearch();
         return $this->render('status', [
+            'searchModel' => $searchModel = new PlaceSearch(),
             'data' => $searchModel->searchByStatus(Yii::$app->request->queryParams, Place::STATUS_PARSED, $this->parsed),
-            'searchModel' => $searchModel,
-            'categories' => PlaceCategory::findAll(['status' => 1]),
-            'cities' => City::find()->all(),
+            'categories' => $this->categories,
+            'cities' => $this->cities,
         ]);
     }
 
@@ -103,12 +101,11 @@ class PlaceController extends Controller
      */
     public function actionEdited()
     {
-        $searchModel = new PlaceSearch();
         return $this->render('status', [
+            'searchModel' => $searchModel = new PlaceSearch(),
             'data' => $searchModel->searchByStatus(Yii::$app->request->queryParams, Place::STATUS_EDITED, $this->edited),
-            'searchModel' => $searchModel,
-            'cities' => City::find()->all(),
-            'categories' => PlaceCategory::findAll(['status' => 1]),
+            'cities' => $this->cities,
+            'categories' => $this->categories,
         ]);
     }
 
@@ -118,13 +115,11 @@ class PlaceController extends Controller
      */
     public function actionPublished()
     {
-        $searchModel = new PlaceSearch();
-
         return $this->render('status', [
+            'searchModel' => $searchModel = new PlaceSearch(),
             'data' => $searchModel->searchByStatus(Yii::$app->request->queryParams, Place::STATUS_PUBLISHED, $this->published),
-            'searchModel' => $searchModel,
-            'cities' => City::find()->all(),
-            'categories' => PlaceCategory::findAll(['status' => 1]),
+            'cities' => $this->cities,
+            'categories' => $this->categories,
         ]);
     }
 
@@ -134,25 +129,21 @@ class PlaceController extends Controller
      */
     public function actionUpdated()
     {
-        $searchModel = new PlaceSearch();
-
         return $this->render('status', [
+            'searchModel' => $searchModel = new PlaceSearch(),
             'data' => $searchModel->searchByStatus(Yii::$app->request->queryParams, Place::STATUS_UPDATED, $this->updated),
-            'searchModel' => $searchModel,
-            'categories' => PlaceCategory::findAll(['status' => 1]),
-            'cities' => City::find()->all(),
+            'categories' => $this->categories,
+            'cities' => $this->cities,
         ]);
     }
 
     public function actionTrashed()
     {
-        $searchModel = new PlaceSearch();
-
         return $this->render('status', [
+            'searchModel' => $searchModel = new PlaceSearch(),
             'data' => $searchModel->searchByStatus(Yii::$app->request->queryParams, Place::STATUS_TRASHED, $this->trashed),
-            'searchModel' => $searchModel,
-            'cities' => City::find()->all(),
-            'categories' => PlaceCategory::findAll(['status' => 1]),
+            'cities' => $this->cities,
+            'categories' => $this->categories,
         ]);
     }
 
@@ -183,8 +174,8 @@ class PlaceController extends Controller
 
         return $this->render('create', [
             'model' => $model,
-            'categories' => PlaceCategory::find()->active()->all(),
-            'cities' => City::find()->all()
+            'categories' => $this->categories,
+            'cities' => $this->cities
         ]);
     }
 
@@ -207,8 +198,8 @@ class PlaceController extends Controller
         }
         return $this->render('update', [
             'model' => $model,
-            'categories' => PlaceCategory::find()->active()->all(),
-            'cities' => City::find()->all()
+            'categories' => $this->categories,
+            'cities' => $this->cities
         ]);
     }
 

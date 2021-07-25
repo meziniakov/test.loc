@@ -41,7 +41,7 @@ class PlaceSearch extends Place
      */
     public function search($params)
     {
-        $query = Place::find();
+        $query = Place::find()->with('category', 'city', 'imageRico');
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'sort' => [
@@ -75,7 +75,7 @@ class PlaceSearch extends Place
 
     public function searchByStatus($params, $status, $count)
     {
-        $query = Place::find()->with('category', 'city')->where(['=', 'status', $status]);
+        $query = Place::find()->with('category', 'city', 'imageRico')->where(['=', 'status', $status]);
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'totalCount' => $count,

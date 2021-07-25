@@ -61,7 +61,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => function ($model) {
                     return $model->category ? $model->category->title : null;
                 },
-                'filter' => ArrayHelper::map(PlaceCategory::find()->all(), 'id', 'title'),
+                'filter' => ArrayHelper::map($categories, 'id', 'title'),
                 'headerOptions' => ['width' => 100],
             ],
             [
@@ -69,7 +69,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => function ($model) {
                     return $model->city ? $model->city->name : null;
                 },
-                'filter' => ArrayHelper::map(City::find()->all(), 'id', 'name'),
+                'filter' => ArrayHelper::map($cities, 'id', 'name'),
                 'headerOptions' => ['width' => 100],
             ],
             [
@@ -96,7 +96,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'html',
                 'filter' => false,
                 'content' => function ($model) {
-                    return ($model->getImage()->getUrl()) ? Html::img($model->getImage()->getUrl('100x')) : '';
+                    return ($model->imageRico) ? Html::img($model->imageRico->getUrl('100x')) : '';
                 }
             ],
             [
