@@ -22,15 +22,17 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::a(Yii::t('backend', 'Create City'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
+
+    <?php Pjax::begin(); ?>
+
     <div class="btn-group">
   <?= Html::a(Yii::t('backend', 'Add'), ['create'], ['class' => 'btn btn-success']) ?>
   <?= ButtonDropdown::widget([
-    'id' => 'test',
-    'label' => 'Установить город',
+    'label' => 'Сменить статус',
     'dropdown' => [
       'items' => [
-        ['label' => "A", 'url' => [''], 'status' => 1, ],
-        ['label' => "N", 'url' => [''], 'status' => 0, ],
+        ['label' => "Активно", 'url' => [''], 'linkOptions' => ['id' => 'Active'] ],
+        ['label' => "Неактивно", 'url' => [''], 'linkOptions' => ['id' => 'Disactive'] ],
       ]
     ],
     'containerOptions' => ['class' => '']
@@ -38,8 +40,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
   ?>
     </div>
-
-    <?php Pjax::begin(); ?>
 
     <?= GridView::widget([
         'id' => 'grid',
@@ -166,38 +166,30 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php 
         $this->registerJs('
         $(document).ready(function(){
-        $(\'#ChangeStatus\').click(function(){
-            var id = $(\'#grid\').yiiGridView(\'getSelectedRows\');
-            $.ajax({
-                type: \'POST\',
-                url : \'/city/multiple-change-status\',
-                data : {id: id, status: status},
-                success : function() {
-                $(this).closest(\'tr\').remove(); //удаление строки
-                }
-            });
-        });
-        });', \yii\web\View::POS_READY);
-    ?>
-
-      <?php 
-        $this->registerJs('
-$(document).ready(function(){
-            $(\'#ToDeleted\').click(function(){
-              var id = $(\'#grid\').yiiGridView(\'getSelectedRows\');
+            $(\'#Active\').click(function(){
+                var id = $(\'#grid\').yiiGridView(\'getSelectedRows\');
                 $.ajax({
                     type: \'POST\',
-                    url : \'/place/multiple-delete\',
-                    data : {id: id},
+                    url : \'/city/multiple-change-status\',
+                    data : {id: id, status: 1},
                     success : function() {
-                      $(this).closest(\'tr\').remove(); //удаление строки
+                    $(this).closest(\'tr\').remove(); //удаление строки
                     }
                 });
-              });
-          });', 
-          \yii\web\View::POS_READY);
-      ?>
+            });
+            $(\'#Disactive\').click(function(){
+                var id = $(\'#grid\').yiiGridView(\'getSelectedRows\');
+                $.ajax({
+                    type: \'POST\',
+                    url : \'/city/multiple-change-status\',
+                    data : {id: id, status: 0},
+                    success : function() {
+                    $(this).closest(\'tr\').remove(); //удаление строки
+                    }
+                });
+            });
 
+        });', \yii\web\View::POS_READY);
+    ?>
     <?php Pjax::end(); ?>
-
 </div>
