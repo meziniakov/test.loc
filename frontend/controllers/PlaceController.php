@@ -159,7 +159,7 @@ class PlaceController extends Controller
         'dataProvider' => $dataProvider,
         'addressInJson' => Place::getJsonForMap($models),
         'categories' => PlaceCategory::find()->active()->all(),
-        'cities' => City::find()->all(),
+        'cities' => City::find()->published()->all(),
         'tags' => Tag::find()->all()
       ]
     );

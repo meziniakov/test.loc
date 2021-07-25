@@ -9,7 +9,7 @@ use common\models\City;
 class ChooseCityWidget extends Widget 
 {
     public function run() {
-            $model = City::find()->where(['status' => '1'])->all();
+            $model = City::find()->published()->all();
             return $this->render('chooseCityWidget', [
                 'model' => $model,
             ]);

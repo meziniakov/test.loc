@@ -115,7 +115,7 @@ class SiteController extends Controller
               'listing' => $listing,
               'tags' => Tag::find()->all(),
               'categories' => PlaceCategory::find()->active()->all(),
-              'cities' => City::find()->where('id != :id', ['id' => $city->id])->orderBy(new Expression('rand()'))->with('placies', 'imageRico')->limit(8)->all(),
+              'cities' => City::find()->published()->where('id != :id', ['id' => $city->id])->orderBy(new Expression('rand()'))->with('placies', 'imageRico')->limit(8)->all(),
               ]);
           } elseif (Yii::$app->params['city'] == 'global') {
             $places = Place::find();
@@ -129,7 +129,7 @@ class SiteController extends Controller
             'places' => $places,
             'tags' => Tag::find()->all(),
             'categories' => PlaceCategory::find()->active()->all(),
-            'cities' => City::find()->orderBy(new Expression('rand()'))->with('placies', 'imageRico')->limit(8)->all(),
+            'cities' => City::find()->published()->orderBy(new Expression('rand()'))->with('placies', 'imageRico')->limit(8)->all(),
         ]);
     }
 
@@ -147,7 +147,7 @@ class SiteController extends Controller
 
     public function actionCity()
     {
-      $model = City::find()->all();
+      $model = City::find()->published()->all();
       return $this->render('city', [
           'model' => $model,
       ]);

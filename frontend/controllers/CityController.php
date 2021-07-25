@@ -243,7 +243,7 @@ class CityController extends Controller
               // 'listing' => $listing,
               'tags' => Tag::find()->all(),
               'categories' => PlaceCategory::find()->active()->all(),
-              'cities' => City::find()->all(),
+              'cities' => City::find()->published()->all(),
             ]);
 
         return $this->render('ekskursii', [

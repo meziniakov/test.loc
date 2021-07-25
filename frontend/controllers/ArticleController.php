@@ -44,7 +44,7 @@ class ArticleController extends Controller
         $city_id = Yii::$app->request->get('city_id');
         $tag_id = Yii::$app->request->get('tag_id');
     
-        if ($city = City::find()->where('url = :url', [':url' => Yii::$app->params['city']])->one()) {
+        if ($city = Yii::$app->city->isCity()) {
             $query = Article::find()->published()->where(['city_id' => $city->id])->with('category');
           } elseif (Yii::$app->params['city'] == 'global') {
             $query = Article::find()->published()->with('category');

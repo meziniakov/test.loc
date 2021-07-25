@@ -17,7 +17,7 @@ class RobotsController extends Controller
     if(!$robots = Yii::$app->cache->get('robots')) {
       $sitemap = '';
 
-      if ($city = City::find()->where('url = :url', [':url' => Yii::$app->params['city']])->one()) {
+      if ($city = Yii::$app->city->isCity()) {
         $sitemap = '/sitemap.xml';
       } elseif (Yii::$app->params['city'] == 'global') {
         $sitemap = '/sitemap.xml';

@@ -21,7 +21,7 @@ class SitemapController extends Controller
     if(!$xml_sitemap = Yii::$app->cache->get('sitemap')) {
       $urls = [];
 
-      if ($city = City::find()->where('url = :url', [':url' => Yii::$app->params['city']])->one()) {
+      if ($city = Yii::$app->city->isCity()) {
         $places = Place::find()->where(['status' => Place::STATUS_PARSED])->andWhere(['city_id' => $city->id])->with('category', 'city')->all();
       } elseif (Yii::$app->params['city'] == 'global') {
         $places = Place::find()->where(['city_id' => null])->with('category')->all();

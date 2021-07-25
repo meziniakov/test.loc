@@ -54,7 +54,7 @@ class EventController extends Controller
     $city_id = Yii::$app->request->get('city_id');
     $tag_id = Yii::$app->request->get('tag_id');
 
-    if ($city = City::find()->where('url = :url', [':url' => Yii::$app->params['city']])->one()) {
+    if ($city = Yii::$app->city->isCity()) {
       $query = Event::find()->where(['city_id' => $city->id])->with('category');
     } elseif (Yii::$app->params['city'] == 'global') {
       $query = Event::find()->with('category');
@@ -113,7 +113,7 @@ class EventController extends Controller
         'dataProvider' => $dataProvider,
         // 'addressInJson' => Event::getJsonForMap($models),
         'categories' => EventCategory::find()->active()->asArray()->all(),
-        'cities' => City::find()->all(),
+        'cities' => City::find()->published()->all(),
         'tags' => Tag::find()->asArray()->all()
       ]
     );
@@ -145,7 +145,7 @@ class EventController extends Controller
         'dataProvider' => $dataProvider,
         'addressInJson' => Event::getJsonForMap($models),
         'categories' => EventCategory::find()->active()->all(),
-        'cities' => City::find()->all(),
+        'cities' => City::find()->published()->all(),
         'tags' => Tag::find()->all()
       ]
     );
@@ -153,7 +153,7 @@ class EventController extends Controller
 
   public function actionView($slug)
   {
-    if ($city = City::find()->where('url = :url', [':url' => Yii::$app->params['city']])->one()) {
+    if ($city = Yii::$app->city->isCity()) {
       $event = $this->findModel($slug, $city->id);
       $otherEvent = Event::find()->parsed()->where(['!=', 'id', $event->id])->andWhere(['category_id' => $event->category_id])->andWhere(['city_id' => $city->id])->limit(5)->all();
     } elseif (Yii::$app->params['city'] == 'global') {
@@ -247,7 +247,7 @@ class EventController extends Controller
 
   public function actionCategory($slug)
   {
-    if ($city = City::find()->where('url = :url', [':url' => Yii::$app->params['city']])->one()) {
+    if ($city = Yii::$app->city->isCity()) {
       $query = $this->findModelCategory($slug, $city->id);
       $event = $query->one();
     } elseif (Yii::$app->params['city'] == 'global') {

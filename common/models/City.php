@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use common\models\query\CityQuery;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\behaviors\SluggableBehavior;
@@ -129,6 +130,11 @@ class City extends \yii\db\ActiveRecord
 
     public function getImagesRico(){
         return $this->hasMany(\alex290\yii2images\models\Image::class, ['itemId' => 'id'])->where(['modelName' => $this->formName()]);
+    }
+
+    public static function find()
+    {
+        return new CityQuery(get_called_class());
     }
 
     public function download($url, $pathinfo)
