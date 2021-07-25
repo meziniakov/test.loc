@@ -14,6 +14,7 @@ return [
   'sku' => 'div.article',
   'price' => 'span.new',
   'attr-image' => 'src',
+  'show_count' => 100,
   'editorjs-widget/plugins' => [
       'header' => [
           'repository' => 'editorjs/header',
