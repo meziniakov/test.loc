@@ -89,50 +89,15 @@ class WikiController extends Controller
   public function actionTest()
   {
     $cities = City::find()->andFilterWhere(['not like', 'name', 'район'])->all();
-    foreach($cities as $city) {
-      $client = new Client();
-      $res = $client->request('GET', 'https://ru.wikipedia.org/w/api.php', [
-          'headers' => [
-            'User-Agent' => 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.71 Safari/537.36',
-            // 'Content-type' => 'text/html',
-            //   'Accept' => 'text/html',
-          ],
-          'query' => [
-            'format' => 'json',
-            'action' => 'query',
-            'prop' => 'extracts',
-            'exintro' => '',
-            'extract' => 'explaintext',
-            'utf8' => 1,
-            'titles' => $city->name
-          ],
-          // 'proxy' => [
-          //     'socks5' => '174.76.48.230:4145',
-          //     // 'http'  => '89.187.177.97:80', // Use this proxy with "http"
-          //     // 'http'  => '172.67.181.40:80', // Use this proxy with "http"
-          //     // 'https' => '51.178.49.77:3131', // Use this proxy with "https",
-          // ],
-          ['http_errors' => false],
-          ['connect_timeout' => 2, 'timeout' => 5],
-          // 'debug' => true,
-      ]);
-  
-    $body = $res->getBody();
-    // $document = \phpQuery::newDocumentHTML($body)->html();
-    $document = json_decode($body, true);
     $countSave = 0;
 
-    foreach($document['query']['pages'] as $item) {
-      $preview = strip_tags($item['extract'], '<p>');
+    foreach($cities as $city) {
+      Yii::$app->queue->push(new WikiJob([
+        'city' => $city->name,
+      ]));
+      $countSave++;  
     }
-
-    Yii::$app->queue->push(new WikiJob([
-      'city' => $city->name,
-      'preview' => $preview,
-    ]));
-    $countSave++;  
-    }
-    echo 'ok' . $countSave;
+    echo 'Добавлено описаний ' . $countSave . ' городов';
 
   }
   public function actionNew()
