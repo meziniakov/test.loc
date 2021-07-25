@@ -69,7 +69,7 @@ class City extends \yii\db\ActiveRecord
             [['lat', 'lng'], 'number'],
             // [['status', 'created_at', 'updated_at'], 'integer'],
             ['status', 'default', 'value' => self::STATUS_DRAFT],
-            [['name', 'url', 'description', 'youtube_url', 'website', 'in_obj_phrase', 'iata', 'name_en'], 'string', 'max' => 255],
+            [['name', 'url', 'youtube_url', 'website', 'in_obj_phrase', 'iata', 'name_en'], 'string', 'max' => 255],
             [['preview'], 'string'],
             [['title', 'h1'], 'string', 'max' => 80],
             [['ascii_name','in_obj_phrase','from_obj_phrase', 'name_prepositional'], 'string', 'max' => 20],
