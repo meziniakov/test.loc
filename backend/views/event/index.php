@@ -90,15 +90,27 @@ $this->params['breadcrumbs'][] = $this->title;
                 'headerOptions' => ['width' => 100],
             ],
             [
-                'attribute' => 'created_at',
-                'label' => 'Дата создания',
+                'attribute' => 'start',
+                'label' => 'Дата начала',
                 'format' => ['date', 'dd.MM.YYYY'],
-                'options' => ['width' => '90'],
+                'options' => ['width' => '70'],
                 'filter' => DatePicker::widget([
                     'model' => $searchModel,
-                    'attribute' => 'created_at',
+                    'attribute' => 'start',
                     'dateFormat' => 'dd.MM.yyyy',
-                    'options' => ['width' => '90']
+                    'options' => ['width' => '70']
+                ]),
+            ],
+            [
+                'attribute' => 'end',
+                'label' => 'Дата окончания',
+                'format' => ['date', 'dd.MM.YYYY'],
+                'options' => ['width' => '70'],
+                'filter' => DatePicker::widget([
+                    'model' => $searchModel,
+                    'attribute' => 'end',
+                    'dateFormat' => 'dd.MM.yyyy',
+                    'options' => ['width' => '70']
                 ]),
             ],
             // [

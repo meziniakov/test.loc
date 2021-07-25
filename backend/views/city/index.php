@@ -4,6 +4,7 @@ use common\models\City;
 use common\models\Event;
 use common\models\Place;
 use nickdenry\grid\toggle\components\RoundSwitchColumn;
+use yii\bootstrap\ButtonDropdown;
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\helpers\ArrayHelper;
@@ -20,6 +21,23 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <?= Html::a(Yii::t('backend', 'Create City'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
+
+    <div class="btn-group">
+  <?= Html::a(Yii::t('backend', 'Add'), ['create'], ['class' => 'btn btn-success']) ?>
+  <?= ButtonDropdown::widget([
+    'id' => 'test',
+    'label' => 'Установить город',
+    'dropdown' => [
+      'items' => [
+        ['label' => "A", 'url' => [''], 'status' => 1, ],
+        ['label' => "N", 'url' => [''], 'status' => 0, ],
+      ]
+    ],
+    'containerOptions' => ['class' => '']
+  ]);
+
+  ?>
+    </div>
 
     <?php Pjax::begin(); ?>
 
@@ -144,6 +162,41 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ],
     ]); ?>
+
+<?php 
+        $this->registerJs('
+        $(document).ready(function(){
+        $(\'#ChangeStatus\').click(function(){
+            var id = $(\'#grid\').yiiGridView(\'getSelectedRows\');
+            $.ajax({
+                type: \'POST\',
+                url : \'/city/multiple-change-status\',
+                data : {id: id, status: status},
+                success : function() {
+                $(this).closest(\'tr\').remove(); //удаление строки
+                }
+            });
+        });
+        });', \yii\web\View::POS_READY);
+    ?>
+
+      <?php 
+        $this->registerJs('
+$(document).ready(function(){
+            $(\'#ToDeleted\').click(function(){
+              var id = $(\'#grid\').yiiGridView(\'getSelectedRows\');
+                $.ajax({
+                    type: \'POST\',
+                    url : \'/place/multiple-delete\',
+                    data : {id: id},
+                    success : function() {
+                      $(this).closest(\'tr\').remove(); //удаление строки
+                    }
+                });
+              });
+          });', 
+          \yii\web\View::POS_READY);
+      ?>
 
     <?php Pjax::end(); ?>
 

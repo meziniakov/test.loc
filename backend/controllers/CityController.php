@@ -201,4 +201,15 @@ class CityController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+
+    public function actionMultipleChangeStatus()
+    {
+        var_dump(Yii::$app->request->post('id','status'));die;
+        if (Yii::$app->request->post('id','status')) {
+            City::updateAll(['status' => Yii::$app->request->post('')], ['id' => Yii::$app->request->post('id')]);
+        }
+        Yii::$app->session->setFlash('success', 'Успешно изменено');
+        return $this->redirect(Yii::$app->request->referrer);
+    }
+
 }
