@@ -5,6 +5,7 @@ namespace backend\models\search;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use common\models\Event;
+use Yii;
 
 /**
  * EventSearch represents the model behind the search form of `common\models\Event`.
@@ -47,6 +48,9 @@ class EventSearch extends Event
                 'defaultOrder' => [
                         'id' => SORT_DESC
                 ]
+            ],
+            'pagination' => [
+                'pageSize' => Yii::$app->keyStorage->get('backend.show-count'),
             ],
         ]);
 

@@ -55,7 +55,7 @@ class CitySearch extends City
                 'attributes' => ['id','placeCount', 'eventCount'],
             ],
             'pagination' => [
-                'pageSize' => Yii::$app->params['show_count'],
+                'pageSize' => Yii::$app->keyStorage->get('backend.show-count'),
             ],
             // 'sort' => [
             //     'defaultOrder' => [
