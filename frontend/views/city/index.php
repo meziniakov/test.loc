@@ -14,28 +14,17 @@ $this->title = $city->name . ' ' . date('Y') . ' - все о городе с ф�
 			]); ?>
 
 <?php if(!empty($city->preview)):?>
-<section class="gray">
+<section>
 	<div class="container">
 		<div class="row">
-
-			<!-- property main detail -->
 			<div class="col-lg-12 col-md-12 col-sm-12">
-
-				<!-- Single Block Wrap -->
-				<div class="block-wrap">
-
 					<div class="block-header">
 						<h4 class="block-title">Краткая информация о городе</h4>
 					</div>
-
 					<div class="block-body">
 						<?= $city->preview ?>
 					</div>
-
-				</div>
-
 			</div>
-
 		</div>
 	</div>
 </section>
@@ -93,6 +82,8 @@ $this->title = $city->name . ' ' . date('Y') . ' - все о городе с ф�
 		</div>
 	</div>
 </section>
+<?php endif ?>
+
 
 <section>
 	<div class="container">
@@ -149,7 +140,6 @@ $this->title = $city->name . ' ' . date('Y') . ' - все о городе с ф�
 		</div>
 	</div>
 </section>
-<?php endif ?>
 
 <section>
 				<div class="container">
