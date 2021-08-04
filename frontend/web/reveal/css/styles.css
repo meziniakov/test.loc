@@ -4730,7 +4730,7 @@ button.btn.adv-btn {
     display: block;
     content: "";
     background-color: #101f4e;
-    opacity: 0.4;
+    opacity: 0.3;
     z-index:11;
     transition: 0.3s ease-out;
 }
@@ -5126,7 +5126,7 @@ form.search-big-form.search-shadow, form.search-form.search-shadow {
 .overlay-cate:before {
     content:"";
     position:absolute;
-    background:linear-gradient(to bottom, transparent 7%, #1a1d2b);
+    background:linear-gradient(to bottom, transparent 57%, #1a1d2b);
     left:0;
     right:0;
     top: 0;
@@ -6325,7 +6325,7 @@ article figure .list-overlay:before {
     right: 0;
     top: 0;
     bottom: 0;
-    background: linear-gradient(to bottom,transparent 20%,#222e4c);
+    background: linear-gradient(to bottom,transparent 80%,#222e4c);
     display: block;
     height: 100%;
     width: 100%;

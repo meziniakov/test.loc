@@ -155,21 +155,22 @@ $svgNight = '<svg xmlns="http://www.w3.org/2000/svg" height="70" width="250" vie
 <div class="container-fluid p-0">
     <?= Wrapper::widget(); ?>
 </div>
-<div class="breadcrumb p-0">
-<?= Breadcrumbs::widget([
-    'encodeLabels' => false,
-    'tag' => 'div',
-    'options' => [
-        'class' => 'breadcrumb container',
-    ],
-    'homeLink' => [
-        'label' => '<i class="ti-home"></i>',
-        'url' => Yii::$app->homeUrl,
-        'title' => 'Главная',
-    ],
-    'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
-]) ?>
-</div>
+<!-- <div class="breadcrumb p-0"> -->
+<?php // Breadcrumbs::widget([
+//     'encodeLabels' => false,
+//     'tag' => 'div',
+//     'options' => [
+//         'class' => 'breadcrumb container',
+//     ],
+//     'homeLink' => [
+//         'label' => '<i class="ti-home"></i>',
+//         'url' => Yii::$app->homeUrl,
+//         'title' => 'Главная',
+//     ],
+//     'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
+// ]) 
+?>
+<!-- </div> -->
 
 <?= $content ?>
 
