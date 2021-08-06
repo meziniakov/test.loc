@@ -52,9 +52,10 @@ class JsonController extends Controller
     {
         $model = new JsonForm();
         if ($model->load(Yii::$app->request->post())) {
-            $model->jsonFile = UploadedFile::getInstance($model, 'jsonFile');
-            if ($model->jsonFile) {
+            if($model->jsonFile = UploadedFile::getInstance($model, 'jsonFile')) {
                 $path = $model->uploadJsonFile();
+            } else {
+                $path = $model->jsonFileByURL;
             }
             $json = file_get_contents($path, true);
             $array = Json::decode($json, false);
@@ -81,9 +82,7 @@ class JsonController extends Controller
         $model = new JsonForm();
         if ($model->load(Yii::$app->request->post())) {
             if($model->jsonFile = UploadedFile::getInstance($model, 'jsonFile')) {
-                if ($model->jsonFile) {
-                    $path = $model->uploadJsonFile();
-                }
+                $path = $model->uploadJsonFile();
             } else {
                 $path = $model->jsonFileByURL;
             }
