@@ -51,7 +51,7 @@ $this->title = $city->name . ' ' . date('Y') . ' - все о городе с ф�
 							<?php endif ?>
 							<div class="grid-category-thumb">
 								<?php if (isset($place->city)) : ?>
-									<a href="<?= Url::to(['place/view', 'city' => $place->city->url, 'category' => $place->category['slug'], 'slug' => $place->slug]) ?>" class="overlay-cate"><?= Html::img($place->imageRico->getUrl('358x229'), ['class' => 'img-responsive', 'alt' => $place->slug]) ?></a>
+									<a href="<?= Url::to(['place/view', 'category' => $place->category['slug'], 'city' => $place->city->url, 'slug' => $place->slug]) ?>" class="overlay-cate"><?= Html::img($place->imageRico->getUrl('358x229'), ['class' => 'img-responsive', 'alt' => $place->slug]) ?></a>
 								<?php else : ?>
 									<a href="<?= Url::to(['place/view', 'category' => $place->category['slug'], 'slug' => $place->slug]) ?>" class="overlay-cate"><?= Html::img($place->imageRico->getUrl('358x229'), ['class' => 'img-responsive', 'alt' => $place->slug]) ?></a>
 								<?php endif ?>
@@ -72,7 +72,7 @@ $this->title = $city->name . ' ' . date('Y') . ' - все о городе с ф�
 							</div>
 							<div class="modern-list-content">
 								<div class="listing-cat">
-									<?= Html::a('<i class="' . $place->category['icon'] . ' bg-a"></i>' . $place->category['title'], ['place/category', 'slug' => $place->category['slug']], ['class' => 'cat-icon cl-1']) ?>
+									<?= Html::a('<i class="' . $place->category['icon'] . ' bg-a"></i>' . $place->category['title'], ['place/category', 'city' => $place->city->url, 'slug' => $place->category['slug']], ['class' => 'cat-icon cl-1']) ?>
 								</div>
 							</div>
 						</div>
@@ -126,7 +126,7 @@ $this->title = $city->name . ' ' . date('Y') . ' - все о городе с ф�
 										<div class="theme-cl f-bold">
 											<?php if (!empty($place->category->slug)) : ?>
 												<div class="listing-cat">
-													<?= Html::a("<i class='{$place->category->icon} bg-a'></i>" . $place->category->title, ['place/category', 'slug' => $place->category->slug], ['class' => 'cat-icon cl-1']) ?>
+													<?= Html::a("<i class='{$place->category->icon} bg-a'></i>" . $place->category->title, ['place/category', 'city' => $place->city->url, 'slug' => $place->category->slug], ['class' => 'cat-icon cl-1']) ?>
 												</div>
 											<?php endif ?>
 										</div>
@@ -155,7 +155,7 @@ $this->title = $city->name . ' ' . date('Y') . ' - все о городе с ф�
 					<div class="row">
 						<?php $i = 0; foreach($cities as $city):?>
 								<div class="col-lg-<?= ($i === 0) ? '8' : '4'?> col-md-8">
-									<a href="https://<?= $city['url'] ?>.trip2place.com/" class="img-wrap">
+									<a href="https://trip2place.com/<?= $city['url'] ?>" class="img-wrap">
 											<div class="img-wrap-content visible">
 												<h4><?= $city->name?></h4>
 											</div>

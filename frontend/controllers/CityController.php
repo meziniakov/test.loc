@@ -9,6 +9,7 @@ use vova07\fileapi\actions\UploadAction as FileAPIUpload;
 use common\models\Place;
 use common\models\Tag;
 use common\models\PlaceCategory;
+use common\models\EventCategory;
 use common\models\City;
 use common\models\Event;
 use yii\web\NotFoundHttpException;
@@ -78,9 +79,9 @@ class CityController extends Controller
      *
      * @return mixed
      */
-    public function actionDostoprimechatelnosti()
+    public function actionDostoprimechatelnosti($city)
     {
-      if ($city = Yii::$app->city->isCity()) {
+      if ($city = Yii::$app->city->isCity($city)) {
         $query = Place::find()->published()->where(['city_id' => $city->id])->with('category', 'city' ,'imageRico');
       } elseif (Yii::$app->params['city'] == 'global') {
         $query = Place::find()->published()->with('category', 'city' ,'imageRico');
@@ -125,9 +126,9 @@ class CityController extends Controller
             ]);
     }
 
-    public function actionEvents()
+    public function actionEvents($city = null)
     {
-      if ($city = Yii::$app->city->isCity()) {
+      if ($city = Yii::$app->city->isCity($city)) {
         $query = Event::find()->published()->where(['city_id' => $city->id])->with('category', 'city' ,'imageRico');
       } elseif (Yii::$app->params['city'] == 'global') {
         $query = Event::find()->published()->with('category', 'city' ,'imageRico');
@@ -164,17 +165,17 @@ class CityController extends Controller
               // 'fb:app_id'=> '1811670458869631',//для статистики по переходам
             ]);
          
-            return $this->render('dostoprimechatelnosti', [
+            return $this->render('events', [
               'city' => $city,
               'dataProvider' => $dataProvider,
-              'tags' => Tag::find()->all(),
-              'categories' => PlaceCategory::find()->active()->all(),
+              // 'tags' => Tag::find()->all(),
+              'categories' => EventCategory::find()->active()->all(),
             ]);
     }
 
-    public function actionGidy()
+    public function actionGidy($city = null)
     {
-      if ($city = Yii::$app->city->isCity()) {
+      if ($city = Yii::$app->city->isCity($city)) {
       } elseif (Yii::$app->params['city'] == 'global') {
       } else {
         throw new NotFoundHttpException(Yii::t('frontend', 'Page not found.'));
@@ -250,4 +251,90 @@ class CityController extends Controller
         ]);
     }
 
+    public function actionPogoda($city = null)
+    {
+      if ($city = Yii::$app->city->isCity($city)) {
+      } elseif (Yii::$app->params['city'] == 'global') {
+      } else {
+        throw new NotFoundHttpException(Yii::t('frontend', 'Page not found.'));
+      }
+  
+      Yii::$app->view->registerLinkTag(['rel' => 'canonical', 'href' => Url::canonical()], 'canonical');
+      Yii::$app->view->registerMetaTag([
+        'name' => 'description',
+        'content' => isset($city->name) ? 'Достопримечательности, музеи, цирки, места отдыха и многое другое в городе ' . $city->name : 'Достопримечательности, музеи, цирки, места отдыха и многое другое',
+      ], 'description');
+  
+      Yii::$app->seo->putFacebookMetaTags([
+        'og:locale'     => 'ru_RU',
+        'og:url'        => Url::canonical(),
+        'og:type'       => 'article',
+        'og:title'      => isset($city->name) ? 'Все достопримечательности в городе ' . $city->name : Yii::$app->keyStorage->get('frontend.index.title'),
+        'og:title'      => isset($city->name) ? 'Достопримечательности, музеи, цирки, места отдыха и многое другое в городе ' . $city->name : 'Достопримечательности, музеи, цирки, места отдыха и многое другое',
+        // 'og:image'      => Url::to($place->getImage()->getUrl(), true),
+        // 'og:image:width' => $place->getImage()->getSizes()['width'],
+        // 'og:image:height' => $place->getImage()->getSizes()['height'],
+        'og:site_name' => 'trip2place - открывай интересные места России',
+        // 'og:updated_time' => Yii::$app->formatter->asDatetime($place->updated_at, "php:Y-m-dTH:i:s+00:00"),
+        // 'og:updated_time' => date(DATE_ATOM, $place->updated_at),
+        // 'fb:app_id' => '',
+        // 'vk:app_id' => '',
+        // 'vk:page_id' => '',
+        // 'vk:image' => '',
+        // 'fb:app_id'=> '1811670458869631',//для статистики по переходам
+      ]);
+      function connect($url, $city)
+      {
+        $client = new Client();
+        $res = $client->get($url, [
+          // 'headers' => [
+          //   // "Authorization: Token 41323de3f24c6a81d6bca4ac1cdf13c4d4089350",
+          //   // "{'username': 'z2941@ya.ru', 'password': 'G3e9tSFuaR26!2S'}",
+          //   // 'User-Agent' => $this->user_agent,
+          //   // 'Content-type' => 'application/json',
+          //   // 'Vary' => 'Accept',
+          //   // 'Accept' => 'text/html',
+          // ],
+          'query' => [
+            'q' => $city,
+            'cnt' => 6,
+            'units' => 'metric',
+            'lang' => 'ru',
+            'appid' => '6eea4815462a3754eda2f48540473bc5',
+          ],
+          // 'proxy' => [
+          //     'socks5' => '174.76.48.230:4145',
+          //     // 'http'  => '89.187.177.97:80', // Use this proxy with "http"
+          //     // 'http'  => '172.67.181.40:80', // Use this proxy with "http"
+          //     // 'https' => '51.178.49.77:3131', // Use this proxy with "https",
+          // ],
+          // ['http_errors' => false],
+          // ['connect_timeout' => 2, 'timeout' => 5],
+          // 'debug' => true,
+        ]);
+        $json = json_decode($res->getBody(), true);
+        // $json = json_encode($json);
+        // $json = $res->getBody()->getContents();
+        // $json = $res->getBody();
+        // echo "<pre>";
+        // var_dump($json['list'][0]['wind']['speed']);die;
+        return $json;
+        // echo $body;die;
+      }
+      $byCity = "https://api.openweathermap.org/data/2.5/forecast";
+      $current = "https://api.openweathermap.org/data/2.5/weather";
+      $res = connect($byCity, $city->name);
+      $current = connect($current, $city->name);
+      // echo json_encode($res['cnt']);die;
+    
+      return $this->render('pogoda', [
+        'city' => $city,
+        'current' => $current,
+        // 'activities' => $res->results,
+        // 'listing' => $listing,
+        'tags' => Tag::find()->all(),
+        'categories' => PlaceCategory::find()->active()->all(),
+        'cities' => City::find()->published()->all(),
+      ]);
+    }
 }

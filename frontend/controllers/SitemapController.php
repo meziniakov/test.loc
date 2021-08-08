@@ -15,22 +15,24 @@ use yii\web\Response;
 
 class SitemapController extends Controller
 {
+
   public function actionIndex()
   {
     Yii::$app->cache->delete('sitemap');
     if(!$xml_sitemap = Yii::$app->cache->get('sitemap')) {
       $urls = [];
+      $places = Place::find()->published()->with('category', 'city')->all();
 
-      if ($city = Yii::$app->city->isCity()) {
-        $places = Place::find()->where(['status' => Place::STATUS_PARSED])->andWhere(['city_id' => $city->id])->with('category', 'city')->all();
-      } elseif (Yii::$app->params['city'] == 'global') {
-        $places = Place::find()->where(['city_id' => null])->with('category')->all();
-      } else {
-        throw new NotFoundHttpException(Yii::t('frontend', 'Page not found.'));
-      }
+      // if ($city = Yii::$app->city->isCity()) {
+      //   $places = Place::find()->where(['status' => Place::STATUS_PARSED])->andWhere(['city_id' => $city->id])->with('category', 'city')->all();
+      // } elseif (Yii::$app->params['city'] == 'global') {
+      //   $places = Place::find()->where(['city_id' => null])->with('category')->all();
+      // } else {
+      //   throw new NotFoundHttpException(Yii::t('frontend', 'Page not found.'));
+      // }
 
       foreach($places as $place) {
-        $str = '/place/' . $place->category->slug . '/' . $place->slug;
+        $str = '/'. $place->city->url . '/place/' . $place->category->slug . '/' . $place->slug;
         $urls[] = [
           'loc' => $str, //isset($subdomain) ? $subdomain : 
           'lastmod' => date(DATE_ATOM, $place->updated_at),
@@ -39,22 +41,22 @@ class SitemapController extends Controller
         ];
       }
 
-      $articles = Article::find()->published()->all();
-      foreach($articles as $article) {
-        $urls[] = [
-          'loc' => '/article/' . $article->slug,
-          'lastmod' => date(DATE_ATOM, $article->updated_at),
-          'changefreq' => 'daily',
-          'priority' => '1'
-        ];
-      }
+      // $articles = Article::find()->published()->all();
+      // foreach($articles as $article) {
+      //   $urls[] = [
+      //     'loc' => '/article/' . $article->slug,
+      //     'lastmod' => date(DATE_ATOM, $article->updated_at),
+      //     'changefreq' => 'daily',
+      //     'priority' => '1'
+      //   ];
+      // }
 
       $place_categories = PlaceCategory::find()->active()->all();
       foreach($place_categories as $place_category) {
         $urls[] = [
-          'loc' => '/place/' . $place_category->slug,
+          'loc' => '/'. $place->city->url . '/place/' . $place_category->slug,
           'changefreq' => 'weekly',
-          'priority' => '0.5'  
+          'priority' => '0.5'
         ];
       }
 
@@ -70,11 +72,15 @@ class SitemapController extends Controller
       $place_tags = Tag::find()->orderBy('id')->all();
       foreach($place_tags as $place_tag) {
         $urls[] = [
-          'loc' => '/place/tag/' . $place_tag->slug,
+          'loc' => '/'. $place->city->url . '/place/tag/' . $place_tag->slug,
           'changefreq' => 'weekly',
           'priority' => '0.4'  
         ];
       }
+
+      array_multisort($urls);
+      // echo "<pre>";
+      // var_dump($urls);die;
 
       $xml_sitemap = $this->renderPartial('index', [
         'host' => Yii::$app->request->hostInfo, //Yii::$app->request->isSecureConnection ? 'https://' : 'http://'

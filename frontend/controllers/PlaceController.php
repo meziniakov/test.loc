@@ -18,7 +18,6 @@ use yii\helpers\Json;
 
 class PlaceController extends Controller
 {
-
   public function behaviors()
   {
     return [
@@ -32,6 +31,8 @@ class PlaceController extends Controller
       ],
     ];
   }
+
+  public $city;
 
   const PAGE_SIZE = 10;
 
@@ -62,14 +63,14 @@ class PlaceController extends Controller
     );
   }
 
-  public function actionIndex()
+  public function actionIndex($city = null)
   {
     $q = Yii::$app->request->get('q');
     $category_id = Yii::$app->request->get('category_id');
     $city_id = Yii::$app->request->get('city_id');
     $tag_id = Yii::$app->request->get('tag_id');
 
-    if ($city = Yii::$app->city->isCity()) {
+    if ($city = Yii::$app->city->isCity($city)) {
       $query = Place::find()->published()->where(['city_id' => $city->id])->with('category', 'city' ,'imageRico');
     } elseif (Yii::$app->params['city'] == 'global') {
       $query = Place::find()->published()->with('category', 'city' ,'imageRico');
@@ -166,9 +167,9 @@ class PlaceController extends Controller
   }
 
 
-  public function actionView($slug)
+  public function actionView($slug, $city = null)
   {
-    if ($city = Yii::$app->city->isCity()) {
+    if ($city = Yii::$app->city->isCity($city)) {
       $place = $this->findModel($slug);
       $otherPlace = Place::find()->published()->where(['!=', 'id', $place->id])->andWhere(['category_id' => $place->category_id])->andWhere(['city_id' => $city->id])->with('city','category','imageRico')->limit(5)->all();
     } elseif (Yii::$app->params['city'] == 'global') {
@@ -252,9 +253,9 @@ class PlaceController extends Controller
     throw new NotFoundHttpException('Страницы не существует');
   }
 
-  public function actionCategory($slug)
+  public function actionCategory($slug, $city = null)
   {
-    if ($city = Yii::$app->city->isCity()) {
+    if ($city = Yii::$app->city->isCity($city)) {
       $query = $this->findModelCategory($slug, $city->id);
       $place = $query->one();
     } elseif (Yii::$app->params['city'] == 'global') {

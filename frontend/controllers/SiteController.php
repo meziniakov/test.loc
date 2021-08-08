@@ -78,9 +78,10 @@ class SiteController extends Controller
      *
      * @return mixed
      */
-    public function actionIndex()
+    public function actionIndex($city = null)
     {
-        if ($city = Yii::$app->city->isCity()) {
+        if ($city = Yii::$app->city->isCity($city)) {
+            $this->city = $city;
             $places = Place::find();
             $listing = $places->andWhere(['city_id' => $city->id])->with('category', 'imageRico', 'city')->all();
             

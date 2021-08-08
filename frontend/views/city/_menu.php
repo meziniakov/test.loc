@@ -1,4 +1,6 @@
 <?php
+use yii\bootstrap\Html;
+
 $this->params['breadcrumbs'][] = [
 	'label' => $city->name,
 	'options' => [
@@ -46,15 +48,15 @@ $this->params['breadcrumbs'][] = [
 		<div class="element-menu">
 			<div class="scroll-menu">
 				<nav class="scrolling-stone">
-					<a href="/dostoprimechatelnosti/">Достопримечательности</a>
-					<a href="/events/">События</a>
-					<a href="/gidy/">Экскурсии</a>
-					<a href="/photo/">Фото</a>
-					<a href="/pogoda/">Погода</a>
+					<?= Html::a('Достопримечательности', ['city/dostoprimechatelnosti', 'city' => $city->url])?>
+					<?= Html::a('События', ['city/events', 'city' => $city->url])?>
+					<?= Html::a('Экскурсии', ['city/gidy', 'city' => $city->url])?>
+					<?= Html::a('На карте', ['place/index', 'city' => $city->url])?>
+					<!-- <a href="/photo/">Фото</a> -->
+					<!-- <a href="/pogoda/">Погода</a> -->
 					<!-- <a href="/video/">Видео</a> -->
-					<a href="/place/">Карта</a>
 					<a href="/aviabileti/">Авиабилеты</a>
-					<a href="/russia/moskva/hotel/">Отели</a>
+					<!-- <a href="/russia/moskva/hotel/">Отели</a> -->
 				</nav>
 			</div>
 		</div>

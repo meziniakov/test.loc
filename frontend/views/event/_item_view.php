@@ -40,7 +40,7 @@ use yii\helpers\HtmlPurifier;
 								<div class="modern-list-content">
 									<?php if (!empty($model->category->slug)) : ?>
 										<div class="listing-cat">
-												<?= Html::a("<i class='{$model->category->icon} bg-a'></i>" . $model->category->title, ['event/category', 'slug' => $model->category->slug], ['class' => 'cat-icon cl-1']) ?>
+												<?= Html::a("<i class='{$model->category->icon} bg-a'></i>" . $model->category->title, ['event/category', 'slug' => $model->category->slug, 'city' => $model->city->url], ['class' => 'cat-icon cl-1']) ?>
 										</div>
 									<?php endif ?>
 								</div>

@@ -23,7 +23,7 @@ use yii\helpers\HtmlPurifier;
 											<i class="ti-star"></i>
 										</div>
 										<?php if(isset($model->city) && isset($model->category)):?>
-											<h4 class="lst-title"><?= Html::a($model->title, ['place/view', 'category' => $model->category->slug, 'city' => $model->city->url,'slug' => $model->slug]) ?></h4>
+											<h4 class="lst-title"><?= Html::a($model->title, ['place/view', 'category' => $model->category->slug, 'city' => $model->city->url, 'slug' => $model->slug]) ?></h4>
 								<?php else :?>
 									<h4 class="lst-title"><?= Html::a($model->title, ['place/view', 'category' => $model->category->slug, 'slug' => $model->slug]) ?></h4>
 									<?php endif ?>
@@ -32,7 +32,7 @@ use yii\helpers\HtmlPurifier;
 								<div class="modern-list-content">
 									<?php if (!empty($model->category->slug)) : ?>
 										<div class="listing-cat">
-												<?= Html::a("<i class='{$model->category->icon} bg-a'></i>" . $model->category->title, ['place/category', 'slug' => $model->category->slug], ['class' => 'cat-icon cl-1']) ?>
+												<?= Html::a("<i class='{$model->category->icon} bg-a'></i>" . $model->category->title, ['place/category', 'slug' => $model->category->slug, 'city' => $model->city->url], ['class' => 'cat-icon cl-1']) ?>
 										</div>
 									<?php endif ?>
 								</div>

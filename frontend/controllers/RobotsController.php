@@ -17,14 +17,14 @@ class RobotsController extends Controller
     if(!$robots = Yii::$app->cache->get('robots')) {
       $sitemap = '';
 
-      if ($city = Yii::$app->city->isCity()) {
-        $sitemap = '/sitemap.xml';
-      } elseif (Yii::$app->params['city'] == 'global') {
-        $sitemap = '/sitemap.xml';
-        
-      } else {
-        throw new NotFoundHttpException(Yii::t('frontend', 'Page not found.'));
-      }
+      // if ($city = Yii::$app->city->isCity()) {
+      //   $sitemap = '/sitemap.xml';
+      // } elseif (Yii::$app->params['city'] == 'global') {
+      //   $sitemap = '/sitemap.xml';
+      // } else {
+      //   throw new NotFoundHttpException(Yii::t('frontend', 'Page not found.'));
+      // }
+
       $robots = $this->renderPartial('index', [
         'host' => Yii::$app->request->hostInfo,
         'sitemap' => $sitemap,

@@ -18,7 +18,6 @@ use yii\helpers\Json;
 
 class EventController extends Controller
 {
-
   public function behaviors()
   {
     return [
@@ -32,6 +31,8 @@ class EventController extends Controller
       ],
     ];
   }
+
+  public $city;
 
   const PAGE_SIZE = 10;
 
@@ -47,14 +48,14 @@ class EventController extends Controller
     );
   }
 
-  public function actionIndex()
+  public function actionIndex($city = null)
   {
     $q = Yii::$app->request->get('q');
     $category_id = Yii::$app->request->get('category_id');
     $city_id = Yii::$app->request->get('city_id');
     $tag_id = Yii::$app->request->get('tag_id');
 
-    if ($city = Yii::$app->city->isCity()) {
+    if ($city = Yii::$app->city->isCity($city)) {
       $query = Event::find()->where(['city_id' => $city->id])->with('category');
     } elseif (Yii::$app->params['city'] == 'global') {
       $query = Event::find()->with('category');
@@ -151,9 +152,9 @@ class EventController extends Controller
     );
   }
 
-  public function actionView($slug)
+  public function actionView($slug, $city = null)
   {
-    if ($city = Yii::$app->city->isCity()) {
+    if ($city = Yii::$app->city->isCity($city)) {
       $event = $this->findModel($slug, $city->id);
       $otherEvent = Event::find()->parsed()->where(['!=', 'id', $event->id])->andWhere(['category_id' => $event->category_id])->andWhere(['city_id' => $city->id])->limit(5)->all();
     } elseif (Yii::$app->params['city'] == 'global') {
@@ -245,9 +246,9 @@ class EventController extends Controller
     throw new NotFoundHttpException('Страницы не существует');
   }
 
-  public function actionCategory($slug)
+  public function actionCategory($slug, $city = null)
   {
-    if ($city = Yii::$app->city->isCity()) {
+    if ($city = Yii::$app->city->isCity($city)) {
       $query = $this->findModelCategory($slug, $city->id);
       $event = $query->one();
     } elseif (Yii::$app->params['city'] == 'global') {
