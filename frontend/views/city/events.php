@@ -5,8 +5,6 @@ use yii\bootstrap\Html;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 use yii\widgets\ListView;
-
-$this->title = 'Все события в городе ' . $city->name;
 ?>
 
 <?php echo $this->render('_menu', [
@@ -22,11 +20,8 @@ $this->title = 'Все события в городе ' . $city->name;
     <div class="row">
       <?= ListView::widget([
         'dataProvider' => $dataProvider,
-        //  'options' => ['class' => ['col-md-12 col-sm-12 mt-3']],
         'itemOptions' => ['class' => ['item col-lg-4 col-md-6 col-sm-12 p-0']],
         'itemView' => '_event_item_view',
-        // 'summary' => 'Показаны записи <strong>{begin} - {end} </strong> из <strong>{totalCount}</strong>',
-        // 'summaryOptions' => ['class' => 'shorting-wrap'],
         'pager' => [
           'class' => \kop\y2sp\ScrollPager::class,
           'triggerTemplate' => '<div class="col-lg-12 text-center">

@@ -7,7 +7,6 @@ use yii\helpers\Html;
 /* @var $message string */
 /* @var $exception Exception */
 
-$this->title = "Города";
 $this->params['breadcrumbs'][] = $this->title;
 
 $firstLetter = [];

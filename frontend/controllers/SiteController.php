@@ -43,12 +43,12 @@ class SiteController extends Controller
     //     // echo "Hi";
     //     // return $this->city = $city;
     // }
-    // public function __construct()
+    // public function __construct($city)
     // {
-    //   return $this->city = Yii::$app->city->isCity();
-    //   // print_r($this->city);die;
+    //   // return $this->city = Yii::$app->city->isCity();
+    //   $this->city = $city;
+    //   print_r($this->city);die;
     //   // echo $this->city = Yii::$app->city->isCity();
-    //   // // echo $this->city;die;
     //   // var_dump(Yii::$app->params['city']); die;
     //   // var_dump(Yii::$app->city->isCity()); die;
     // }
@@ -85,24 +85,23 @@ class SiteController extends Controller
             $places = Place::find();
             $listing = $places->andWhere(['city_id' => $city->id])->with('category', 'imageRico', 'city')->all();
             
-            Yii::$app->view->registerLinkTag(['rel' => 'canonical', 'href' => Url::canonical()], 'canonical');
+            $this->view->title = 'Город ' . $city->name . ' - краткая история, куда сходить, что посмотреть с фотографиями и адресами на trip2place.com';
+
+            Yii::$app->view->registerLinkTag(['rel' => 'canonical', 'href' => Url::current([], true)], 'canonical');
             Yii::$app->view->registerMetaTag([
               'name' => 'description',
-              'content' => isset($city->name) ? 'Достопримечательности, музеи, цирки, места отдыха и многое другое в городе ' . $city->name : 'Достопримечательности, музеи, цирки, места отдыха и многое другое',
+              'content' => isset($city->in_obj_phrase) ? 'Достопримечательности, музеи, цирки, места отдыха и многое другое ' . $city->in_obj_phrase : 'Достопримечательности, музеи, цирки, места отдыха и многое другое',
             ], 'description');
         
             Yii::$app->seo->putFacebookMetaTags([
               'og:locale'     => 'ru_RU',
-              'og:url'        => Url::canonical(),
+              'og:url'        => Url::current([], true),
               'og:type'       => 'article',
-              'og:title'      => isset($city->name) ? 'Все достопримечательности в городе ' . $city->name : Yii::$app->keyStorage->get('frontend.index.title'),
-              'og:title'      => isset($city->name) ? 'Достопримечательности, музеи, цирки, места отдыха и многое другое в городе ' . $city->name : 'Достопримечательности, музеи, цирки, места отдыха и многое другое',
-              // 'og:image'      => Url::to($place->getImage()->getUrl(), true),
-              // 'og:image:width' => $place->getImage()->getSizes()['width'],
-              // 'og:image:height' => $place->getImage()->getSizes()['height'],
+              'og:title'      => isset($city->in_obj_phrase) ? 'Все достопримечательности ' . $city->in_obj_phrase : Yii::$app->keyStorage->get('frontend.index.title'),
+              'og:title'      => isset($city->in_obj_phrase) ? 'Достопримечательности, музеи, цирки, места отдыха и многое другое ' . $city->in_obj_phrase : 'Достопримечательности, музеи, цирки, места отдыха и многое другое',
+              'og:image'      => $mainImage = Url::to($city->imageRico->getUrl(), true),
               'og:site_name' => 'trip2place - открывай интересные места России',
-              // 'og:updated_time' => Yii::$app->formatter->asDatetime($place->updated_at, "php:Y-m-dTH:i:s+00:00"),
-              // 'og:updated_time' => date(DATE_ATOM, $place->updated_at),
+              // 'og:updated_time' => date(DATE_ATOM, $city->updated_at),
               // 'fb:app_id' => '',
               // 'vk:app_id' => '',
               // 'vk:page_id' => '',
@@ -134,20 +133,18 @@ class SiteController extends Controller
         ]);
     }
 
-    // public function actionFaq()
-    // {
-    //     return $this->render('faq', [
-    //     ]);
-    // }
-
     public function actionEkskursii()
     {
-        return $this->render('ekskursii', [
-        ]);
+      $this->view->title = 'Бронируйте экскурсии чтобы узнавать больше о городах и их истории на trip2place.com';
+
+      return $this->render('ekskursii', [
+      ]);
     }
 
     public function actionCity()
     {
+      $this->view->title = 'Выберите города, которые бы хотели посетить на trip2place.com';
+
       $model = City::find()->published()->all();
       return $this->render('city', [
           'model' => $model,

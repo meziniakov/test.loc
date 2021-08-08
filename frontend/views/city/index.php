@@ -5,7 +5,6 @@ use yii\bootstrap\Html;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 
-$this->title = $city->name . ' ' . date('Y') . ' - все о городе с фото и видео на trip2place.com';
 ?>
 
 <?php echo $this->render('_menu', [

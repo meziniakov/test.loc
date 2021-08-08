@@ -1,7 +1,6 @@
 <?php
 $this->registerCssFile('/reveal/css/cities.css');
 
-
 $firstLetter = [];
   foreach ($cities as $city) {
     $firstLetter[mb_substr($city->name,0,1,"UTF-8")][] = [
@@ -9,7 +8,6 @@ $firstLetter = [];
       'url' => $city->url
     ];
   }
-  // var_dump($firstLetter);die;
 ksort($firstLetter);
 ?>
 

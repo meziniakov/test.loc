@@ -6,7 +6,6 @@ use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 use yii\widgets\ListView;
 
-$this->title = isset($city->name) ? 'Все достопримечательности в городе ' . $city->name : Yii::$app->keyStorage->get('frontend.index.title');
 ?>
 <?php echo $this->render('_menu', [
 				'city' => $city,
