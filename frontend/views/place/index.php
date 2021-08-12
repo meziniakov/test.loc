@@ -2,8 +2,6 @@
 
 use yii\widgets\ListView;
 
-$this->title = Yii::t('frontend', 'Места');
-
 $this->registerJsFile(
 	"/reveal/js/ymaps.js",
 	$options = ['depends' => [

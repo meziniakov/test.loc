@@ -93,6 +93,8 @@ class CityController extends Controller
       } else {
         throw new NotFoundHttpException(Yii::t('frontend', 'Page not found.'));
       }
+
+      $this->view->title = 'Культурные места и достопримечательности ' . $city->in_obj_phrase;
   
       $dataProvider = Place::getDataProvider($query);
         
@@ -127,7 +129,7 @@ class CityController extends Controller
 
     public function actionEvents($city = null)
     {
-      if ($this->city = Yii::$app->city->isCity($city)) {
+      if ($city = Yii::$app->city->isCity($city)) {
         $query = Event::find()->published()->where(['city_id' => $city->id])->with('category', 'city' ,'imageRico');
       } elseif (Yii::$app->params['city'] == 'global') {
         $query = Event::find()->published()->with('category', 'city' ,'imageRico');
@@ -176,7 +178,7 @@ class CityController extends Controller
         throw new NotFoundHttpException(Yii::t('frontend', 'Page not found.'));
       }
 
-      $this->view->title = 'Бронируйте экскурсии чтобы узнавать больше о городах и их истории на trip2place.com';
+      $this->view->title = 'Бронируйте экскурсии ' . $city->in_obj_phrase . ' чтобы поближе познакомиться с городом на trip2place.com';
 
       Yii::$app->view->registerLinkTag(['rel' => 'canonical', 'href' => Url::canonical()], 'canonical');
       Yii::$app->view->registerMetaTag([
@@ -214,6 +216,8 @@ class CityController extends Controller
       }
       $byCity = "https://experience.tripster.ru/api/experiences/?detailed=true&city__name_ru=" . $city->name;
       $res = connect($byCity);
+      // echo "<pre>";
+      // var_dump($res->results);die;
     
       return $this->render('gidy', [
         'city' => $city,

@@ -88,6 +88,8 @@ class PlaceController extends Controller
 
     $models = $dataProvider->getModels();
 
+    $this->view->title = 'Культурные места и достопримечательности ' . $city->in_obj_phrase . ' на карте trip2place';
+
     $title = 'trip2place.com - открывай интересные места России';
     $content = "trip2place.com - путешествуй, открывая новые места в России.";
 

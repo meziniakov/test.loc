@@ -5,8 +5,6 @@ use yii\bootstrap\Html;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 use yii\widgets\ListView;
-
-$this->title = 'Все достопримечательности в городе ' . $city->name;
 ?>
 
 <?php echo $this->render('_menu', [
