@@ -46,7 +46,7 @@ class CityByTripsterJob extends BaseObject implements \yii\queue\JobInterface
                 $city->uploadImage($pathinfo, $city->name);
             }
         }
-
+    }
     // {
     //     $result = $this->city;
     //     if($city = City::findOne(['name' => $result['name_ru']])){
