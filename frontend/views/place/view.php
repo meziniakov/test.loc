@@ -52,7 +52,7 @@ $images = $place->getImages();
 							<div class="listname-into">
 								<h1><?= $place->title ?>
 									<span class="prt-type rent">
-										<?= Html::a($place->category['title'], ['place/category', 'slug' => $place->category['slug'], 'city' => $model->city->url], ['class' => 'cat-icon cl-1']) ?>
+										<?= Html::a($place->category['title'], ['place/category', 'slug' => $place->category['slug'], 'city' => $place->city->url], ['class' => 'cat-icon cl-1']) ?>
 									</span>
 								</h1>
 								<span><?= $place->address ? '<i class="lni-map-marker"></i>' . $place->address : '' ?></span>
