@@ -64,7 +64,7 @@ class City extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'url'], 'required'],
+            [['name'], 'required'],
             [['name', 'url'], 'unique'],
             [['lat', 'lng'], 'number'],
             // [['status', 'created_at', 'updated_at'], 'integer'],
