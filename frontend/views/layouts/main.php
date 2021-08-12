@@ -33,6 +33,7 @@ AppAsset::register($this);
 
 <head>
     <meta charset="<?= Yii::$app->charset ?>">
+    <meta name="verify-admitad" content="1270e7320d" />
     <?php $this->registerJsFile('/reveal/js/gtm.js') ?>
     <?= $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/svg+xml', 'href' => 'https://trip2place.com/favicon.svg']);?>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
