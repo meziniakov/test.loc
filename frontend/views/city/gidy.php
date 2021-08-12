@@ -5,6 +5,7 @@ use yii\bootstrap\Html;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 use yii\widgets\ListView;
+use common\models\City;
 
 ?>
 <?php echo $this->render('_menu', [
@@ -23,10 +24,63 @@ use yii\widgets\ListView;
 							<!--  Single Listing -->
 							<?php foreach($activities as $activity):?>
 							<div class="col-lg-4 col-md-6 col-sm-12">
+							<script type="application/ld+json">{
+								"@context": "http://schema.org",
+								"@type": "Event",
+								"eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+								"eventStatus": "http://schema.org/EventScheduled",
+								"name": "<?= $activity->title ?>",
+								"url": "<?= $activity->url ?>",
+								"image": "<?= $activity->cover_image?>",
+								"description": "<?= $activity->tagline ?>",
+								"organizer": [
+									{
+										"@type": "Organization",
+										"name": "<?= $activity->guide->first_name ?>",
+										"url": "<?= $activity->guide->url ?>"
+									}
+								],
+								"performer": [
+									{
+										"@type": "PerformingGroup",
+										"name": "<?= $activity->guide->first_name ?>",
+										"url": "<?= $activity->guide->url ?>"
+									}
+								],
+								"location": [
+									{
+										"@type": "Place",
+										"name": "<?= $activity->city->name_ru ?>",
+										"url": "<?= $activity->city->url ?>",
+										"address": [
+											{
+												"@type": "PostalAddress",
+												"addressCountry": [
+													{
+														"@type": "Country",
+														"name": "<?= $activity->city->country->name_ru ?>"
+													}
+												]
+											}
+										]
+									}
+								],
+								"offers": [
+									{
+										"@type": "Offer",
+										"availability": "https://schema.org/InStock",
+										"price": [
+											"<?= $activity->price->value ?>"
+										],
+										"priceCurrency": "<?= $activity->price->currency ?>",
+										"url": "<?= $activity->url ?>"
+									}
+								]
+							}</script>
 							<div class="property_item classical-list">
 								<div class="image">
-									<a href="<?= $activity->url?>" class="listing-thumb">
-										<img src="<?= $activity->cover_image?>" alt="latest property" class="img-responsive">
+									<a href="<?= $activity->url?>" title="Экскурсия «<?= $activity->title ?>»" class="listing-thumb">
+										<img src="<?= $activity->cover_image?>" alt="Город <?= $activity->city->name_ru . '. ' . $activity->city->country->name_ru?>" class="img-responsive">
 									</a>
 									<div class="listing-price-info"> 
 										<span class="pricetag"><?= $activity->price->value?> ₽</span>
@@ -36,10 +90,10 @@ use yii\widgets\ListView;
 								
 								<div class="proerty_content">
 									<div class="author-avater">
-										<img src="<?= $activity->guide->avatar->medium?>" class="author-avater-img" alt="">
+										<img src="<?= $activity->guide->avatar->medium?>" class="author-avater-img" title="<?= $activity->guide->first_name . ' — гид ' . $activity->city->in_obj_phrase?>" alt="<?= $activity->guide->first_name . ' — гид ' . $activity->city->in_obj_phrase?>">
 									</div>
 									<div class="proerty_text">
-									  <h3 class="captlize"><a href="listing-detail.html"><?= $activity->title ?></a><span class="veryfied-author"></span></h3>
+									  <h3 class="captlize"><a href="<?= $activity->url ?>"><?= $activity->title ?></a><span class="veryfied-author"></span></h3>
 									</div>
 									<p class="property_add"><?= $activity->tagline?></p>
 									<!-- <div class="property_meta"> 

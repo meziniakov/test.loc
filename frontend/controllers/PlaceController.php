@@ -89,9 +89,7 @@ class PlaceController extends Controller
     $models = $dataProvider->getModels();
 
     $this->view->title = 'Культурные места и достопримечательности ' . $city->in_obj_phrase . ' на карте trip2place';
-
-    $title = 'trip2place.com - открывай интересные места России';
-    $content = "trip2place.com - путешествуй, открывая новые места в России.";
+    $content = "trip2place.com - путешествуй, открывая новые культурные места и достопримечательности " . $city->in_obj_phrase;
 
     Yii::$app->view->registerLinkTag(['rel' => 'canonical', 'href' => Url::current([], true)], 'canonical');
     Yii::$app->view->registerMetaTag([
@@ -103,7 +101,7 @@ class PlaceController extends Controller
       'og:locale'     => 'ru_RU',
       'og:url'        => Url::current([], true),
       'og:type'       => 'article',
-      'og:title'      => $title,
+      'og:title'      => $this->view->title,
       'og:description' => 'trip2place.com - изучайте Россию вместе с нами.',
       // 'og:image'      => Url::to($place->getImage()->getUrl(), true),
       // 'og:image:width' => $place->getImage()->getSizes()['width'],

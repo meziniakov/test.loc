@@ -98,17 +98,17 @@ class CityController extends Controller
   
       $dataProvider = Place::getDataProvider($query);
         
-      Yii::$app->view->registerLinkTag(['rel' => 'canonical', 'href' => Url::canonical()], 'canonical');
+      Yii::$app->view->registerLinkTag(['rel' => 'canonical', 'href' => Url::current([], true)], 'canonical');
       Yii::$app->view->registerMetaTag([
         'name' => 'description',
-        'content' => isset($city->in_obj_phrase) ? 'Достопримечательности, музеи, цирки, места отдыха и многое другое ' . $city->in_obj_phrase : 'Достопримечательности, музеи, цирки, места отдыха и многое другое',
+        'content' => 'Достопримечательности, музеи, цирки, места отдыха и многое другое ' . $city->in_obj_phrase,
       ], 'description');
   
       Yii::$app->seo->putFacebookMetaTags([
         'og:locale'     => 'ru_RU',
-        'og:url'        => Url::canonical(),
+        'og:url'        => Url::current([], true),
         'og:type'       => 'article',
-        'og:title'      => isset($city->in_obj_phrase) ? 'Достопримечательности, музеи, цирки, места отдыха и многое другое ' . $city->in_obj_phrase : 'Достопримечательности, музеи, цирки, места отдыха и многое другое',
+        'og:title'      => $this->view->title,
         'og:image'      => Url::to($city->getImage()->getUrl(), true),
         'og:site_name' => 'trip2place - открывай интересные места России',
         // 'og:updated_time' => date(DATE_ATOM, $place->updated_at),
@@ -141,18 +141,17 @@ class CityController extends Controller
       
       $this->view->title = 'События и мероприятия ' . $city->in_obj_phrase;
 
-      Yii::$app->view->registerLinkTag(['rel' => 'canonical', 'href' => Url::canonical()], 'canonical');
+      Yii::$app->view->registerLinkTag(['rel' => 'canonical', 'href' => Url::current([], true)], 'canonical');
       Yii::$app->view->registerMetaTag([
         'name' => 'description',
-        'content' => isset($city->name) ? 'Достопримечательности, музеи, цирки, места отдыха и многое другое в городе ' . $city->name : 'Достопримечательности, музеи, цирки, места отдыха и многое другое',
+        'content' => 'Культурные события, мероприятия и прочий досуг ' . $city->in_obj_phrase,
       ], 'description');
   
       Yii::$app->seo->putFacebookMetaTags([
         'og:locale'     => 'ru_RU',
-        'og:url'        => Url::canonical(),
+        'og:url'        => Url::current([], true),
         'og:type'       => 'article',
-        'og:title'      => isset($city->name) ? 'Все достопримечательности в городе ' . $city->name : Yii::$app->keyStorage->get('frontend.index.title'),
-        'og:title'      => isset($city->name) ? 'Достопримечательности, музеи, цирки, места отдыха и многое другое в городе ' . $city->name : 'Достопримечательности, музеи, цирки, места отдыха и многое другое',
+        'og:title'      => $this->view->title,
         // 'og:image'      => Url::to($place->getImage()->getUrl(), true),
         'og:site_name' => 'trip2place - открывай интересные места России',
         // 'og:updated_time' => date(DATE_ATOM, $place->updated_at),
@@ -180,18 +179,17 @@ class CityController extends Controller
 
       $this->view->title = 'Бронируйте экскурсии ' . $city->in_obj_phrase . ' чтобы поближе познакомиться с городом на trip2place.com';
 
-      Yii::$app->view->registerLinkTag(['rel' => 'canonical', 'href' => Url::canonical()], 'canonical');
+      Yii::$app->view->registerLinkTag(['rel' => 'canonical', 'href' => Url::current([], true)], 'canonical');
       Yii::$app->view->registerMetaTag([
         'name' => 'description',
-        'content' => isset($city->name) ? 'Достопримечательности, музеи, цирки, места отдыха и многое другое в городе ' . $city->name : 'Достопримечательности, музеи, цирки, места отдыха и многое другое',
+        'content' => 'Выбирайте и бронируйте экскурсии от местных жителей ' . $city->in_obj_phrase,
       ], 'description');
   
       Yii::$app->seo->putFacebookMetaTags([
         'og:locale'     => 'ru_RU',
-        'og:url'        => Url::canonical(),
+        'og:url'        => Url::current([], true),
         'og:type'       => 'article',
-        'og:title'      => isset($city->name) ? 'Все достопримечательности в городе ' . $city->name : Yii::$app->keyStorage->get('frontend.index.title'),
-        'og:title'      => isset($city->name) ? 'Достопримечательности, музеи, цирки, места отдыха и многое другое в городе ' . $city->name : 'Достопримечательности, музеи, цирки, места отдыха и многое другое',
+        'og:title'      => $this->view->title,
         // 'og:image'      => Url::to($place->getImage()->getUrl(), true),
         'og:site_name' => 'trip2place - открывай интересные места России',
         // 'og:updated_time' => date(DATE_ATOM, $place->updated_at),
@@ -208,8 +206,6 @@ class CityController extends Controller
           'headers' => [
             'Content-type' => 'application/json',
           ],
-          ['http_errors' => false],
-          ['connect_timeout' => 2, 'timeout' => 5],
         ]);
         $json = json_decode($res->getBody(), false);
         return $json;
@@ -217,7 +213,7 @@ class CityController extends Controller
       $byCity = "https://experience.tripster.ru/api/experiences/?detailed=true&city__name_ru=" . $city->name;
       $res = connect($byCity);
       // echo "<pre>";
-      // var_dump($res->results);die;
+      // var_dump(getSchedule(13493)->begin);die;
     
       return $this->render('gidy', [
         'city' => $city,
@@ -234,7 +230,7 @@ class CityController extends Controller
         throw new NotFoundHttpException(Yii::t('frontend', 'Page not found.'));
       }
   
-      Yii::$app->view->registerLinkTag(['rel' => 'canonical', 'href' => Url::canonical()], 'canonical');
+      Yii::$app->view->registerLinkTag(['rel' => 'canonical', 'href' => Url::current([], true)], 'canonical');
       Yii::$app->view->registerMetaTag([
         'name' => 'description',
         'content' => isset($city->name) ? 'Достопримечательности, музеи, цирки, места отдыха и многое другое в городе ' . $city->name : 'Достопримечательности, музеи, цирки, места отдыха и многое другое',
@@ -242,7 +238,7 @@ class CityController extends Controller
   
       Yii::$app->seo->putFacebookMetaTags([
         'og:locale'     => 'ru_RU',
-        'og:url'        => Url::canonical(),
+        'og:url'        => Url::current([], true),
         'og:type'       => 'article',
         'og:title'      => isset($city->name) ? 'Все достопримечательности в городе ' . $city->name : Yii::$app->keyStorage->get('frontend.index.title'),
         'og:title'      => isset($city->name) ? 'Достопримечательности, музеи, цирки, места отдыха и многое другое в городе ' . $city->name : 'Достопримечательности, музеи, цирки, места отдыха и многое другое',
