@@ -66,6 +66,7 @@ class City extends \yii\db\ActiveRecord
         return [
             [['name'], 'required'],
             [['name', 'url'], 'unique'],
+            ['url', 'filter', 'filter' => 'strtolower'],
             [['lat', 'lng'], 'number'],
             // [['status', 'created_at', 'updated_at'], 'integer'],
             ['status', 'default', 'value' => self::STATUS_DRAFT],
