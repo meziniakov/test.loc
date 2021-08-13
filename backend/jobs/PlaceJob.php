@@ -47,7 +47,7 @@ class PlaceJob extends BaseObject implements \yii\queue\JobInterface
             if(isset($object->contacts->website)) {
                 $place->website = $object->contacts->website;
             }
-            $place->status = 1;
+            $place->status = Place::STATUS_PARSED;
     
             if ($placeCategory = PlaceCategory::findOne(['title' => $object->category->name])) {
                 $place->category_id = $placeCategory->id;
@@ -100,7 +100,7 @@ class PlaceJob extends BaseObject implements \yii\queue\JobInterface
                 $place->addTagValues($tags);
             }
 
-            $place->save();
+            $place->save(false);
 
             if (isset($object->image)) {
                 $pathinfo = pathinfo($object->image->url);
@@ -117,7 +117,6 @@ class PlaceJob extends BaseObject implements \yii\queue\JobInterface
                 $imageFiles = $place->images;
                 $place->uploadImages($imageFiles, $object);
             }
-            return true;
         }
     }
 }

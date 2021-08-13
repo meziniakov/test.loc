@@ -4744,10 +4744,13 @@ button.btn.adv-btn {
     transform: translate(0,-50.5%);
 }
 .img-wrap-content h4 {
-    font-size: 28px;
-    line-height: 36px;
+    font-size: 45px;
+    line-height: 56px;
     color: #fff;
-    margin: 0;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-family: sans-serif;
+    /* letter-spacing: 5px; */
 }
 .img-wrap-content span {
     font-size: 16px;
