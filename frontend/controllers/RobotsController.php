@@ -15,7 +15,7 @@ class RobotsController extends Controller
   {
     Yii::$app->cache->delete('robots');
     if(!$robots = Yii::$app->cache->get('robots')) {
-      $sitemap = '';
+      $sitemap = '/sitemap';
 
       // if ($city = Yii::$app->city->isCity()) {
       //   $sitemap = '/sitemap.xml';
