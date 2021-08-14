@@ -113,7 +113,7 @@ class JsonController extends Controller
                     $countUpdate++;
                 }
             }
-            Yii::$app->session->setFlash('success', "Успешно обновлено {$countUpdate} записей \r\n Успешно запущено {$countSave} записей в очередь.");
+            Yii::$app->session->setFlash('success', "Успешно обновлено {$countUpdate} записей в очереди.");
         }
 
         return $this->render('job', [
