@@ -30,7 +30,7 @@ class PlaceJob extends BaseObject implements \yii\queue\JobInterface
     public function execute($queue)
     {
         $object = $this->object;
-        if ($place = Place::findOne(['title' => $object->name]) {
+        if ($place = Place::findOne(['title' => $object->name])) {
             $place->src_id = $object->id;
             $place->text = $object->description;
             $place->address = $object->address->fullAddress;
