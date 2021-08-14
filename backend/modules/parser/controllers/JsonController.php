@@ -93,12 +93,12 @@ class JsonController extends Controller
 
             foreach ($array as $object) {
                 $object = $object->data->general;
-                if ($place = Place::findOne(['title' => $object->name])) {
+                if ($place = Place::findOne(5902)) {
                     $place->src_id = $object->id;
                     $place->text = $object->description;
                     $place->address = $object->address->fullAddress;
                     $place->street = $object->address->street;
-                    $place->status = Place::STATUS_UPDATED;
+                    $place->status = Place::STATUS_EDITED;
 
                     // Если в массиве есть поле с tags, перебираем их и забираем данные
                     if (isset($object->tags)) {
