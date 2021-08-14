@@ -30,8 +30,25 @@ class PlaceJob extends BaseObject implements \yii\queue\JobInterface
     public function execute($queue)
     {
         $object = $this->object;
+        if ($place = Place::findOne(['title' => $object->name]) {
+            $place->src_id = $object->id;
+            $place->text = $object->description;
+            $place->address = $object->address->fullAddress;
+            $place->street = $object->address->street;
+            $place->status = Place::STATUS_UPDATED;
 
-        if (!Place::findOne(['title' => $object->name])) {
+            // Если в массиве есть поле с tags, перебираем их и забираем данные
+            if (isset($object->tags)) {
+                $tags = [];
+                foreach ($object->tags as $tag) {
+                    $tags[] = trim(str_replace("\n", "", strpos($tag->name, '.')));
+                }
+                $place->addTagValues($tags);
+            }
+
+            $place->save();
+
+        } else {
             $place = new Place();
             $place->src_id = $object->id;
             $place->title = $object->name;

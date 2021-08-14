@@ -79,22 +79,22 @@ class Place extends ActiveRecord
             'image' => [
                 'class' => 'alex290\yii2images\behaviors\ImageBehave',
             ],
-            'saveRelations' => [
-                'class'     => SaveRelationsBehavior::class,
-                'relations' => [
-                    'company',
-                    'users',
-                    // 'image' => ['cascadeDelete' => true],
-                    'tags'  => [
-                        'extraColumns' => function ($model) {
-                            /** @var $model Tag */
-                            return [
-                                'order' => $model->order
-                            ];
-                        }
-                    ]
-                ],
-            ],
+            // 'saveRelations' => [
+            //     'class'     => SaveRelationsBehavior::class,
+            //     'relations' => [
+            //         'company',
+            //         'users',
+            //         // 'image' => ['cascadeDelete' => true],
+            //         'tags'  => [
+            //             'extraColumns' => function ($model) {
+            //                 /** @var $model Tag */
+            //                 return [
+            //                     'order' => $model->order
+            //                 ];
+            //             }
+            //         ]
+            //     ],
+            // ],
         ];
     }
 
