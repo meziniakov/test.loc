@@ -77,6 +77,50 @@ class JsonController extends Controller
         ]);
     }
 
+    public function actionPlaceTest()
+    {
+        $model = new JsonForm();
+        if ($model->load(Yii::$app->request->post())) {
+            if($model->jsonFile = UploadedFile::getInstance($model, 'jsonFile')) {
+                $path = $model->uploadJsonFile();
+            } else {
+                $path = $model->jsonFileByURL;
+            }
+            $json = file_get_contents($path, true);
+            $array = Json::decode($json, false);
+
+            $countUpdate = 0;
+
+            foreach ($array as $object) {
+                $object = $this->object;
+                if ($place = Place::findOne(['title' => $object->name])) {
+                    $place->src_id = $object->id;
+                    $place->text = $object->description;
+                    $place->address = $object->address->fullAddress;
+                    $place->street = $object->address->street;
+                    $place->status = Place::STATUS_UPDATED;
+
+                    // Если в массиве есть поле с tags, перебираем их и забираем данные
+                    if (isset($object->tags)) {
+                        $tags = [];
+                        foreach ($object->tags as $tag) {
+                            $tags[] = trim(str_replace("\n", "", strpos($tag->name, '.')));
+                        }
+                        $place->addTagValues($tags);
+                    }
+                    $place->save();
+
+                    $countUpdate++;
+                }
+            }
+            Yii::$app->session->setFlash('success', "Успешно обновлено {$countUpdate} записей \r\n Успешно запущено {$countSave} записей в очередь.");
+        }
+
+        return $this->render('job', [
+            'model' => $model,
+        ]);
+    }
+
     public function actionEvent()
     {
         $model = new JsonForm();
