@@ -15,7 +15,8 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\helpers\Json;
 use yii\web\UploadedFile;
-use backend\jobs\PlaceJob;
+use backend\jobs\CreatePlaceJob;
+use backend\jobs\UpdatePlaceJob;
 use backend\jobs\EventJob;
 use backend\modules\parser\models\JsonForm;
 use yii\helpers\FileHelper;
@@ -61,26 +62,25 @@ class JsonController extends Controller
             $array = Json::decode($json, false);
 
             $countCreate = 0;
+            $countUpdate = 0;
             foreach ($array as $object) {
                 $object = $object->data->general;
-                $countCreate = 0;
-                $countUpdate = 0;
 
                 if ($place = Place::findOne(['title' => $object->name])) {
                     Yii::$app->queue->push(new UpdatePlaceJob([
-                        'object' => $object = $object->data->general,
+                        'object' => $object,
                         'place' => $place,
-                    ]))
+                    ]));
                     $countUpdate++;
                 } else {
                     Yii::$app->queue->push(new CreatePlaceJob([
-                        'object' => $object = $object->data->general,
+                        'object' => $object,
                         'pathinfo' => pathinfo($object->image->url),
-                    ]))
+                    ]));
                     $countCreate++;
                 }
             }
-            Yii::$app->session->setFlash('success', "Добавлено в очередь новых мест: {$countCreate} <br> Добавлено в очередь мест для обновления: {$countupdate}");
+            Yii::$app->session->setFlash('success', "Добавлено в очередь новых мест: {$countCreate} <br> Добавлено в очередь мест для обновления: {$countUpdate}");
         }
 
         return $this->render('job', [
