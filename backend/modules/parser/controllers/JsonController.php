@@ -104,6 +104,7 @@ class JsonController extends Controller
                 $object = $object->data->general;
                 if ($place = Place::findOne(['title' => $object->name])) {
                     $place->src_id = $object->id;
+                    $place->slug = "";
                     $place->text = $object->description;
                     $place->address = $object->address->fullAddress;
                     $place->street = $object->address->street;
