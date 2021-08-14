@@ -60,16 +60,27 @@ class JsonController extends Controller
             $json = file_get_contents($path, true);
             $array = Json::decode($json, false);
 
-            $countSave = 0;
-            foreach ($array as $object) {    
-                if(Yii::$app->queue->push(new PlaceJob([
-                    'object' => $object = $object->data->general,
-                    'pathinfo' => pathinfo($object->image->url),
-                ]))) {
-                    $countSave++;
+            $countCreate = 0;
+            foreach ($array as $object) {
+                $object = $object->data->general;
+                $countCreate = 0;
+                $countUpdate = 0;
+
+                if ($place = Place::findOne(['title' => $object->name])) {
+                    Yii::$app->queue->push(new UpdatePlaceJob([
+                        'object' => $object = $object->data->general,
+                        'place' => $place,
+                    ]))
+                    $countUpdate++;
+                } else {
+                    Yii::$app->queue->push(new CreatePlaceJob([
+                        'object' => $object = $object->data->general,
+                        'pathinfo' => pathinfo($object->image->url),
+                    ]))
+                    $countCreate++;
                 }
             }
-            Yii::$app->session->setFlash('success', "Успешно обновлено  записей\rn Успешно запущено {$countSave} записей в очередь.");
+            Yii::$app->session->setFlash('success', "Добавлено в очередь новых мест: {$countCreate} <br> Добавлено в очередь мест для обновления: {$countupdate}");
         }
 
         return $this->render('job', [
@@ -89,31 +100,112 @@ class JsonController extends Controller
             $json = file_get_contents($path, true);
             $array = Json::decode($json, false);
 
-            $countUpdate = 0;
-
             foreach ($array as $object) {
                 $object = $object->data->general;
-                if ($place = Place::findOne(5902)) {
+                if ($place = Place::findOne(['title' => $object->name])) {
                     $place->src_id = $object->id;
                     $place->text = $object->description;
                     $place->address = $object->address->fullAddress;
                     $place->street = $object->address->street;
-                    $place->status = Place::STATUS_EDITED;
-
+                    $place->status = Place::STATUS_UPDATED;
                     // Если в массиве есть поле с tags, перебираем их и забираем данные
                     if (isset($object->tags)) {
                         $tags = [];
                         foreach ($object->tags as $tag) {
-                            $tags[] = trim(str_replace("\n", "", strpos($tag->name, '.')));
+                            $tags[] = $tag->name;
                         }
                         $place->addTagValues($tags);
                     }
                     $place->save();
-
-                    $countUpdate++;
+                } else {
+                    $place = new Place();
+                    $place->src_id = $object->id;
+                    $place->title = $object->name;
+                    $place->text = $object->description;
+                    $place->address = $object->address->fullAddress;
+                    $place->street = $object->address->street;
+                    $place->street_comment = $object->address->comment;
+                    $place->lng = $object->address->mapPosition->coordinates[0];
+                    $place->lat = $object->address->mapPosition->coordinates[1];
+                    if(isset($object->contacts->email)) {
+                        $place->email = $object->contacts->email;
+                    }
+                    if(isset($object->contacts->website)) {
+                        $place->website = $object->contacts->website;
+                    }
+                    $place->status = Place::STATUS_PARSED;
+            
+                    if ($placeCategory = PlaceCategory::findOne(['title' => $object->category->name])) {
+                        $place->category_id = $placeCategory->id;
+                    } else {
+                        $category = new PlaceCategory();
+                        $category->title = $object->category->name;
+                        $category->slug = $object->category->sysName;
+                        $category->save();
+                        $place->category_id = $category->id;
+                    }
+            
+                    if ($city = City::findOne(['name' => $object->locale->name])) {
+                        $place->city_id = $city->id;
+                    } else {
+                        $city = new City();
+                        $city->name = $object->locale->name;
+                        $city->url = $object->locale->sysName;
+                        $city->save();
+                        $place->city_id = $city->id;
+                    }
+            
+                    // Если в массиве есть поле с phones, перебираем их и забираем данные
+                    if (isset($object->contacts->phones)) {
+                        $phones = [];
+                        foreach ($object->contacts->phones as $phone) {
+                            $phones[] = ['phones' => $phone->value, 'phones_comment' => $phone->comment];
+                        }
+                        Json::encode($phones);
+                        $place->phone = $phones;
+                    }
+                    // Если в массиве есть поле с workingSchedule, перебираем их и забираем данные
+                    if (isset($object->workingSchedule)) {
+                        $_workingSchedule = [];
+                        foreach($object->workingSchedule as $key => $item) {
+                            $_workingSchedule[] = $key = [
+                                'from' => strtotime($item->from),
+                                'to' => strtotime($item->to),
+                            ];
+                        }
+                        // $workingSchedule = array_combine($daysweek, $_workingSchedule);
+                        $workingScheduleJson = Json::encode($_workingSchedule);
+                        $place->schedule = $workingScheduleJson;
+                    }
+                    // Если в массиве есть поле с tags, перебираем их и забираем данные
+                    if (isset($object->tags)) {
+                        $tags = [];
+                        foreach ($object->tags as $tag) {
+                            $tags[] = $tag->name;
+                        }
+                        $place->addTagValues($tags);
+                    }
+        
+                    $place->save();
+        
+                    if (isset($object->image)) {
+                        $pathinfo = pathinfo($object->image->url);
+                        $place->download($object->image->url, $pathinfo);
+                        $place->uploadImage($object->image->url, $object);
+                    }
+            
+                    if (isset($object->gallery)) {
+                        foreach ($object->gallery as $image) {
+                            $pathinfo = pathinfo($image->url);
+                            $place->images[] = $pathinfo;
+                            $place->download($image->url, $pathinfo);
+                        }
+                        $imageFiles = $place->images;
+                        $place->uploadImages($imageFiles, $object);
+                    }
                 }
             }
-            Yii::$app->session->setFlash('success', "Успешно обновлено {$countUpdate} записей в очереди.");
+            // Yii::$app->session->setFlash('success', "Успешно обновлено {$countUpdate} записей в очереди.");
         }
 
         return $this->render('job', [
