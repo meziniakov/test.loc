@@ -92,6 +92,7 @@ class JsonController extends Controller
             $countUpdate = 0;
 
             foreach ($array as $object) {
+                $object = $object->data->general;
                 if ($place = Place::findOne(['title' => $object->name])) {
                     $place->src_id = $object->id;
                     $place->text = $object->description;
