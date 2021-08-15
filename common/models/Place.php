@@ -66,8 +66,9 @@ class Place extends ActiveRecord
             [
                 'class' => SluggableBehavior::class,
                 'attribute' => 'title',
-                'ensureUnique' => true,
+                // 'ensureUnique' => true,
                 'immutable' => true,
+                'slugAttribute' => 'slug'
             ],
             'taggable' => [
                 'class' => TaggableBehavior::class,
@@ -131,7 +132,7 @@ class Place extends ActiveRecord
             // ['category_id', 'exist', 'skipOnError' => true, 'targetClass' => PlaceCategory::class, 'targetAttribute' => ['category_id' => 'id']],
             // ['city_id', 'exist', 'skipOnError' => true, 'targetClass' => City::class, 'targetAttribute' => ['city_id' => 'id']],
             // ['updater_id', 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['updater_id' => 'id']],
-            // [['tagValues', 'slug'], 'safe'],
+            [['tagValues', 'slug'], 'safe'],
             // [['image', 'images', 'gallery'], 'safe'],
             // [['imageFile'], 'file', 'extensions' => 'png, jpg, jpeg'],
             // [['imageFiles'], 'file', 'extensions' => 'png, jpg, jpeg', 'maxFiles' => 25],
