@@ -290,6 +290,7 @@ class PlaceController extends Controller
                 'title' => $title,
                 'place' => $place
             ]));
+        $place->save();
         }
     }
 }
