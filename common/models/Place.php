@@ -66,7 +66,7 @@ class Place extends ActiveRecord
             [
                 'class' => SluggableBehavior::class,
                 'attribute' => 'title',
-                // 'ensureUnique' => true,
+                'ensureUnique' => true,
                 'immutable' => true,
                 'slugAttribute' => 'slug'
             ],
