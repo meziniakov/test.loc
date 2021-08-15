@@ -13,9 +13,8 @@ class UpdatePlaceJob extends BaseObject implements \yii\queue\JobInterface
     {
         $object = $this->object;
         $place = $this->place;
-
+        $place->title = $object->name;
         $place->src_id = $object->id;
-        $place->slug = "";
         $place->text = $object->description;
         $place->address = $object->address->fullAddress;
         $place->street = $object->address->street;

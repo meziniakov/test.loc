@@ -71,8 +71,10 @@ class JsonController extends Controller
                         'object' => $object,
                         'place' => $place,
                     ]));
+                    $place->title = $object->name;
+                    $place->text = $object->description;            
                     $place->slug = '';
-                    $place->save(false);
+                    $place->save();
                     $countUpdate++;
                 } else {
                     Yii::$app->queue->push(new CreatePlaceJob([
