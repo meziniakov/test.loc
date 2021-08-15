@@ -114,7 +114,7 @@ class Place extends ActiveRecord
     {
         return [
             [['title', 'text'], 'required'],
-            [['text', 'address', 'slug'], 'string'],
+            [['text', 'address'], 'string'],
             // [['lat', 'lng'], 'number'],
             // ['published_at', 'default',
             //     'value' => function () {
@@ -132,7 +132,7 @@ class Place extends ActiveRecord
             // ['category_id', 'exist', 'skipOnError' => true, 'targetClass' => PlaceCategory::class, 'targetAttribute' => ['category_id' => 'id']],
             // ['city_id', 'exist', 'skipOnError' => true, 'targetClass' => City::class, 'targetAttribute' => ['city_id' => 'id']],
             // ['updater_id', 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['updater_id' => 'id']],
-            [['tagValues'], 'safe'],
+            [['tagValues', 'slug'], 'safe'],
             // [['image', 'images', 'gallery'], 'safe'],
             // [['imageFile'], 'file', 'extensions' => 'png, jpg, jpeg'],
             // [['imageFiles'], 'file', 'extensions' => 'png, jpg, jpeg', 'maxFiles' => 25],
