@@ -27,6 +27,6 @@ class CreateTestPlaceJob extends BaseObject implements \yii\queue\JobInterface
         $place->category_id = 7;
         $place->city_id = 2;
 
-        $place->save();
+        $place->save(false);
     }
 }
