@@ -114,28 +114,28 @@ class Place extends ActiveRecord
         return [
             [['title', 'text'], 'required'],
             [['text', 'address'], 'string'],
-            [['lat', 'lng'], 'number'],
-            ['published_at', 'default',
-                'value' => function () {
-                    return date(DATE_ATOM);
-                }
-            ],
-            ['published_at', 'filter', 'filter' => 'strtotime'],
-            ['date_parsed', 'safe'],
-            ['tmp_uniq', 'safe'],
-            [['status', 'is_home', 'category_id', 'city_id', 'author_id', 'updater_id', 'created_at', 'updated_at'], 'integer'],
-            [['url', 'description', 'title', 'website', 'street', 'street_comment'], 'string', 'max' => 255],
-            [['title', 'youtube_url'], 'string'],
-            ['status', 'default', 'value' => self::STATUS_PARSED],
-            // ['author_id', 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['author_id' => 'id']],
-            ['category_id', 'exist', 'skipOnError' => true, 'targetClass' => PlaceCategory::class, 'targetAttribute' => ['category_id' => 'id']],
-            ['city_id', 'exist', 'skipOnError' => true, 'targetClass' => City::class, 'targetAttribute' => ['city_id' => 'id']],
-            ['updater_id', 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['updater_id' => 'id']],
-            [['tagValues', 'slug'], 'safe'],
-            [['image', 'images', 'gallery'], 'safe'],
-            [['imageFile'], 'file', 'extensions' => 'png, jpg, jpeg'],
-            [['imageFiles'], 'file', 'extensions' => 'png, jpg, jpeg', 'maxFiles' => 25],
-            [['images'], 'file', 'extensions' => 'png, jpg, jpeg', 'maxFiles' => 25],
+            // [['lat', 'lng'], 'number'],
+            // ['published_at', 'default',
+            //     'value' => function () {
+            //         return date(DATE_ATOM);
+            //     }
+            // ],
+            // ['published_at', 'filter', 'filter' => 'strtotime'],
+            // ['date_parsed', 'safe'],
+            // ['tmp_uniq', 'safe'],
+            // [['status', 'is_home', 'category_id', 'city_id', 'author_id', 'updater_id', 'created_at', 'updated_at'], 'integer'],
+            // [['url', 'description', 'title', 'website', 'street', 'street_comment'], 'string', 'max' => 255],
+            // [['title', 'youtube_url'], 'string'],
+            // ['status', 'default', 'value' => self::STATUS_PARSED],
+            // // ['author_id', 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['author_id' => 'id']],
+            // ['category_id', 'exist', 'skipOnError' => true, 'targetClass' => PlaceCategory::class, 'targetAttribute' => ['category_id' => 'id']],
+            // ['city_id', 'exist', 'skipOnError' => true, 'targetClass' => City::class, 'targetAttribute' => ['city_id' => 'id']],
+            // ['updater_id', 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['updater_id' => 'id']],
+            // [['tagValues', 'slug'], 'safe'],
+            // [['image', 'images', 'gallery'], 'safe'],
+            // [['imageFile'], 'file', 'extensions' => 'png, jpg, jpeg'],
+            // [['imageFiles'], 'file', 'extensions' => 'png, jpg, jpeg', 'maxFiles' => 25],
+            // [['images'], 'file', 'extensions' => 'png, jpg, jpeg', 'maxFiles' => 25],
         ];
     }
 
