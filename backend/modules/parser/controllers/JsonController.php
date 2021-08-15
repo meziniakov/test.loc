@@ -81,6 +81,10 @@ class JsonController extends Controller
                         'object' => $object,
                         'pathinfo' => pathinfo($object->image->url),
                     ]));
+                    $place->title = $object->name;
+                    $place->text = $object->description;            
+                    $place->slug = '';
+                    $place->save();
                     $countCreate++;
                 }
             }
