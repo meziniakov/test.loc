@@ -84,6 +84,9 @@ class PlaceSearch extends Place
                         'id' => SORT_DESC
                 ]
             ],
+            'pagination' => [
+                'pageSize' => Yii::$app->keyStorage->get('backend.show-count'),
+            ],
         ]);
 
         $this->load($params);
