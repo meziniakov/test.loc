@@ -6,11 +6,32 @@ use yii\base\BaseObject;
 use common\models\Place;
 use common\models\PlaceCategory;
 use common\models\City;
+use yii\behaviors\SluggableBehavior;
 
 class CreateTestPlaceJob extends BaseObject implements \yii\queue\JobInterface
 {
     public $title;
     public $place;
+
+    public function behaviors()
+    {
+        return [
+            TimestampBehavior::class,
+            [
+                'class' => BlameableBehavior::class,
+                'updatedByAttribute' => 'updater_id',
+                'createdByAttribute' => 'author_id',
+
+            ],
+            [
+                'class' => SluggableBehavior::class,
+                'attribute' => 'title',
+                'ensureUnique' => true,
+                'immutable' => true,
+                'slugAttribute' => 'slug'
+            ],
+        ];
+    }
 
     public function execute($queue)
     {
