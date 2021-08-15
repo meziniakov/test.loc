@@ -273,17 +273,17 @@ class PlaceController extends Controller
 
     public function actionTest()
     {
-        $title = 'Чувашский государственный художественный музей';
-        $place = Place::findOne(['title' => $title]);
-        $place->title = $title;
-        $place->slug = null;
-        $place->text = "Текст 111";
-        $place->status = Place::STATUS_UPDATED;
-        $place->category_id = 7;
-        $place->city_id = 2;
+        // $title = 'Чувашский государственный художественный музей';
+        // $place = Place::findOne(['title' => $title]);
+        // $place->title = $title;
+        // $place->slug = null;
+        // $place->text = "Текст 111";
+        // $place->status = Place::STATUS_UPDATED;
+        // $place->category_id = 7;
+        // $place->city_id = 2;
 
-        $place->save();
-        die('ok');
+        // $place->save();
+        // die('ok');
         $title = 'Чувашский государственный художественный музей';
         if ($place = Place::findOne(['title' => $title])) {
             Yii::$app->queue->push(new CreateTestPlaceJob([

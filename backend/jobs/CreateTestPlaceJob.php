@@ -16,10 +16,9 @@ class CreateTestPlaceJob extends BaseObject implements \yii\queue\JobInterface
     {
         $title = $this->title;
         $place = $this->place;
-        $place->src_id = '0010';
         $place->title = $title;
-        $place->slug = null;
         $place->text = "Текст 8";
+        $place->save();
         // $place->address = $object->address->fullAddress;
         // $place->street = $object->address->street;
         // $place->street_comment = $object->address->comment;
