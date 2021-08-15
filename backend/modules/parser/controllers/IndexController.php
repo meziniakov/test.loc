@@ -15,6 +15,8 @@ use GuzzleHttp\Exception\ConnectException;
 use yii\debug\models\search\Log;
 use yii\log\Logger;
 use yii\web\UploadedFile;
+use backend\modules\parser\models\GenerateReviewForm;
+
 /**
  * ParsingController implements the CRUD actions for Parser model.
  */
@@ -333,6 +335,98 @@ class IndexController extends Controller
       'parser' => $parser,
       'place' => $place,
     ]);
+  }
+
+  public function actionGenerateReview()
+  {
+    $model = new GenerateReviewForm();
+    if ($model->load(Yii::$app->request->post())) {
+      $this->view->title = $model->title;
+
+      Yii::$app->view->registerLinkTag(['rel' => 'canonical', 'href' => Url::current([], true)], 'canonical');
+      Yii::$app->view->registerMetaTag([
+        'name' => 'description',
+        'content' => $model->description,
+      ], 'description');
+  
+      $parse_url = parse_url($model->url);
+      $uri = $parse_url['scheme'] . '://' . $parse_url['host'];
+      // var_dump($uri);
+      // die;
+      $array = $this->getDocument($model->url)->find($model->findUrls);
+      $urls = $this->getUrls($uri, $array, $model->limitUrls);
+      foreach ($urls as $url) {
+        $html = file_get_contents($url);
+        $doc = \phpQuery::newDocument($html);
+        
+        $title = pq($doc->find('title'))->text();
+        $h1 = pq($doc->find('h1'))->text();
+        $keywords = pq($doc->find('head meta[name="keywords"]'))->attr('content');
+        $description = pq($doc->find('head meta[name="description"]'))->attr('content');
+
+        $img_path = pathinfo(pq($doc->find('head meta[property="og:image"]'))->attr('content'));
+        $img = $model->preSrc . $img_path['basename'];
+        
+        $image = pq($doc->find('meta[itemprop="image"]'))->attr('content');
+        $text = pq($doc->find('head meta[property="og:description"]'))->attr('content');
+
+        $data[] = [
+          'title' => $title,
+          'h1' => $h1,
+          'description' => $description,
+          'img' => $img,
+          'image' => $image,
+          'text' => $text,
+        ];
+      }
+      return $this->render('generate-review', [
+        'data' => $data,
+        'model' => $model
+      ]);
+    }
+    return $this->render('_form2', [
+      'model' => $model
+    ]);
+
+    // echo "<pre>";
+    // print_r($data);
+    // echo "</pre>";
+    // die;
+  }
+
+  public function getDocument($url) {
+    $client = new Client();
+    $res = $client->request('GET', $url, [
+        'headers' => [
+          'User-Agent' => 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.71 Safari/537.36',
+          'Content-type' => 'text/html',
+          'Accept' => 'text/html',
+        ],
+        // 'proxy' => [
+        //     'socks5' => '174.76.48.230:4145',
+        //     // 'http'  => '89.187.177.97:80', // Use this proxy with "http"
+        //     // 'http'  => '172.67.181.40:80', // Use this proxy with "http"
+        //     // 'https' => '51.178.49.77:3131', // Use this proxy with "https",
+        // ],
+        ['http_errors' => false],
+        // ['connect_timeout' => 1, 'timeout' => 1],
+        // 'debug' => true,
+    ]);
+    $body = $res->getBody();
+    $document = \phpQuery::newDocumentHTML($body);
+    return $document;
+  }
+
+  public function getUrls($uri, $array, $limit) {
+    $i = 0;
+    $urls = [];
+    foreach ($array as $elem) {
+      if ($i < $limit) {
+        $urls[] = $uri . pq($elem)->find('a')->attr('href');
+      }
+      $i++;
+    }
+    return $urls;
   }
 
 }

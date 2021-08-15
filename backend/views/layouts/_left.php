@@ -35,6 +35,7 @@ use backend\widgets\Menu;
                         ['label' => Yii::t('backend', 'События'), 'url' => ['/parser/json/event'], 'icon' => '<i class="fa fa-angle-double-right"></i>'],
                         ['label' => Yii::t('backend', 'Json'), 'url' => ['/parser/json'], 'icon' => '<i class="fa fa-angle-double-right"></i>'],
                         ['label' => Yii::t('backend', 'Xml'), 'url' => ['/parser/index'], 'icon' => '<i class="fa fa-angle-double-right"></i>'],
+                        ['label' => Yii::t('backend', 'Генератор обзоров'), 'url' => ['/parser/index/generate-review'], 'icon' => '<i class="fa fa-angle-double-right"></i>'],
                     ],
 
                 ],
