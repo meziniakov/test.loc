@@ -1,31 +1,13 @@
 <?php
 namespace backend\jobs;
 
-use yii\helpers\Json;
 use yii\base\BaseObject;
 use common\models\Place;
-use common\models\PlaceCategory;
-use common\models\City;
 
 class UpdatePlaceJob extends BaseObject implements \yii\queue\JobInterface
 {
     public $object;
     public $place;
-
-    public function behaviors()
-    {
-        return [
-            // 'image' => [
-            //     'class' => 'alex290\yii2images\behaviors\ImageBehave',
-            // ],
-            // [
-            //     'class' => SluggableBehavior::class,
-            //     'attribute' => 'title',
-            //     'ensureUnique' => true,
-            //     'immutable' => true,
-            // ],
-        ];
-    }
 
     public function execute($queue)
     {

@@ -12,21 +12,6 @@ class CreatePlaceJob extends BaseObject implements \yii\queue\JobInterface
     public $object;
     public $pathinfo;
 
-    public function behaviors()
-    {
-        return [
-            // 'image' => [
-            //     'class' => 'alex290\yii2images\behaviors\ImageBehave',
-            // ],
-            // [
-            //     'class' => SluggableBehavior::class,
-            //     'attribute' => 'title',
-            //     'ensureUnique' => true,
-            //     'immutable' => true,
-            // ],
-        ];
-    }
-
     public function execute($queue)
     {
         $object = $this->object;

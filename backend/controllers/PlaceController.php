@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use backend\jobs\CreateTestPlaceJob;
 use Yii;
 use common\models\Place;
 use common\models\City;
@@ -14,6 +15,7 @@ use yii\helpers\ArrayHelper;
 use yii\web\UploadedFile;
 use nickdenry\grid\toggle\actions\ToggleAction;
 use yii\data\ActiveDataProvider;
+use backend\jobs\UpdatePlaceJob;
 
 /**
  * PlaceController implements the CRUD actions for Place model.
@@ -267,5 +269,16 @@ class PlaceController extends Controller
             return $model;
         }
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    public function actionTest()
+    {
+        $title = 'Чувашский государственный художественный музей';
+        if ($place = Place::findOne(['title' => $title])) {
+            Yii::$app->queue->push(new CreateTestPlaceJob([
+                'title' => $title,
+                'place' => $place
+            ]));
+        }
     }
 }
