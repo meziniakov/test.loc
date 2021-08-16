@@ -293,7 +293,7 @@ class PlaceController extends Controller
       throw new NotFoundHttpException(Yii::t('frontend', 'Page not found.'));
     }
     // $listing = Place::find()->with('category')->joinWith('tags')->where('{{%tag}}.slug = :slug', [':slug' => $slug])->all();
-    $query = Place::find()->with('category')->joinWith('tags')->where('{{%tag}}.slug = :slug', [':slug' => $slug]);
+    $query = Place::find()->published()->with('category')->joinWith('tags')->andWhere('{{%tag}}.slug = :slug', [':slug' => $slug]);
     $dataProvider = Place::getDataProvider($query);
 
     $models = $dataProvider->getModels();
@@ -315,7 +315,7 @@ class PlaceController extends Controller
       if (!$model) {
         throw new NotFoundHttpException(Yii::t('frontend', 'Page not found.'));
       }
-      $listing = Place::find()->with('category')->joinWith('tags')->where('{{%tag}}.slug = :slug', [':slug' => $slug])->all();
+      $listing = Place::find()->published()->with('category')->joinWith('tags')->andWhere('{{%tag}}.slug = :slug', [':slug' => $slug])->all();
     }
 
     Yii::$app->response->format = Response::FORMAT_JSON;
@@ -387,7 +387,7 @@ class PlaceController extends Controller
       if (!$model) {
         throw new NotFoundHttpException(Yii::t('frontend', 'Page not found.'));
       }
-      $listing = Place::find()->with('category')->joinWith('tags')->where('{{%tag}}.slug = :slug', [':slug' => $slug])->limit(30)->all();
+      $listing = Place::find()->published()->with('category')->joinWith('tags')->andWhere('{{%tag}}.slug = :slug', [':slug' => $slug])->limit(30)->all();
     }
 
     $json = [];
