@@ -222,7 +222,7 @@ class PlaceController extends Controller
       "@type" => "LocalBusiness",
       "name" => $title,
       "image" => $mainImage,
-      "telephone" => '+'.$place->phone[0]['phones'],
+      "telephone" => $place->phone ? '+'.$place->phone[0]['phones'] : '',
       "email" => "",
       "address" => [
         "@type" => "PostalAddress",
