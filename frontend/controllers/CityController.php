@@ -87,7 +87,7 @@ class CityController extends Controller
     public function actionDostoprimechatelnosti($city)
     {
       if ($city = Yii::$app->city->isCity($city)) {
-        $query = Place::find()->published()->where(['city_id' => $city->id])->with('category', 'city' ,'imageRico');
+        $query = Place::find()->published()->andWhere(['city_id' => $city->id])->with('category', 'city' ,'imageRico');
       } elseif (Yii::$app->params['city'] == 'global') {
         $query = Place::find()->published()->with('category', 'city' ,'imageRico');
       } else {
@@ -130,7 +130,7 @@ class CityController extends Controller
     public function actionEvents($city = null)
     {
       if ($city = Yii::$app->city->isCity($city)) {
-        $query = Event::find()->published()->where(['city_id' => $city->id])->with('category', 'city' ,'imageRico');
+        $query = Event::find()->published()->andWhere(['city_id' => $city->id])->with('category', 'city' ,'imageRico');
       } elseif (Yii::$app->params['city'] == 'global') {
         $query = Event::find()->published()->with('category', 'city' ,'imageRico');
       } else {
@@ -254,7 +254,7 @@ class CityController extends Controller
         // 'vk:image' => '',
         // 'fb:app_id'=> '1811670458869631',//для статистики по переходам
       ]);
-      function connect($url, $city)
+      function connectClient($url, $city)
       {
         $client = new Client();
         $res = $client->get($url, [
@@ -294,8 +294,8 @@ class CityController extends Controller
       }
       $byCity = "https://api.openweathermap.org/data/2.5/forecast";
       $current = "https://api.openweathermap.org/data/2.5/weather";
-      $res = connect($byCity, $city->name);
-      $current = connect($current, $city->name);
+      $res = connectClient($byCity, $city->name);
+      $current = connectClient($current, $city->name);
       // echo json_encode($res['cnt']);die;
     
       return $this->render('pogoda', [
