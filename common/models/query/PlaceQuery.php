@@ -31,7 +31,7 @@ class PlaceQuery extends \yii\db\ActiveQuery
     }
     public function published()
     {
-        return $this->andWhere(['status' => Place::STATUS_PUBLISHED]);
+        return $this->where(['status' => Place::STATUS_PUBLISHED]);
     }
 
     /**
