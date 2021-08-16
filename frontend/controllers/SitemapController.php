@@ -72,7 +72,7 @@ class SitemapController extends Controller
       $place_tags = Tag::find()->orderBy('id')->all();
       foreach($place_tags as $place_tag) {
         $urls[] = [
-          'loc' => '/'. $place->city->url . '/place/tag/' . $place_tag->slug,
+          'loc' => '/place/tag/' . $place_tag->slug,
           'changefreq' => 'weekly',
           'priority' => '0.4'  
         ];
