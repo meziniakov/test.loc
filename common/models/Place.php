@@ -228,6 +228,7 @@ class Place extends ActiveRecord
                 $addressInJson[] = [
                     'addres' => trim($row['address']),
                     'title' => $row['title'],
+                    'city' => $row->city->url,
                     'slug' => $row['slug'],
                     'mainImg' => $row->imageRico->getUrl('358x229'),
                     'category' => $row['category']['title'],

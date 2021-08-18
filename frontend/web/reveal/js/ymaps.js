@@ -23,6 +23,7 @@ function init() {
 	for (let $i = 0; $i < addres.length; $i++) {
 		var category = addres[$i]['category'] ? addres[$i]['category'] : '';
 		var categorySlug = addres[$i]['categorySlug'] ? addres[$i]['categorySlug'] : '';
+		var city = addres[$i]['city'] ? addres[$i]['city'] : '';
 		var slug = addres[$i]['slug'] ? addres[$i]['slug'] : '';
 		var title = addres[$i]['title'] ? addres[$i]['title'] : '';
 		var mainImg = addres[$i]['mainImg'] ? addres[$i]['mainImg'] : '';
@@ -37,9 +38,9 @@ function init() {
 				balloonContentBody: '<div class="map-popup-wrap">' +
 					'<div class="map-popup"></div><div class="property-listing property-2">' +
 					'<div class="listing-img-wrapper"><div class="list-single-img">' +
-					'<a href="/place/' + categorySlug + '/' + slug + '"><img src="' + mainImg + '" class="img-fluid mx-auto" alt="" /></a></div>' +
+					'<a href="'+ city +'/place/' + categorySlug + '/' + slug + '"><img src="' + mainImg + '" class="img-fluid mx-auto" alt="" /></a></div>' +
 					'<span class="property-type">' + category + '</span></div><div class="listing-detail-wrapper pb-0">' +
-					'<div class="listing-short-detail"><h4 class="listing-name"><a href="/place/' + categorySlug + '/' + slug + '">' + title + '</a>' +
+					'<div class="listing-short-detail"><h4 class="listing-name"><a href="'+ city +'/place/' + categorySlug + '/' + slug + '">' + title + '</a>' +
 					'<i class="list-status ti-check"></i></h4></div></div></div></div></div></div>'
 			})
 			myMap.geoObjects.add(placemark);
@@ -59,9 +60,9 @@ function init() {
 						balloonContentBody: '<div class="map-popup-wrap">' +
 							'<div class="map-popup"></div><div class="property-listing property-2">' +
 							'<div class="listing-img-wrapper"><div class="list-single-img">' +
-							'<a href="/place/' + categorySlug + '/' + slug + '"><img src="' + mainImg + '" class="img-fluid mx-auto" alt="" /></a></div>' +
+							'<a href="'+ city +'/place/' + categorySlug + '/' + slug + '"><img src="' + mainImg + '" class="img-fluid mx-auto" alt="" /></a></div>' +
 							'<span class="property-type">' + category + '</span></div><div class="listing-detail-wrapper pb-0">' +
-							'<div class="listing-short-detail"><h4 class="listing-name"><a href="/place/' + categorySlug + '/' + slug + '">' + title + '</a>' +
+							'<div class="listing-short-detail"><h4 class="listing-name"><a href="'+ city +'/place/' + categorySlug + '/' + slug + '">' + title + '</a>' +
 							'<i class="list-status ti-check"></i></h4></div></div></div></div></div></div>'
 					})
 					// myMap.destroy(),
