@@ -18,6 +18,8 @@ return [
         // 'ajax-login' => 'site/ajax-login',
         // 'faq' => 'site/faq',
         'ekskursii' => 'site/ekskursii',
+        'avia' => 'site/avia',
+        'railway' => 'site/railway',
         '<city>/dostoprimechatelnosti' => 'city/dostoprimechatelnosti',
         '<city>/events' => 'city/events',
         '<city>/gidy' => 'city/gidy',

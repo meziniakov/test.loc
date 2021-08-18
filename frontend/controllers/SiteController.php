@@ -141,6 +141,23 @@ class SiteController extends Controller
       ]);
     }
 
+    public function actionAvia()
+    {
+      return $this->render('avia');
+    }
+
+    public function actionRailway()
+    {
+      $places = Place::find();
+      $listing = $places->where(['is_home' => 1])->with('category', 'imageRico', 'city')->all();
+
+      return $this->render('poezd', [
+        'cities' => City::find()->published()->orderBy(new Expression('rand()'))->with('placies', 'imageRico')->limit(8)->all(),
+        'listing' => $listing,
+        'places' => $places,
+      ]);
+    }
+
     public function actionCity()
     {
       $this->view->title = 'Выберите города, которые бы хотели посетить на trip2place.com';
