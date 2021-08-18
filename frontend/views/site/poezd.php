@@ -18,7 +18,7 @@
 			<div class="col-lg-12 col-md-12">
 					<h2>Путешествуй по городам России 🎉</h2>
 					<!-- <p>Top &amp; perfect 200+ location listings.</p> -->
-]			</div>
+			</div>
 		</div>
 		<div class="row">
 			<?php $i = 0; foreach ($cities as $city) : ?>
