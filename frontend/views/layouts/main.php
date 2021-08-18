@@ -60,7 +60,7 @@ AppAsset::register($this);
 
 $menuItems = [
     [
-        'label' => 'Город',
+        'label' => '🧭',
         'options' => [
             'data-toggle' => "modal",
             'data-target' => "#chooseCity",
