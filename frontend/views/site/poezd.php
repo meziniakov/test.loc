@@ -7,7 +7,7 @@
         </div>
         <div class="row justify-content-center">
             <div class="col-lg-12 col-md-12">
-                <script src="https://c45.travelpayouts.com/content?promo_id=1809&shmarker=323671&trs=133893&tab1=1&tab2=&tab3=&tab4=&tabDef=1&color_scheme=basic_white&hide_logo=true&hide_logo_tab=true&powered_by=false" charset="utf-8" async="true"></script>
+						<script src="https://c45.travelpayouts.com/content?promo_id=1809&shmarker=323671&trs=133893&tab1=1&tab2=1&tab3=&tab4=&tabDef=1&color_scheme=basic_white&hide_logo=true&hide_logo_tab=true&powered_by=false" charset="utf-8" async="true"></script>
             </div>
         </div>
     </div>
