@@ -22,7 +22,7 @@ $this->params['breadcrumbs'][] = [
 						<h1 class="big-header-capt"><?= $city->name ?></h1>
 					</div>
 				</div>
-				<div class="listing-detail_right">
+				<!-- <div class="listing-detail_right">
 					<div class="listing-detail-item">
 						<a href="#" class="btn btn-list"><i class="ti-heart"></i>В любимые </a>
 					</div>
@@ -39,7 +39,7 @@ $this->params['breadcrumbs'][] = [
 							</div>
 						</div>
 					</div>
-				</div>
+				</div> -->
 			</div>
 		</div>
 	</div>
@@ -48,15 +48,12 @@ $this->params['breadcrumbs'][] = [
 		<div class="element-menu">
 			<div class="scroll-menu">
 				<nav class="scrolling-stone">
+					<?= Html::a('Главная', ['city', 'city' => $city->url])?>
 					<?= Html::a('Достопримечательности', ['city/dostoprimechatelnosti', 'city' => $city->url])?>
 					<?= Html::a('События', ['city/events', 'city' => $city->url])?>
 					<?= Html::a('Экскурсии', ['city/gidy', 'city' => $city->url])?>
 					<?= Html::a('На карте', ['place/index', 'city' => $city->url])?>
-					<!-- <a href="/photo/">Фото</a> -->
-					<!-- <a href="/pogoda/">Погода</a> -->
-					<!-- <a href="/video/">Видео</a> -->
-					<a href="/aviabileti/">Авиабилеты</a>
-					<!-- <a href="/russia/moskva/hotel/">Отели</a> -->
+					<a href="/avia">Авиабилеты</a>
 				</nav>
 			</div>
 		</div>
