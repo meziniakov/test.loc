@@ -36,7 +36,7 @@ class Area extends \yii\db\ActiveRecord
             [
                 'class' => SluggableBehavior::class,
                 'attribute' => 'name',
-                // 'slugAttribute' => 'slug',
+                'slugAttribute' => 'slug',
                 // 'ensureUnique' => true,
                 'skipOnEmpty' => true,
                 // 'immutable' => true,
