@@ -38,9 +38,9 @@ class Region extends \yii\db\ActiveRecord
             [
                 'class' => SluggableBehavior::class,
                 'attribute' => 'name',
-                'slugAttribute' => 'slug',
-                'ensureUnique' => true,
-                'immutable' => true,
+                // 'slugAttribute' => 'slug',
+                // 'ensureUnique' => true,
+                // 'immutable' => true,
             ],
         ];
     }
@@ -54,7 +54,7 @@ class Region extends \yii\db\ActiveRecord
             [['name'], 'required'],
             [['status', 'federal_district_id', 'kladr_id'], 'integer'],
             ['status', 'default', 'value' => 1],
-            [['name', 'slug'], 'string', 'max' => 255],
+            [['name'], 'string', 'max' => 255],
             [['type', 'type_full'], 'string', 'max' => 20],
             [['iso_code'], 'string', 'max' => 10],
             [['fias_id'], 'string', 'max' => 50],

@@ -33,9 +33,9 @@ class FederalDistrict extends \yii\db\ActiveRecord
             [
                 'class' => SluggableBehavior::class,
                 'attribute' => 'name',
-                'slugAttribute' => 'slug',
-                'ensureUnique' => true,
-                'immutable' => true,
+                // 'slugAttribute' => 'slug',
+                // 'ensureUnique' => true,
+                // 'immutable' => true,
             ],
         ];
     }
@@ -49,7 +49,7 @@ class FederalDistrict extends \yii\db\ActiveRecord
             [['name'], 'required'],
             ['status', 'default', 'value' => 1],
             [['status', 'country_id'], 'integer'],
-            [['name', 'slug'], 'string', 'max' => 255],
+            [['name'], 'string', 'max' => 255],
             [['name'], 'unique'],
             [['country_id'], 'exist', 'skipOnError' => true, 'targetClass' => Country::class, 'targetAttribute' => ['country_id' => 'id']],
         ];

@@ -32,9 +32,9 @@ class Country extends \yii\db\ActiveRecord
             [
                 'class' => SluggableBehavior::class,
                 'attribute' => 'name',
-                'slugAttribute' => 'slug',
-                'ensureUnique' => true,
-                'immutable' => true,
+                // 'slugAttribute' => 'slug',
+                // 'ensureUnique' => true,
+                // 'immutable' => true,
             ],
         ];
     }
@@ -47,7 +47,7 @@ class Country extends \yii\db\ActiveRecord
         return [
             [['name'], 'required'],
             [['status'], 'integer'],
-            [['name', 'slug'], 'string', 'max' => 255],
+            [['name'], 'string', 'max' => 255],
             [['iso_code'], 'string', 'max' => 10],
             [['name'], 'unique'],
         ];

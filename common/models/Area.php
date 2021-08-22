@@ -36,9 +36,9 @@ class Area extends \yii\db\ActiveRecord
             [
                 'class' => SluggableBehavior::class,
                 'attribute' => 'name',
-                'slugAttribute' => 'slug',
-                'ensureUnique' => true,
-                'immutable' => true,
+                // 'slugAttribute' => 'slug',
+                // 'ensureUnique' => true,
+                // 'immutable' => true,
             ],
         ];
     }
@@ -50,10 +50,9 @@ class Area extends \yii\db\ActiveRecord
     {
         return [
             [['name'], 'required'],
-            [['slug'], 'safe'],
             [['status', 'region_id', 'kladr_id'], 'integer'],
             ['status', 'default', 'value' => 1],
-            [['name', 'slug'], 'string', 'max' => 255],
+            [['name'], 'string', 'max' => 255],
             [['type', 'type_full'], 'string', 'max' => 20],
             [['fias_id'], 'string', 'max' => 50],
             [['region_id'], 'exist', 'skipOnError' => true, 'targetClass' => Region::class, 'targetAttribute' => ['region_id' => 'id']],
