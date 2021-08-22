@@ -58,10 +58,9 @@ class UpdatePlaceJob extends BaseObject implements \yii\queue\JobInterface
             $area->name = $response[0]['data']['area'];
             $area->type = $response[0]['data']['area_type'];
             $area->type_full = $response[0]['data']['area_type_full'];
-            if($area->validate()){
-                $area->save();
-            }
-        }
+            $area->validate();
+            $area->save();
+    }
 
         if(!empty($response[0]['data']['city'])) {
             if ($city = City::findOne(['name' => $response[0]['data']['city']])) {
@@ -72,9 +71,8 @@ class UpdatePlaceJob extends BaseObject implements \yii\queue\JobInterface
                 $city->name = $response[0]['data']['city'];
                 $city->area_id = $area->id;
                 // $city->url = $object->locale->sysName;
-                if($city->validate()){
-                    $city->save();
-                }
+                $city->validate();
+                $city->save();
                 $place->city_id = $city->id;
             }
         } else {
