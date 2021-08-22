@@ -37,6 +37,7 @@ class UpdatePlaceJob extends BaseObject implements \yii\queue\JobInterface
         if(!$federal_district = FederalDistrict::findOne(['name' => $response[0]['data']['federal_district']])) {
             $federal_district = new FederalDistrict();
             $federal_district->name = $response[0]['data']['federal_district'];
+            $federal_district->save(false);
             $federal_district->country_id = 1;
             $federal_district->save();
         }
@@ -44,6 +45,7 @@ class UpdatePlaceJob extends BaseObject implements \yii\queue\JobInterface
             $region = new Region();
             $region->federal_district_id = $federal_district->id;
             $region->name = $response[0]['data']['region'];
+            $region->save(false);
             $region->type = $response[0]['data']['region_type'];
             $region->type_full = $response[0]['data']['region_type_full'];
             $region->save();
@@ -52,6 +54,7 @@ class UpdatePlaceJob extends BaseObject implements \yii\queue\JobInterface
             $area = new Area();
             $area->region_id = $region->id;
             $area->name = $response[0]['data']['area'];
+            $area->save(false);
             $area->type = $response[0]['data']['area_type'];
             $area->type_full = $response[0]['data']['area_type_full'];
             $area->save();
