@@ -8,6 +8,8 @@ use yii\behaviors\TimestampBehavior;
 use yii\behaviors\SluggableBehavior;
 use yii\behaviors\BlameableBehavior;
 use yii\helpers\Url;
+use GuzzleHttp\Client;
+
 // use alex290\yii2images\models\Image;
 /**
  * This is the model class for table "city".
@@ -69,6 +71,7 @@ class City extends \yii\db\ActiveRecord
             ['url', 'filter', 'filter' => 'strtolower'],
             [['lat', 'lng'], 'number'],
             // [['status', 'created_at', 'updated_at'], 'integer'],
+            [['area_id'], 'integer'],
             ['status', 'default', 'value' => self::STATUS_DRAFT],
             [['name', 'url', 'youtube_url', 'website', 'in_obj_phrase', 'iata', 'name_en'], 'string', 'max' => 255],
             [['preview', 'description'], 'string'],
@@ -93,6 +96,7 @@ class City extends \yii\db\ActiveRecord
             'name' => 'Название',
             'description' => Yii::t('backend', 'Description'),
             'preview' => Yii::t('backend', 'Preview'),
+            'area_id' => Yii::t('backend', 'Район'),
             'url' => Yii::t('backend', 'URL'),
             'lat' => Yii::t('backend', 'Широта'),
             'lng' => Yii::t('backend', 'Долгота'),
@@ -103,6 +107,11 @@ class City extends \yii\db\ActiveRecord
             'imageFile' => Yii::t('backend', 'Image Upload'),
             'imageFiles' => Yii::t('backend', 'Images Upload'),
         ];
+    }
+
+    public function getArea()
+    {
+        return $this->hasOne(Area::class, ['id' => 'area_id']);
     }
 
     public function getPlacies()
@@ -188,6 +197,19 @@ class City extends \yii\db\ActiveRecord
             'dirtyAlias' =>  $this->urlAlias . $urlSize . '.' . $this->getExtension()
         ]);
         return $url;
+    }
+
+    public static function getSchedule($id)
+    {
+      $client = new Client();
+      $url = "https://experience.tripster.ru/api/experiences/{$id}/schedule/";
+      $res = $client->request('GET', $url, [
+        'headers' => [
+          'Content-type' => 'application/json',
+        ],
+      ]);
+      $json = json_decode($res->getBody(), false);
+      return $json;
     }
 
 

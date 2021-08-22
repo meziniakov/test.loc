@@ -259,7 +259,7 @@ class CityController extends Controller
         $client = new Client();
         $res = $client->get($url, [
           // 'headers' => [
-          //   // "Authorization: Token 41323de3f24c6a81d6bca4ac1cdf13c4d4089350",
+          //   // "Authorization: Token env('TRIPSTER_TOKEN')",
           //   // "{'username': 'z2941@ya.ru', 'password': 'G3e9tSFuaR26!2S'}",
           //   // 'User-Agent' => $this->user_agent,
           //   // 'Content-type' => 'application/json',

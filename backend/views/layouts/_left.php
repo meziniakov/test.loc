@@ -43,6 +43,14 @@ use backend\widgets\Menu;
                     'label' => Yii::t('backend', 'Cities'),
                     'url' => ['/city'],
                     'icon' => '<i class="fa fa-globe"></i>',
+                    'options' => ['class' => 'treeview'],
+                    'items' => [
+                        ['label' => Yii::t('backend', 'Страны'), 'url' => ['/country'], 'icon' => '<i class="fa fa-angle-double-right"></i>'],
+                        ['label' => Yii::t('backend', 'Округа'), 'url' => ['/federal-district'], 'icon' => '<i class="fa fa-angle-double-right"></i>'],
+                        ['label' => Yii::t('backend', 'Регионы'), 'url' => ['/region'], 'icon' => '<i class="fa fa-angle-double-right"></i>'],
+                        ['label' => Yii::t('backend', 'Районы'), 'url' => ['/area'], 'icon' => '<i class="fa fa-angle-double-right"></i>'],
+                    ],
+
                 ],
                 [
                     'label' => Yii::t('backend', 'Places'),

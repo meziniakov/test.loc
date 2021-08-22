@@ -19,6 +19,9 @@ use backend\jobs\CreatePlaceJob;
 use backend\jobs\UpdatePlaceJob;
 use backend\jobs\EventJob;
 use backend\modules\parser\models\JsonForm;
+use common\models\Area;
+use common\models\FederalDistrict;
+use common\models\Region;
 use yii\helpers\FileHelper;
 
 class JsonController extends Controller
@@ -90,6 +93,141 @@ class JsonController extends Controller
         return $this->render('job', [
             'model' => $model,
         ]);
+    }
+    public function actionDa()
+    {
+        $model = new JsonForm();
+        if ($model->load(Yii::$app->request->post())) {
+            if($model->jsonFile = UploadedFile::getInstance($model, 'jsonFile')) {
+                $path = $model->uploadJsonFile();
+            } else {
+                $path = $model->jsonFileByURL;
+            }
+            $json = file_get_contents($path, true);
+            $array = Json::decode($json, false);
+
+            $countCreate = 0;
+            $countUpdate = 0;
+            foreach ($array as $object) {
+                $object = $object->data->general;
+                if ($place = Place::findOne(['title' => $object->name])) {
+                    $dadata = new \Dadata\DadataClient(env('DADATA_TOKEN'), env('DADATA_SECRET'));
+                    if(isset($object->address->fiasHouseId)) {
+                        $response = $dadata->findById("address", $object->address->fiasHouseId);
+                    } else {
+                        $response = $dadata->findById("address", $object->address->fiasStreetId);                        
+                    }
+            
+                    $place->title = $object->name;
+                    $place->src_id = $object->id;
+                    $place->status = Place::STATUS_UPDATED;
+                    $place->text = $object->description;
+            
+                    $place->address = $object->address->fullAddress;
+                    $place->street = $object->address->street;
+                    $place->street_comment = $object->address->fiasStreetId;
+                    
+                    if(!$federal_district = FederalDistrict::findOne(['name' => $response[0]['data']['federal_district']])) {
+                        $federal_district = new FederalDistrict();
+                        $federal_district->name = $response[0]['data']['federal_district'];
+                        $federal_district->country_id = 1;
+                        $federal_district->save();
+                    }
+                    if(!$region = Region::findOne(['name' => $response[0]['data']['region']])) {
+                        $region = new Region();
+                        $region->federal_district_id = $federal_district->id;
+                        $region->name = $response[0]['data']['region'];
+                        $region->type = $response[0]['data']['region_type'];
+                        $region->type_full = $response[0]['data']['region_type_full'];
+                        $region->save();
+                    }
+                    if(!$area = Area::findOne(['name' => $response[0]['data']['area']])) {
+                        $area = new Area();
+                        $area->region_id = $region->id;
+                        $area->name = $response[0]['data']['area'];
+                        $area->type = $response[0]['data']['area_type'];
+                        $area->type_full = $response[0]['data']['area_type_full'];
+                        $area->save();
+                    }
+                    if(!empty($response[0]['data']['city'])) {
+                        if ($city = City::findOne(['name' => $response[0]['data']['city']])) {
+                            $place->city_id = $city->id;
+                        } else {
+                            $city = new City();
+                            $city->name = $response[0]['data']['city'];
+                            // $city->url = $object->locale->sysName;
+                            $city->save();
+                            $place->city_id = $city->id;
+                        }
+                    } else {
+                        $city = new City();
+                        $city->name = $response[0]['data']['settlement_with_type'];
+                        // $city->url = $object->locale->sysName;
+                        $city->save();
+                        $place->city_id = $city->id;
+                    }
+
+                    $place->title = $object->name;
+                    $place->text = $object->description;            
+                    $place->slug = '';
+                    $place->save();
+                    $countUpdate++;
+                // } else {
+                //     Yii::$app->queue->push(new CreatePlaceJob([
+                //         'object' => $object,
+                //         'pathinfo' => pathinfo($object->image->url),
+                //     ]));
+                //     $countCreate++;
+                }
+            }
+            Yii::$app->session->setFlash('success', "Добавлено в очередь мест для обновления: {$countUpdate}");
+        }
+
+        return $this->render('job', [
+            'model' => $model,
+        ]);
+    }
+
+    public function actionDadata()
+    {
+        $places = Place::find()->all();
+        $dadata = new \Dadata\DadataClient(env('DADATA_TOKEN'), env('DADATA_SECRET'));
+        // var_dump(($response = $dadata->findById("address", '')) == null);die;
+        if(($response = $dadata->findById("address", '')) == null) {
+            $response = $dadata->findById("address", '1d06c590-17ae-4264-b7a8-7af8008ff7ab');
+        }
+        // $response = $dadata->findById("address", '7f5d3322-1cfc-402d-94c9-6850c2f438d9');
+        // $response = $dadata->findById("address", 'ab425a84-50ec-4941-b414-9ffd16c3a254');
+        // $response = $dadata->findById("address", '591fad24-0be3-4765-ae5d-b3833f98635e');
+        echo "<pre>";
+        var_dump($response);die;
+
+  
+        $countCreate = 0;
+        $countUpdate = 0;
+        foreach ($places as $object) {
+            $object = $object->data->general;
+
+            if ($place = Place::findOne(['title' => $object->name])) {
+                Yii::$app->queue->push(new UpdatePlaceJob([
+                    'object' => $object,
+                    'place' => $place,
+                ]));
+                $place->title = $object->name;
+                $place->text = $object->description;            
+                $place->slug = '';
+                $place->save();
+                $countUpdate++;
+            } else {
+                Yii::$app->queue->push(new CreatePlaceJob([
+                    'object' => $object,
+                    'pathinfo' => pathinfo($object->image->url),
+                ]));
+                $countCreate++;
+            }
+        }
+        Yii::$app->session->setFlash('success', "Добавлено в очередь новых мест: {$countCreate} <br> Добавлено в очередь мест для обновления: {$countUpdate}");
+
     }
 
     public function actionPlaceTest()
