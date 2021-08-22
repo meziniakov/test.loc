@@ -25,7 +25,7 @@ class JsonForm extends Model
             [['jsonFile'], 'safe'],
             [['parts'], 'integer'],
             [['jsonFileByURL'], 'string'],
-            [['jsonFile'], 'file', 'extensions' => 'json'],
+            // [['jsonFile'], 'file', 'extensions' => 'json'],
         ];
     }
 
