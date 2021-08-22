@@ -34,7 +34,7 @@ class Country extends \yii\db\ActiveRecord
                 'attribute' => 'name',
                 'slugAttribute' => 'slug',
                 'ensureUnique' => true,
-                'immutable' => true,
+                // 'immutable' => true,
             ],
         ];
     }
