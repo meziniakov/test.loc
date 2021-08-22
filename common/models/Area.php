@@ -29,6 +29,19 @@ class Area extends \yii\db\ActiveRecord
         return '{{%area}}';
     }
 
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => SluggableBehavior::class,
+                'attribute' => 'name',
+                'slugAttribute' => 'slug',
+                'ensureUnique' => true,
+                'immutable' => true,
+            ],
+        ];
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -36,6 +49,7 @@ class Area extends \yii\db\ActiveRecord
     {
         return [
             [['name'], 'required'],
+            [['slug'], 'safe'],
             [['status', 'region_id', 'kladr_id'], 'integer'],
             ['status', 'default', 'value' => 1],
             [['name', 'slug'], 'string', 'max' => 255],
