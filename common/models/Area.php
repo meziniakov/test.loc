@@ -38,7 +38,6 @@ class Area extends \yii\db\ActiveRecord
                 'attribute' => 'name',
                 'slugAttribute' => 'slug',
                 // 'ensureUnique' => true,
-                'skipOnEmpty' => true,
                 // 'immutable' => true,
             ],
         ];
