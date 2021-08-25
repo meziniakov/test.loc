@@ -72,12 +72,7 @@ class JsonController extends Controller
                 if ($place = Place::findOne(['title' => $object->name])) {
                     Yii::$app->queue->push(new UpdatePlaceJob([
                         'object' => $object,
-                        'place' => $place,
                     ]));
-                    $place->title = $object->name;
-                    $place->text = $object->description;            
-                    $place->slug = '';
-                    $place->save();
                     $countUpdate++;
                 } else {
                     Yii::$app->queue->push(new CreatePlaceJob([

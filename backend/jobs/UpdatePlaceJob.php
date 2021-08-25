@@ -17,7 +17,8 @@ class UpdatePlaceJob extends BaseObject implements \yii\queue\JobInterface
     {
         
         $object = $this->object;
-        $place = $this->place;
+        // $place = $this->place;
+        $place = Place::findOne(['title' => $object->name]);
 
         $place->title = $object->name;
         $place->src_id = $object->id;
