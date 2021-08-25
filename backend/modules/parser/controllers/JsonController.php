@@ -69,7 +69,7 @@ class JsonController extends Controller
             foreach ($array as $object) {
                 $object = $object->data->general;
 
-                if ($place = Place::findOne(['title' => $object->name])) {
+                if (Place::findOne(['title' => $object->name])) {
                     Yii::$app->queue->push(new UpdatePlaceJob([
                         'object' => $object,
                     ]));
