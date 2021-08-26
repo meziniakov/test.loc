@@ -14,7 +14,8 @@ class TestController extends Controller
 {
     public function actionTest()
     {
-        $path = '/var/www/yii2zif/test.loc/storage/json/events/museums.json';
+        // $path = '/var/www/yii2zif/test.loc/storage/json/events/museums.json';
+        $path = '/var/www/surf-city/storage/theme/museums.json';
         $json = file_get_contents($path, true);
         $array = Json::decode($json, false);
 
