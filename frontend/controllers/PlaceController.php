@@ -248,7 +248,7 @@ class PlaceController extends Controller
 
   public function findModelCategory($slug, $city_id = null)
   {
-    $model = Place::find()->published()->joinWith(['category'])->andWhere('{{%place_category}}.slug = :slug', [':slug' => $slug])->andWhere(['city_id' => $city_id]);
+    $model = Place::find()->joinWith(['category'])->andWhere('{{%place}}.status = :status', [':status' => Place::STATUS_PUBLISHED])->andWhere('{{%place_category}}.slug = :slug', [':slug' => $slug])->andWhere(['city_id' => $city_id]);
     if ($model->one() !== null) {
       return $model;
     }
