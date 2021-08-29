@@ -30,12 +30,11 @@ class UpdatePlaceJob extends BaseObject implements \yii\queue\JobInterface
         if(isset($object->address->fiasHouseId)) {
             $response = $dadata->findById("address", $object->address->fiasHouseId);
             $place->street_comment = $object->address->fiasHouseId;
-        } elseif(isset($object->address->fiasStreetId)) {
-            $response = $dadata->findById("address", $object->address->fiasStreetId);
+        } elseif(isset($object->address->fiasStreetId) && !empty($response = $dadata->findById("address", $object->address->fiasStreetId))) {
             $place->street_comment = $object->address->fiasStreetId;
         } elseif(isset($object->address->fiasCityId)) {
             $response = $dadata->findById("address", $object->address->fiasCityId);
-            $place->street_comment = $object->address->fiasStreetId;
+            $place->street_comment = $object->address->fiasCityId;
         } else {
             $response = $dadata->findById("address", $object->address->fiasSettlementId);
             $place->street_comment = $object->address->fiasSettlementId;
