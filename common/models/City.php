@@ -32,13 +32,6 @@ class City extends \yii\db\ActiveRecord
     public function behaviors()
     {
         return [
-            // TimestampBehavior::class,
-            // [
-            //     'class' => BlameableBehavior::class,
-            //     'updatedByAttribute' => 'updater_id',
-            //     'createdByAttribute' => 'author_id',
-
-            // ],
             [
                 'class' => SluggableBehavior::class,
                 'attribute' => 'name',

@@ -80,57 +80,58 @@ class SiteController extends Controller
      */
     public function actionIndex($city = null)
     {
-        if ($city = Yii::$app->city->isCity($city)) {
-            $this->city = $city;
-            $places = Place::find();
-            $listing = $places->andWhere(['city_id' => $city->id])->with('category', 'imageRico', 'city')->all();
-            
-            $this->view->title = 'Город ' . $city->name . ' - краткая история, куда сходить, что посмотреть с фотографиями и адресами на trip2place.com';
+      if($city == null) {
+        Yii::$app->params['city'] == 'global';
+        $places = Place::find();
+        $listing = $places->where(['is_home' => 1])->with('category', 'imageRico', 'city')->all();
 
-            Yii::$app->view->registerLinkTag(['rel' => 'canonical', 'href' => Url::current([], true)], 'canonical');
-            Yii::$app->view->registerMetaTag([
-              'name' => 'description',
-              'content' => isset($city->in_obj_phrase) ? 'Достопримечательности, музеи, цирки, места отдыха и многое другое ' . $city->in_obj_phrase : 'Достопримечательности, музеи, цирки, места отдыха и многое другое',
-            ], 'description');
-        
-            Yii::$app->seo->putFacebookMetaTags([
-              'og:locale'     => 'ru_RU',
-              'og:url'        => Url::current([], true),
-              'og:type'       => 'article',
-              'og:title'      => isset($city->in_obj_phrase) ? 'Все достопримечательности ' . $city->in_obj_phrase : Yii::$app->keyStorage->get('frontend.index.title'),
-              'og:title'      => isset($city->in_obj_phrase) ? 'Достопримечательности, музеи, цирки, места отдыха и многое другое ' . $city->in_obj_phrase : 'Достопримечательности, музеи, цирки, места отдыха и многое другое',
-              'og:image'      => $mainImage = Url::to($city->imageRico->getUrl(), true),
-              'og:site_name' => 'trip2place - открывай интересные места России',
-              // 'og:updated_time' => date(DATE_ATOM, $city->updated_at),
-              // 'fb:app_id' => '',
-              // 'vk:app_id' => '',
-              // 'vk:page_id' => '',
-              // 'vk:image' => '',
-              // 'fb:app_id'=> '1811670458869631',//для статистики по переходам
-            ]);
+        return $this->render('index', [
+          'listing' => $listing,
+          'places' => $places,
+          'tags' => Tag::find()->all(),
+          'categories' => PlaceCategory::find()->active()->all(),
+          'cities' => City::find()->published()->orderBy(new Expression('rand()'))->with('placies', 'imageRico')->limit(8)->all(),
+        ]);
+      } elseif($city = Yii::$app->city->isCity($city)) {
+          $this->city = $city;
+          $places = Place::find();
+          $listing = $places->andWhere(['city_id' => $city->id])->with('category', 'imageRico', 'city')->all();
+          
+          $this->view->title = 'Город ' . $city->name . ' - краткая история, куда сходить, что посмотреть с фотографиями и адресами на trip2place.com';
 
-            return $this->render('/city/index', [
-              'places' => $places,
-              'city' => $city,
-              'listing' => $listing,
-              'tags' => Tag::find()->all(),
-              'categories' => PlaceCategory::find()->active()->all(),
-              'cities' => City::find()->where('id != :id', ['id' => $city->id])->published()->orderBy(new Expression('rand()'))->with('placies', 'imageRico')->limit(8)->all(),
-              ]);
-          } elseif (Yii::$app->params['city'] == 'global') {
-            $places = Place::find();
-            $listing = $places->where(['is_home' => 1])->with('category', 'imageRico', 'city')->all();
+          Yii::$app->view->registerLinkTag(['rel' => 'canonical', 'href' => Url::current([], true)], 'canonical');
+          Yii::$app->view->registerMetaTag([
+            'name' => 'description',
+            'content' => isset($city->in_obj_phrase) ? 'Достопримечательности, музеи, цирки, места отдыха и многое другое ' . $city->in_obj_phrase : 'Достопримечательности, музеи, цирки, места отдыха и многое другое',
+          ], 'description');
+      
+          Yii::$app->seo->putFacebookMetaTags([
+            'og:locale'     => 'ru_RU',
+            'og:url'        => Url::current([], true),
+            'og:type'       => 'article',
+            'og:title'      => isset($city->in_obj_phrase) ? 'Все достопримечательности ' . $city->in_obj_phrase : Yii::$app->keyStorage->get('frontend.index.title'),
+            'og:title'      => isset($city->in_obj_phrase) ? 'Достопримечательности, музеи, цирки, места отдыха и многое другое ' . $city->in_obj_phrase : 'Достопримечательности, музеи, цирки, места отдыха и многое другое',
+            'og:image'      => $mainImage = Url::to($city->imageRico->getUrl(), true),
+            'og:site_name' => 'trip2place - открывай интересные места России',
+            // 'og:updated_time' => date(DATE_ATOM, $city->updated_at),
+            // 'fb:app_id' => '',
+            // 'vk:app_id' => '',
+            // 'vk:page_id' => '',
+            // 'vk:image' => '',
+            // 'fb:app_id'=> '1811670458869631',//для статистики по переходам
+          ]);
+
+          return $this->render('/city/index', [
+            'places' => $places,
+            'city' => $city,
+            'listing' => $listing,
+            'tags' => Tag::find()->all(),
+            'categories' => PlaceCategory::find()->active()->all(),
+            'cities' => City::find()->where('id != :id', ['id' => $city->id])->published()->orderBy(new Expression('rand()'))->with('placies', 'imageRico')->limit(8)->all(),
+          ]);
         } else {
             throw new NotFoundHttpException(Yii::t('frontend', 'Page not found.'));
         }
-    
-        return $this->render('index', [
-            'listing' => $listing,
-            'places' => $places,
-            'tags' => Tag::find()->all(),
-            'categories' => PlaceCategory::find()->active()->all(),
-            'cities' => City::find()->published()->orderBy(new Expression('rand()'))->with('placies', 'imageRico')->limit(8)->all(),
-        ]);
     }
 
     public function actionEkskursii()
