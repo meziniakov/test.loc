@@ -48,7 +48,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'raw',
                 'headerOptions' => ['width' => 400],
             ],
-            // 'description:ntext',
+            // 'slug:ntext',
+            [
+                'attribute' => 'slug',
+                // 'format' =>  ['date', 'HH:mm dd.MM.YY'],
+                'options' => ['width' => '90']
+            ],
             [
                 'class' => RoundSwitchColumn::class,
                 'attribute' => 'is_home',

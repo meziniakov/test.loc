@@ -44,6 +44,11 @@ $controller = Yii::$app->controller->id;
                 'format' => 'raw',
             ],
             [
+              'attribute' => 'slug',
+              // 'format' =>  ['date', 'HH:mm dd.MM.YY'],
+              'options' => ['width' => '90']
+            ],
+            [
                 'class' => RoundSwitchColumn::class,
                 'attribute' => 'is_home',
                 'action' => 'switch',
