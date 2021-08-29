@@ -74,11 +74,16 @@ class UpdatePlaceJob extends BaseObject implements \yii\queue\JobInterface
                 $place->city_id = $city->id;
             }
         } else {
-            $city = new City();
-            $city->name = $response[0]['data']['settlement_with_type'];
-            $city->area_id = $area->id;
-            $city->save();
-            $place->city_id = $city->id;
+            if ($city = City::findOne(['name' => $response[0]['data']['settlement_with_type']])) {
+                $place->city_id = $city->id;
+                $city->area_id = $area->id;
+            } else {
+                $city = new City();
+                $city->name = $response[0]['data']['settlement_with_type'];
+                $city->area_id = $area->id;
+                $city->save();
+                $place->city_id = $city->id;
+            }
         }
 
         // Если в массиве есть поле с tags, перебираем их и забираем данные
