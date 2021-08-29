@@ -27,8 +27,7 @@ class UpdatePlaceJob extends BaseObject implements \yii\queue\JobInterface
         }
 
         $dadata = new \Dadata\DadataClient(env('DADATA_TOKEN'), env('DADATA_SECRET'));
-        if(isset($object->address->fiasHouseId)) {
-            $response = $dadata->findById("address", $object->address->fiasHouseId);
+        if(isset($object->address->fiasHouseId) && !empty($response = $dadata->findById("address", $object->address->fiasHouseId))) {
             $place->street_comment = $object->address->fiasHouseId;
         } elseif(isset($object->address->fiasStreetId) && !empty($response = $dadata->findById("address", $object->address->fiasStreetId))) {
             $place->street_comment = $object->address->fiasStreetId;

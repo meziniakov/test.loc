@@ -32,15 +32,13 @@ class CreatePlaceJob extends BaseObject implements \yii\queue\JobInterface
         }
 
         $dadata = new \Dadata\DadataClient(env('DADATA_TOKEN'), env('DADATA_SECRET'));
-        if(isset($object->address->fiasHouseId)) {
-            $response = $dadata->findById("address", $object->address->fiasHouseId);
+        if(isset($object->address->fiasHouseId) && !empty($response = $dadata->findById("address", $object->address->fiasHouseId))) {
             $place->street_comment = $object->address->fiasHouseId;
-        } elseif(isset($object->address->fiasStreetId)) {
-            $response = $dadata->findById("address", $object->address->fiasStreetId);
+        } elseif(isset($object->address->fiasStreetId) && !empty($response = $dadata->findById("address", $object->address->fiasStreetId))) {
             $place->street_comment = $object->address->fiasStreetId;
         } elseif(isset($object->address->fiasCityId)) {
             $response = $dadata->findById("address", $object->address->fiasCityId);
-            $place->street_comment = $object->address->fiasStreetId;
+            $place->street_comment = $object->address->fiasCityId;
         } else {
             $response = $dadata->findById("address", $object->address->fiasSettlementId);
             $place->street_comment = $object->address->fiasSettlementId;
@@ -109,7 +107,9 @@ class CreatePlaceJob extends BaseObject implements \yii\queue\JobInterface
         if (isset($object->contacts->phones)) {
             $phones = [];
             foreach ($object->contacts->phones as $phone) {
-                $phones[] = ['phones' => $phone->value, 'phones_comment' => $phone->comment];
+                $phones[] = [
+                    'phones' => $phone->value, 
+                    'phones_comment' => isset($phone->comment) ? $phone->comment : ''];
             }
             Json::encode($phones);
             $place->phone = $phones;
