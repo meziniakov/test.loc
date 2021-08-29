@@ -2,6 +2,7 @@
 
 namespace backend\modules\parser\controllers;
 
+use backend\helpers\WebConsole;
 use Yii;
 use backend\modules\parser\models\JsonParser;
 use common\models\City;
@@ -22,6 +23,7 @@ use backend\modules\parser\models\JsonForm;
 use common\models\Area;
 use common\models\FederalDistrict;
 use common\models\Region;
+use yii\helpers\Console;
 use yii\helpers\FileHelper;
 
 class JsonController extends Controller
@@ -975,8 +977,46 @@ class JsonController extends Controller
         Yii::$app->session->setFlash('success', "Успешно запущено {$countSave} записей в очередь.");
     }
 
-    public function actionPhpinfo()
+    public function actionInfo()
     {
-        return phpinfo();
+        // $name = Console::input("Пожалуйста, введите Ваше имя:");
+        // $formatName = Console::ansiFormat($name,[Console::FG_YELLOW]);
+        // Console::output("Ваше имя: {$formatName}");
+        // $hello = Console::ansiFormat("Hello",[Console::FG_YELLOW,Console::BG_BLUE]);
+        // $hello = Console::ansiFormat("Hello",[Console::FG_YELLOW]);
+        // $world = Console::ansiFormat("World",[Console::FG_GREEN]);
+        // Console::output("{$hello} {$world}");
+      
+        // Console::output('Hello World');
+        // Console::ansiFormat(null);
+        // Console::output(Console::ansiFormat("negative",[Console::NEGATIVE]));
+        // die;
+
+        $output=null;
+        $retval=null;
+        exec('/usr/bin/php7.2 /var/www/yii2zif/test.loc/yii queue/info', $output, $retval);
+        
+        return $this->render('info', [
+            'output' => $output,
+            'time' => date('H:i:s'),
+        ]);
+    }
+
+    public function actionPjaxRun()
+    {
+        $output=null;
+        $retval=null;
+        exec('/usr/bin/php7.2 /var/www/yii2zif/test.loc/yii queue/run --isolate', $output, $retval);
+        
+        return $this->redirect('/parser/json/info');
+    }
+
+    public function actionPjaxClear()
+    {
+        $output=null;
+        $retval=null;
+        exec('/usr/bin/php7.2 /var/www/yii2zif/test.loc/yii queue/clear', $output, $retval);
+        
+        return $this->redirect('/parser/json/info');
     }
 }

@@ -31,6 +31,14 @@ return [
         ],
     ],
     'components' => [
+        'log' => [
+            'targets' => [
+                    [
+                    'class' => 'yii\log\FileTarget',
+                    'levels' => ['error', 'warning'],
+                ],
+            ],
+        ],
         'queue' => [
             // 'class' => \yii\queue\file\Queue::class,
             'class' => \yii\queue\db\Queue::class,

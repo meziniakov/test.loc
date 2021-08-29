@@ -5,10 +5,12 @@ use yii\helpers\FileHelper;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
+use yii\widgets\Pjax;
 
 /* @var $this yii\web\View */
 /* @var $model backend\modules\parser\models\JsonParser */
 /* @var $form yii\widgets\ActiveForm */
+
 ?>
 
 <div class="json-parser-form">
@@ -17,7 +19,7 @@ use yii\widgets\ActiveForm;
 
     <?php if (Yii::$app->controller->action->id == 'chunk') : ?>
         <div class="form-group">
-            <?= html::a('Перейти к парсингу','event', ['class' => 'btn btn-primary'])?>
+            <?= html::a('Перейти к парсингу', 'event', ['class' => 'btn btn-primary']) ?>
         </div>
 
         <div class="col-lg-12">
@@ -31,20 +33,16 @@ use yii\widgets\ActiveForm;
         <div class="form-group">
             <?= Html::submitButton(Yii::t('backend', 'Запуск'), ['class' => 'btn btn-success']) ?>
         </div>
-
         <?php ActiveForm::end(); ?>
-
     <?php else : ?>
-
         <div class="form-group">
-            <?= html::a('Разделить файл на части','chunk', ['class' => 'btn btn-primary'])?>
+            <?= html::a('Разделить файл на части', 'chunk', ['class' => 'btn btn-primary']) ?>
         </div>
-
         <?php
         $files = FileHelper::findFiles(Yii::getAlias('@storage') . '/json/events/');
         sort($files);
-        echo $form->field($model, 'jsonFileByURL')->radioList($files,[
-            'item' => function($index, $label, $name, $checked, $value) {
+        echo $form->field($model, 'jsonFileByURL')->radioList($files, [
+            'item' => function ($index, $label, $name, $checked, $value) {
                 return '<label class="modal-radio" style="display:block;">
                         <input type="radio" name="' . $name . '" value="' . $label . '" tabindex="3">
                         <i></i>
@@ -53,7 +51,8 @@ use yii\widgets\ActiveForm;
             }
         ]) ?>
 
-        <?php // $form->field($model, 'jsonFileByURL')->checkboxList($files) ?>
+        <?php // $form->field($model, 'jsonFileByURL')->checkboxList($files) 
+        ?>
         <?= $form->field($model, 'jsonFile')->fileInput() ?>
 
         <div class="form-group">
