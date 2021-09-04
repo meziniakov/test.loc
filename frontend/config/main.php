@@ -1,6 +1,5 @@
 <?php
 use yii\web\NotFoundHttpException;
-use Yii;
 
 $params = array_merge(
     require __DIR__ . '/../../common/config/params.php',
